@@ -1,10 +1,8 @@
 (function() {
   'use strict';
 
-  // Find or create canvas
   let canvas = document.getElementById('spaceBgCanvas');
   if (!canvas) {
-    // Fallback: look for other known background canvas IDs in the markup
     canvas = document.getElementById('plexusBg') || 
              document.getElementById('plexusBgHub') || 
              document.getElementById('plexusBgCodex') || 
@@ -19,13 +17,23 @@
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
 
-  // Track mouse coordinates for subtle parallax
-  let mouseX = 0, mouseY = 0;
-  let targetMouseX = 0, targetMouseY = 0;
+  // Track mouse coordinates & gravity portal triggers
+  let mouseX = width / 2, mouseY = height / 2;
+  let targetMouseX = width / 2, targetMouseY = height / 2;
+  let isMouseDown = false;
+  let gravityRadius = 0;
 
   window.addEventListener('mousemove', (e) => {
-    targetMouseX = (e.clientX - width / 2) * 0.05;
-    targetMouseY = (e.clientY - height / 2) * 0.05;
+    targetMouseX = e.clientX;
+    targetMouseY = e.clientY;
+  });
+
+  window.addEventListener('mousedown', () => {
+    isMouseDown = true;
+  });
+
+  window.addEventListener('mouseup', () => {
+    isMouseDown = false;
   });
 
   window.addEventListener('resize', () => {
@@ -33,113 +41,228 @@
     height = canvas.height = window.innerHeight;
   });
 
-  // Twinkling slowly drifting star class
+  // Spark particle class shedding from meteor tail
+  class MeteorSpark {
+    constructor(x, y, vx, vy, color) {
+      this.x = x;
+      this.y = y;
+      this.vx = vx * -0.25 + (Math.random() - 0.5) * 2;
+      this.vy = vy * -0.25 + (Math.random() - 0.5) * 2;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.alpha = 1.0;
+      this.decay = Math.random() * 0.05 + 0.035;
+      this.color = color;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha -= this.decay;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.alpha);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // Twinkling, drifting star class with 3D layers and special flares
   class Star {
     constructor() {
       this.reset(true);
     }
     reset(init = false) {
       this.x = Math.random() * width;
-      this.y = init ? Math.random() * height : -10;
-      this.size = Math.random() * 1.6 + 0.4;
-      this.speedX = (Math.random() - 0.2) * 0.1; // Slow drift
-      this.speedY = (Math.random() * 0.15 + 0.05);
-      this.alpha = Math.random();
-      this.twinkleSpeed = 0.003 + Math.random() * 0.01;
+      this.y = init ? Math.random() * height : -20;
+      
+      // Determine 3D Depth Layer
+      const roll = Math.random();
+      if (roll < 0.6) {
+        // Far stars
+        this.layer = 1;
+        this.size = Math.random() * 0.6 + 0.3;
+        this.speedX = (Math.random() - 0.2) * 0.05;
+        this.speedY = Math.random() * 0.08 + 0.03;
+        this.parallax = 0.15;
+        this.baseAlpha = Math.random() * 0.4 + 0.15;
+      } else if (roll < 0.9) {
+        // Mid stars
+        this.layer = 2;
+        this.size = Math.random() * 0.8 + 0.6;
+        this.speedX = (Math.random() - 0.2) * 0.1;
+        this.speedY = Math.random() * 0.15 + 0.08;
+        this.parallax = 0.45;
+        this.baseAlpha = Math.random() * 0.5 + 0.35;
+      } else {
+        // Close stars
+        this.layer = 3;
+        this.size = Math.random() * 1.2 + 1.2;
+        this.speedX = (Math.random() - 0.2) * 0.18;
+        this.speedY = Math.random() * 0.25 + 0.15;
+        this.parallax = 0.85;
+        this.baseAlpha = Math.random() * 0.4 + 0.55;
+      }
+
+      this.alpha = this.baseAlpha;
+      this.twinkleSpeed = 0.004 + Math.random() * 0.012;
       this.color = this.getRandomColor();
+      
+      // Special flare star chance (only close/mid stars)
+      this.isFlare = this.layer >= 2 && Math.random() < 0.08;
+      this.flareAngle = Math.random() * Math.PI;
+      this.flareRotation = (Math.random() - 0.5) * 0.005;
     }
     getRandomColor() {
       const colors = [
         'rgba(255, 255, 255, ',
         'rgba(0, 243, 255, ',   // Cosmic Cyan
-        'rgba(176, 136, 255, ', // Violet/Purple
+        'rgba(176, 136, 255, ', // Purple/Violet
         'rgba(255, 183, 0, ',   // Gold
       ];
       return colors[Math.floor(Math.random() * colors.length)];
     }
     update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
+      // Gravitational warp pull towards cursor if mouse is down
+      let dx = mouseX - this.x;
+      let dy = mouseY - this.y;
+      let dist = Math.hypot(dx, dy);
 
-      // Twinkle
+      if (isMouseDown && dist < 320) {
+        // Spiral orbital pull
+        const force = (320 - dist) * 0.00015 * this.parallax;
+        const angle = Math.atan2(dy, dx) + Math.PI / 2.2;
+        this.x += Math.cos(angle) * force * 16;
+        this.y += Math.sin(angle) * force * 16;
+      } else {
+        // Standard cosmic drift
+        this.x += this.speedX;
+        this.y += this.speedY;
+      }
+
+      // Twinkle oscillation
       this.alpha += this.twinkleSpeed;
-      if (this.alpha > 1 || this.alpha < 0.15) {
+      if (this.alpha > this.baseAlpha + 0.2 || this.alpha < this.baseAlpha - 0.2) {
         this.twinkleSpeed = -this.twinkleSpeed;
+      }
+      this.alpha = Math.max(0.1, Math.min(1.0, this.alpha));
+
+      if (this.isFlare) {
+        this.flareAngle += this.flareRotation;
       }
 
       // Reset if out of bounds
-      if (this.y > height || this.x < 0 || this.x > width) {
+      if (this.y > height + 20 || this.x < -20 || this.x > width + 20) {
         this.reset(false);
       }
     }
     draw() {
-      // Add subtle parallax offset
-      const px = this.x + mouseX * (this.size * 0.4);
-      const py = this.y + mouseY * (this.size * 0.4);
-      
-      ctx.fillStyle = this.color + Math.max(0, Math.min(1, this.alpha)) + ')';
+      // Parallax offsets relative to screen center
+      const offsetX = (mouseX - width / 2) * 0.05 * this.parallax;
+      const offsetY = (mouseY - height / 2) * 0.05 * this.parallax;
+      const px = this.x + offsetX;
+      const py = this.y + offsetY;
+
+      ctx.fillStyle = this.color + this.alpha + ')';
       ctx.beginPath();
       ctx.arc(px, py, this.size, 0, Math.PI * 2);
       ctx.fill();
+
+      // Draw cosmic star flares (crosshairs)
+      if (this.isFlare && this.alpha > 0.45) {
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(this.flareAngle);
+        ctx.strokeStyle = this.color + (this.alpha * 0.5) + ')';
+        ctx.lineWidth = 0.6;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = ctx.fillStyle;
+
+        ctx.beginPath();
+        // Horiz
+        ctx.moveTo(-this.size * 5.5, 0);
+        ctx.lineTo(this.size * 5.5, 0);
+        // Vert
+        ctx.moveTo(0, -this.size * 5.5);
+        ctx.lineTo(0, this.size * 5.5);
+        ctx.stroke();
+        ctx.restore();
+      }
     }
   }
 
-  // Rotating nebula dust cloud class
+  // Pulsing, rotating nebula cloud class
   class Nebula {
-    constructor(x, y, radius, color) {
+    constructor(x, y, radius, color, scaleSpeed) {
       this.x = x;
       this.y = y;
       this.radius = radius;
       this.color = color;
       this.angle = Math.random() * Math.PI * 2;
-      this.speed = (Math.random() - 0.5) * 0.0003;
+      this.speed = (Math.random() - 0.5) * 0.0002;
+      this.scale = 1.0;
+      this.scaleSpeed = scaleSpeed;
     }
     update() {
       this.angle += this.speed;
+      this.scale += this.scaleSpeed;
+      if (this.scale > 1.15 || this.scale < 0.85) {
+        this.scaleSpeed = -this.scaleSpeed;
+      }
     }
     draw() {
       ctx.save();
-      // Translate to nebula center with parallax
-      const px = this.x + mouseX * 0.15;
-      const py = this.y + mouseY * 0.15;
+      // Screen blend modes for premium glowing overlaps
+      ctx.globalCompositeOperation = 'screen';
+      
+      const offsetX = (mouseX - width / 2) * 0.015;
+      const offsetY = (mouseY - height / 2) * 0.015;
+      const px = this.x + offsetX;
+      const py = this.y + offsetY;
+      
       ctx.translate(px, py);
       ctx.rotate(this.angle);
 
-      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.radius);
+      const r = this.radius * this.scale;
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
       grad.addColorStop(0, this.color);
-      grad.addColorStop(0.5, this.color.replace('0.06', '0.025').replace('0.05', '0.02').replace('0.04', '0.015'));
+      grad.addColorStop(0.4, this.color.replace('0.06', '0.025').replace('0.05', '0.02').replace('0.04', '0.015'));
       grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
   }
 
-  // High-speed shooting meteor class
+  // Burning Meteor class with particle spark exhaust
   class Meteor {
     constructor() {
       this.reset();
     }
     reset() {
-      this.x = Math.random() * width * 1.1 - width * 0.1;
+      this.x = Math.random() * width * 0.9 - width * 0.1;
       this.y = -60;
-      this.length = Math.random() * 90 + 60;
-      this.speedX = Math.random() * 7 + 9; // Zoom fast diagonally
-      this.speedY = Math.random() * 6 + 7;
+      this.length = Math.random() * 120 + 80;
+      this.speedX = Math.random() * 8 + 10; 
+      this.speedY = Math.random() * 7 + 8;
       this.alpha = 1.0;
-      this.decay = Math.random() * 0.018 + 0.012;
-      this.width = Math.random() * 1.8 + 0.8;
+      this.decay = Math.random() * 0.016 + 0.008;
+      this.width = Math.random() * 2.2 + 1.2;
       this.color = this.getRandomColor();
     }
     getRandomColor() {
       const colors = [
-        { head: '#ffffff', tail: 'rgba(255, 255, 255, ' },
-        { head: '#00f3ff', tail: 'rgba(0, 243, 255, ' },
-        { head: '#b088ff', tail: 'rgba(176, 136, 255, ' },
-        { head: '#ffb700', tail: 'rgba(255, 183, 0, ' }
+        { head: '#ffffff', tail: 'rgba(255, 255, 255, ', spark: '#ffb700' },
+        { head: '#00f3ff', tail: 'rgba(0, 243, 255, ', spark: '#00f3ff' },
+        { head: '#b088ff', tail: 'rgba(176, 136, 255, ', spark: '#b088ff' },
+        { head: '#ffb700', tail: 'rgba(255, 183, 0, ', spark: '#ff5500' }
       ];
       return colors[Math.floor(Math.random() * colors.length)];
     }
@@ -147,53 +270,75 @@
       this.x += this.speedX;
       this.y += this.speedY;
       this.alpha -= this.decay;
+
+      // Spawn burning tail spark exhaust particles
+      if (this.alpha > 0.15 && Math.random() < 0.7) {
+        sparks.push(new MeteorSpark(
+          this.x, 
+          this.y, 
+          this.speedX, 
+          this.speedY, 
+          this.color.spark
+        ));
+      }
     }
     draw() {
       if (this.alpha <= 0) return;
       ctx.save();
-      // Draw linear gradient meteor streak
+      // Draw meteor core flare
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = this.color.head;
+      
       const grad = ctx.createLinearGradient(
         this.x, 
         this.y, 
-        this.x - this.speedX * (this.length / 12), 
-        this.y - this.speedY * (this.length / 12)
+        this.x - this.speedX * (this.length / 10), 
+        this.y - this.speedY * (this.length / 10)
       );
       grad.addColorStop(0, this.color.head);
-      grad.addColorStop(1, this.color.tail + '0)');
+      grad.addColorStop(0.3, this.color.tail + this.alpha + ')');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
       ctx.strokeStyle = grad;
       ctx.lineWidth = this.width;
+      ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.moveTo(this.x, this.y);
       ctx.lineTo(this.x - this.speedX * (this.length / 15), this.y - this.speedY * (this.length / 15));
       ctx.stroke();
+
+      // Draw head node
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.width * 1.1, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     }
   }
 
-  // Setup background elements
+  // Setup instances
   const stars = [];
-  const starCount = 140;
+  const starCount = 150;
   for (let i = 0; i < starCount; i++) {
     stars.push(new Star());
   }
 
-  // Large rotating cosmic nebulae
   const nebulae = [
-    new Nebula(width * 0.2, height * 0.35, Math.min(width, height) * 0.65, 'rgba(176, 136, 255, 0.06)'), // Violet-Purple
-    new Nebula(width * 0.8, height * 0.65, Math.min(width, height) * 0.55, 'rgba(0, 243, 255, 0.05)'),  // Cosmic Cyan
-    new Nebula(width * 0.5, height * 0.5, Math.min(width, height) * 0.75, 'rgba(120, 80, 240, 0.04)')   // Deep space blue-purple
+    new Nebula(width * 0.15, height * 0.3, Math.min(width, height) * 0.7, 'rgba(176, 136, 255, 0.06)', 0.0004), 
+    new Nebula(width * 0.85, height * 0.7, Math.min(width, height) * 0.6, 'rgba(0, 243, 255, 0.05)', 0.0003),  
+    new Nebula(width * 0.5, height * 0.5, Math.min(width, height) * 0.8, 'rgba(120, 80, 240, 0.04)', 0.00025)
   ];
 
   const meteors = [];
+  const sparks = [];
   const maxMeteors = 2;
 
   function animate() {
-    // Lerp mouse coordinates for smooth inertia effect
+    // Smooth glide inertia
     mouseX += (targetMouseX - mouseX) * 0.08;
     mouseY += (targetMouseY - mouseY) * 0.08;
 
-    // Clear canvas
+    // Void background
     ctx.fillStyle = '#06040d';
     ctx.fillRect(0, 0, width, height);
 
@@ -203,13 +348,44 @@
       nebulae[i].draw();
     }
 
+    // Reset composite operation to normal
+    ctx.globalCompositeOperation = 'source-over';
+
+    // Draw Constellation Lines (Cosmic Plexus Web) between close Layer 3 stars
+    ctx.save();
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < starCount; i++) {
+      const s1 = stars[i];
+      if (s1.layer < 3) continue; // Only draw for close layer stars
+      for (let j = i + 1; j < starCount; j++) {
+        const s2 = stars[j];
+        if (s2.layer < 3) continue;
+        
+        const dist = Math.hypot(s1.x - s2.x, s1.y - s2.y);
+        if (dist < 100) {
+          const alpha = (1 - dist / 100) * 0.16 * Math.min(s1.alpha, s2.alpha);
+          ctx.strokeStyle = `rgba(0, 243, 255, ${alpha})`;
+          ctx.beginPath();
+          // Shift offsets for parallax compatibility
+          const oX1 = s1.x + (mouseX - width/2)*0.05*s1.parallax;
+          const oY1 = s1.y + (mouseY - height/2)*0.05*s1.parallax;
+          const oX2 = s2.x + (mouseX - width/2)*0.05*s2.parallax;
+          const oY2 = s2.y + (mouseY - height/2)*0.05*s2.parallax;
+          ctx.moveTo(oX1, oY1);
+          ctx.lineTo(oX2, oY2);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.restore();
+
     // Draw Stars
     for (let i = 0; i < stars.length; i++) {
       stars[i].update();
       stars[i].draw();
     }
 
-    // Randomly spawn Meteor
+    // Spawn Meteor
     if (meteors.length < maxMeteors && Math.random() < 0.005) {
       meteors.push(new Meteor());
     }
@@ -223,6 +399,53 @@
       } else {
         m.draw();
       }
+    }
+
+    // Draw Burning Meteor Sparks
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.update();
+      if (s.alpha <= 0) {
+        sparks.splice(i, 1);
+      } else {
+        s.draw();
+      }
+    }
+
+    // Draw pulsing black hole / gravity portal on click
+    if (isMouseDown) {
+      gravityRadius += (120 - gravityRadius) * 0.08;
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      
+      // Pulse ring
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.45)';
+      ctx.lineWidth = 1.5;
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = '#00f3ff';
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, gravityRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Outer ripple
+      ctx.strokeStyle = 'rgba(176, 136, 255, 0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, gravityRadius * 1.5, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Dark core
+      const coreGrad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, gravityRadius * 0.65);
+      coreGrad.addColorStop(0, 'rgba(6, 4, 13, 0.95)');
+      coreGrad.addColorStop(0.5, 'rgba(176, 136, 255, 0.15)');
+      coreGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, gravityRadius * 0.65, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      gravityRadius = 0;
     }
 
     requestAnimationFrame(animate);
