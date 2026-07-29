@@ -1,0 +1,113 @@
+[
+  {
+    "accountName": "MrAlphaChuuu#0072",
+    "name": "ChuuBonkThisMonk",
+    "level": 93,
+    "updated": "2026-07-28T23:56:03.678333Z",
+    "isCurrent": true,
+    "league": "Runes of Aldur",
+    "leagueUrl": "runesofaldur",
+    "className": "Martial Artist",
+    "skills": [
+      {
+        "name": "Quarterstaff Strike",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvQmxhbmtHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/250ec3ed08/BlankGem.png",
+        "damage": [218665, 14, 32, 31, 23, 0, 0]
+      },
+      {
+        "name": "Rend",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvRHJ1aWRXeXZlcm5Td2lwZVNraWxsR2VtIiwidyI6MSwiaCI6MSwic2NhbGUiOjEsInJlYWxtIjoicG9lMiJ9XQ/4cfc53955e/DruidWyvernSwipeSkillGem.png",
+        "damage": [32552, 16, 17, 34, 33, 0, 0]
+      },
+      {
+        "name": "Hollow Form",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvQmxhbmtHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/250ec3ed08/BlankGem.png",
+        "damage": [2632, 1, 50, 28, 21, 0, 0]
+      },
+      {
+        "name": "Hollow Focus",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvQmxhbmtHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/250ec3ed08/BlankGem.png",
+        "damage": [316, 3, 49, 27, 21, 0, 0]
+      },
+      {
+        "name": "Devour",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvRHJ1aWREZXZvdXJTaG9ja1NraWxsR2VtIiwidyI6MSwiaCI6MSwic2NhbGUiOjEsInJlYWxtIjoicG9lMiJ9XQ/e5d265be73/DruidDevourShockSkillGem.png",
+        "damage": [29851, 13, 17, 35, 35, 0, 0]
+      },
+      {
+        "name": "Pounce",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV29sZkxlYXBBdHRhY2tTa2lsbEdlbSIsInciOjEsImgiOjEsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/7d5766517e/WolfLeapAttackSkillGem.png",
+        "damage": [1157, 10, 18, 36, 36, 0, 0]
+      }
+    ],
+    "eligibility": { "type": "listed" }
+  },
+  {
+    "accountName": "MrAlphaChuuu#0072",
+    "name": "AlphaChuuTheRangerrr",
+    "level": 96,
+    "updated": "2026-07-28T13:55:43.706318Z",
+    "isCurrent": false,
+    "league": "Runes of Aldur",
+    "leagueUrl": "runesofaldur",
+    "className": "Deadeye",
+    "skills": [
+      {
+        "name": "Ice Shot",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvSWNlU2hvdFNraWxsR2VtIiwidyI6MSwiaCI6MSwic2NhbGUiOjEsInJlYWxtIjoicG9lMiJ9XQ/32f9c0922d/IceShotSkillGem.png",
+        "damage": [1167922, 0, 10, 82, 8, 0, 0]
+      },
+      {
+        "name": "Tornado Shot",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvTmV3L1Rvcm5hZG9TaG90U2tpbGxHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/f00738255a/TornadoShotSkillGem.png",
+        "damage": [51699, 10, 10, 72, 8, 0, 0]
+      },
+      {
+        "name": "Frost Wall",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvRnJvc3RXYWxsU2tpbGxHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/b63bdf07e5/FrostWallSkillGem.png",
+        "damage": [380, 0, 9, 89, 2, 0, 0]
+      }
+    ],
+    "eligibility": { "type": "listed" }
+  },
+  {
+    "accountName": "MrAlphaChuuu#0072",
+    "name": "ProFessionalGawkGawk",
+    "level": 97,
+    "updated": "2026-07-28T13:55:43.353442Z",
+    "isCurrent": false,
+    "league": "Runes of Aldur",
+    "leagueUrl": "runesofaldur",
+    "className": "Spirit Walker",
+    "skills": [
+      {
+        "name": "Wild Protector",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvQmxhbmtHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/250ec3ed08/BlankGem.png",
+        "damage": [52008, 71, 8, 0, 0, 21, 0]
+      },
+      {
+        "name": "Azmerian Wolf",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvR2Vtcy9OZXcvQmxhbmtHZW0iLCJ3IjoxLCJoIjoxLCJzY2FsZSI6MSwicmVhbG0iOiJwb2UyIn1d/250ec3ed08/BlankGem.png",
+        "damage": [49789, 72, 7, 0, 0, 21, 0]
+      },
+      {
+        "name": "Pounce",
+        "icon": "https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV29sZkxlYXBBdHRhY2tTa2lsbEdlbSIsInciOjEsImgiOjEsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/7d5766517e/WolfLeapAttackSkillGem.png",
+        "damage": [318, 61, 34, 0, 0, 5, 0]
+      }
+    ],
+    "eligibility": { "type": "listed" }
+  },
+  {
+    "accountName": "MrAlphaChuuu#0072",
+    "name": "TwoBiGballsOfGems",
+    "level": 90,
+    "updated": null,
+    "isCurrent": false,
+    "league": "Runes of Aldur",
+    "leagueUrl": "runesofaldur",
+    "className": null,
+    "skills": [],
+    "eligibility": { "type": "notFetched" }
+  }
+]
