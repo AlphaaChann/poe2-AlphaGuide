@@ -189,6 +189,87 @@ li { margin-bottom: 0.3rem; }
   box-shadow: 0 0 12px var(--green-glow);
 }
 
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto;
+    height: auto;
+  }
+  .app-navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 0.75rem 1rem;
+    gap: 0.6rem;
+  }
+  .app-brand {
+    font-size: 11px;
+    text-align: center;
+    justify-content: center;
+  }
+  .app-search-wrap {
+    width: 100%;
+  }
+  .app-patch-badge {
+    display: none;
+  }
+  .app-container {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+  }
+  .app-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--bdr);
+    max-height: 64px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 0.5rem;
+    scrollbar-width: none;
+  }
+  .app-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+  .sidebar-title {
+    display: none;
+  }
+  .app-subtab {
+    min-width: 170px;
+    margin-bottom: 0;
+    border-bottom: none !important;
+    background: rgba(16, 11, 32, 0.5);
+    border: 1px solid rgba(176, 136, 255, 0.1);
+    padding: 0.4rem 0.65rem;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .app-subtab.active {
+    border-left: none !important;
+    border-top: 2px solid var(--green);
+  }
+  .app-main {
+    padding: 1rem 1rem 3rem;
+    overflow: visible;
+  }
+  .top-subnav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .top-subnav-items {
+    width: 100%;
+  }
+  .chapter-card {
+    padding: 1rem;
+  }
+}
 </style>
 </head>
 <body>

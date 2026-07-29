@@ -219,6 +219,75 @@ body {
   animation: spin 1s linear infinite; box-shadow: 0 0 10px rgba(176, 136, 255, 0.2);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto;
+    height: auto;
+  }
+  .app-navbar {
+    padding: 0 1rem;
+  }
+  .app-brand {
+    font-size: 12px;
+  }
+  .app-container {
+    flex-direction: column;
+    overflow: visible;
+    height: auto;
+  }
+  .app-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--bdr);
+    max-height: 200px;
+    padding: 0.75rem;
+  }
+  .sidebar-title {
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+  #charListContainer {
+    flex-direction: row !important;
+    overflow-x: auto;
+    gap: 0.5rem !important;
+    padding-bottom: 0.25rem;
+  }
+  .char-item {
+    margin-bottom: 0;
+    min-width: 200px;
+    padding: 0.5rem 0.75rem;
+  }
+  .char-name {
+    font-size: 14px;
+  }
+  .app-main {
+    padding: 1rem 1rem 3rem;
+    overflow: visible;
+  }
+  .char-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.25rem;
+  }
+  .hero-title {
+    font-size: 1.35rem;
+  }
+  .hero-meta {
+    font-size: 13px;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .details-card {
+    grid-column: span 1 !important;
+    padding: 1rem;
+  }
+}
 </style>
 </head>
 <body>
