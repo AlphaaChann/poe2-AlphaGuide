@@ -380,7 +380,7 @@ html, body {
     z-index: 200;
   }
   .mobile-drawer-backdrop.active {
-    display: block;
+    display: block !important;
   }
   .mobile-drawer {
     position: fixed;
@@ -391,7 +391,7 @@ html, body {
     z-index: 250;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     box-shadow: 10px 0 30px rgba(0,0,0,0.8);
   }
@@ -540,8 +540,8 @@ html, body {
   </div>
 
   <!-- MOBILE DRAWER BACKDROP AND OVERLAY -->
-  <div class="mobile-drawer-backdrop" id="drawerBackdrop" onclick="closeMobileMenu()"></div>
-  <div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-backdrop" id="drawerBackdrop" onclick="closeMobileMenu()" style="display: none;"></div>
+  <div class="mobile-drawer" id="mobileDrawer" style="display: none;">
     <div class="drawer-header">
       <div class="mobile-title">MENU</div>
       <button class="drawer-close" onclick="closeMobileMenu()">✕</button>
