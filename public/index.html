@@ -300,14 +300,217 @@ html, body {
   box-shadow: 0 0 25px var(--violet-glow);
 }
 
-.dashboard-card {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
 .dashboard-card:hover {
   border-color: #00f3ff !important;
   box-shadow: 0 0 30px rgba(0, 243, 255, 0.35), 0 8px 30px rgba(0,0,0,0.6) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE RESPONSIVENESS AND COMPATIBILITY (max-width: 768px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  body, html {
+    overflow: auto;
+  }
+  .hub-shell {
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Hide desktop sidebars */
+  .icon-nav, .games-panel {
+    display: none !important;
+  }
+
+  /* Mobile header */
+  .mobile-header {
+    display: flex !important;
+    height: 60px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--bdr);
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 150;
+    backdrop-filter: blur(16px);
+  }
+  .mobile-menu-trigger {
+    background: transparent;
+    border: none;
+    color: var(--cyan);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--violet);
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--violet-glow);
+  }
+  .mobile-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--violet);
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  /* Drawer menu overlay */
+  .mobile-drawer-backdrop {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+  }
+  .mobile-drawer-backdrop.active {
+    display: block;
+  }
+  .mobile-drawer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px; height: 100vh;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--bdr);
+    z-index: 250;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+  }
+  .mobile-drawer.active {
+    transform: translateX(0);
+  }
+  .drawer-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--bdr);
+  }
+  .drawer-close {
+    background: transparent;
+    border: none;
+    color: var(--cyan);
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .drawer-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Mobile list navigation style */
+  .drawer-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .drawer-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--r-md);
+    color: var(--txt-mid);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+  .drawer-menu-item:hover {
+    background: rgba(176, 136, 255, 0.08);
+    color: #fff;
+  }
+  .drawer-menu-item.active {
+    background: linear-gradient(90deg, rgba(176, 136, 255, 0.2) 0%, rgba(176, 136, 255, 0.05) 100%);
+    color: var(--cyan);
+    border-left-color: var(--cyan);
+    font-weight: 700;
+    box-shadow: inset 0 0 10px rgba(176, 136, 255, 0.1);
+  }
+
+  /* Main canvas scrollable */
+  .main-canvas {
+    height: calc(100vh - 60px);
+    overflow-y: auto !important;
+    padding: 1.25rem 1rem 3rem !important;
+  }
+
+  /* Hero adjustments */
+  .hero-banner {
+    padding: 1.5rem 1rem !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .logo-effects-container {
+    width: 200px !important;
+    height: 110px !important;
+    margin-bottom: 0.5rem;
+  }
+  #logoEffectsCanvas {
+    width: 200px !important;
+    height: 200px !important;
+    top: -45px !important;
+  }
+  .hero-avatar-box {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .hero-title {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.5rem;
+  }
+  .play-game-btn {
+    padding: 0.65rem 1.5rem !important;
+    font-size: 11px !important;
+  }
+
+  /* Dashboard card container grid stacking */
+  .cards-container {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    margin-top: 1.25rem !important;
+  }
+  .dashboard-card {
+    grid-column: span 1 !important;
+    padding: 1.25rem !important;
+  }
+  
+  /* Iframe fullscreen bar on mobile */
+  .app-view-fullscreen {
+    z-index: 500 !important;
+  }
+  .app-fullscreen-bar {
+    height: 48px !important;
+    padding: 0 0.75rem !important;
+  }
+  .back-hub-btn {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 10px !important;
+  }
 }
 
 </style>
@@ -316,6 +519,35 @@ html, body {
 <canvas id="plexusBgHub" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
 <canvas id="lightningCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.85;"></canvas>
 <div class="hub-shell">
+
+  <!-- MOBILE HEADER (Visible only on mobile) -->
+  <div class="mobile-header" style="display: none;">
+    <button class="mobile-menu-trigger" onclick="toggleMobileMenu()">☰</button>
+    <div class="mobile-title">POE2 ALPHACHUU GUIDE</div>
+    <div class="mobile-profile" onclick="showDashboard()">
+      <img src="assets/gaming_cheeser_logo.jpg" alt="Logo" style="width:100%; height:100%; object-fit:cover;" />
+    </div>
+  </div>
+
+  <!-- MOBILE DRAWER BACKDROP AND OVERLAY -->
+  <div class="mobile-drawer-backdrop" id="drawerBackdrop" onclick="closeMobileMenu()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div class="mobile-title">MENU</div>
+      <button class="drawer-close" onclick="closeMobileMenu()">✕</button>
+    </div>
+    <div class="drawer-content">
+      <div class="drawer-menu-list">
+        <div class="drawer-menu-item active" data-mobile-app="dashboard" onclick="showDashboard()">⚡ Dashboard</div>
+        <div class="drawer-menu-item" data-mobile-app="leveling_guide.html" onclick="openApp('leveling_guide.html', 'POE2 ALPHACHUU GUIDE — Leveling Guide')">🗺️ Leveling Guide</div>
+        <div class="drawer-menu-item" data-mobile-app="poe2_crafting_codex.html" onclick="openApp('poe2_crafting_codex.html', 'POE2 ALPHACHUU GUIDE — Crafting &amp; Tips Codex')">🛠️ Crafting Codex</div>
+        <div class="drawer-menu-item" data-mobile-app="res_app.html" onclick="openApp('res_app.html', 'POE2 ALPHACHUU GUIDE — Resistance Benchmarks')">🛡️ Resistance Caps</div>
+        <div class="drawer-menu-item" data-mobile-app="poe2_currency_guide.html" onclick="openApp('poe2_currency_guide.html', 'POE2 ALPHACHUU GUIDE — Currency &amp; Tips')">💎 Currency &amp; Tips</div>
+        <div class="drawer-menu-item" data-mobile-app="poe2_pinnacle_drops.html" onclick="openApp('poe2_pinnacle_drops.html', 'POE2 ALPHACHUU GUIDE — Pinnacle Boss Drops')">👑 Boss Drops</div>
+        <div class="drawer-menu-item" data-mobile-app="poe2_ingame_build.html" onclick="openApp('poe2_ingame_build.html', 'POE2 ALPHACHUU GUIDE — Alpha Ingame Build')">👤 Ingame Build</div>
+      </div>
+    </div>
+  </div>
 
   <!-- 1. LEFTMOST THIN ICON SIDEBAR -->
   <aside class="icon-nav">
@@ -493,11 +725,25 @@ function selectTab(appUrl) {
   document.querySelectorAll('.icon-item').forEach(el => {
     el.classList.toggle('active', el.getAttribute('data-app') === appUrl);
   });
+  document.querySelectorAll('.drawer-menu-item').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-mobile-app') === appUrl);
+  });
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobileDrawer').classList.toggle('active');
+  document.getElementById('drawerBackdrop').classList.toggle('active');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileDrawer').classList.remove('active');
+  document.getElementById('drawerBackdrop').classList.remove('active');
 }
 
 function openApp(url, title, tabId) {
   const activeKey = tabId || url;
   selectTab(activeKey);
+  closeMobileMenu();
   document.getElementById('embeddedAppPanel').classList.add('active');
   const iframe = document.getElementById('appIframe');
   const targetUrl = tabId ? url + '#' + tabId : url;
@@ -519,6 +765,7 @@ function closeEmbeddedApp() {
 }
 function showDashboard() {
   selectTab('dashboard');
+  closeMobileMenu();
   closeEmbeddedApp();
 }
 
