@@ -46,11 +46,11 @@
     constructor(x, y, vx, vy, color) {
       this.x = x;
       this.y = y;
-      this.vx = vx * -0.25 + (Math.random() - 0.5) * 2;
-      this.vy = vy * -0.25 + (Math.random() - 0.5) * 2;
-      this.size = Math.random() * 1.8 + 0.6;
+      this.vx = vx * -0.25 + (Math.random() - 0.5) * 2.2;
+      this.vy = vy * -0.25 + (Math.random() - 0.5) * 2.2;
+      this.size = Math.random() * 2.0 + 0.6;
       this.alpha = 1.0;
-      this.decay = Math.random() * 0.05 + 0.035;
+      this.decay = Math.random() * 0.04 + 0.03;
       this.color = color;
     }
     update() {
@@ -421,21 +421,24 @@
     }
   }
 
-  // Burning Meteor class with particle spark exhaust
+  // Large Burning Shooting Star (Meteor) moving specifically from TOP-RIGHT to BOTTOM-LEFT
   class Meteor {
     constructor() {
       this.reset();
     }
     reset() {
-      this.x = Math.random() * width * 0.9 - width * 0.1;
+      // Start in the top-right quadrant (between 70% and 110% of width)
+      this.x = Math.random() * (width * 0.4) + width * 0.7;
       this.y = -60;
-      this.length = Math.random() * 120 + 80;
-      this.speedX = Math.random() * 8 + 10; 
-      this.speedY = Math.random() * 7 + 8;
-      this.alpha = 1.0;
-      this.decay = Math.random() * 0.016 + 0.008;
-      this.width = Math.random() * 2.2 + 1.2;
+      
+      // Negative X speed = travel left; Positive Y speed = travel down
+      this.speedX = -(Math.random() * 6 + 10); 
+      this.speedY = Math.random() * 5 + 7;
+      
+      this.width = Math.random() * 3.5 + 2.5;   // Thick highly-visible shooting star
+      this.active = true;
       this.color = this.getRandomColor();
+      this.path = []; // Coordinate history for lingering trail fade
     }
     getRandomColor() {
       const colors = [
@@ -447,51 +450,66 @@
       return colors[Math.floor(Math.random() * colors.length)];
     }
     update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.alpha -= this.decay;
+      if (this.active) {
+        this.x += this.speedX;
+        this.y += this.speedY;
 
-      // Spawn burning tail spark exhaust particles
-      if (this.alpha > 0.15 && Math.random() < 0.7) {
-        sparks.push(new MeteorSpark(
-          this.x, 
-          this.y, 
-          this.speedX, 
-          this.speedY, 
-          this.color.spark
-        ));
+        // Push current point to path
+        this.path.push({ x: this.x, y: this.y, alpha: 1.0 });
+
+        // Check if out of bounds (passed left or bottom)
+        if (this.y > height + 80 || this.x < -80) {
+          this.active = false;
+        }
+
+        // Spawn burning exhaust sparks
+        if (Math.random() < 0.65) {
+          sparks.push(new MeteorSpark(
+            this.x, 
+            this.y, 
+            this.speedX, 
+            this.speedY, 
+            this.color.spark
+          ));
+        }
       }
+
+      // Slowly decay trail path points (remains behind for a few seconds)
+      for (let i = 0; i < this.path.length; i++) {
+        this.path[i].alpha -= 0.012; // ~1.4 seconds total linger time
+      }
+
+      // Keep only active path points
+      this.path = this.path.filter(p => p.alpha > 0);
     }
     draw() {
-      if (this.alpha <= 0) return;
+      if (this.path.length < 2) return;
       ctx.save();
-      // Draw meteor core flare
+      
+      ctx.lineCap = 'round';
       ctx.shadowBlur = 15;
       ctx.shadowColor = this.color.head;
-      
-      const grad = ctx.createLinearGradient(
-        this.x, 
-        this.y, 
-        this.x - this.speedX * (this.length / 10), 
-        this.y - this.speedY * (this.length / 10)
-      );
-      grad.addColorStop(0, this.color.head);
-      grad.addColorStop(0.3, this.color.tail + this.alpha + ')');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = this.width;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(this.x - this.speedX * (this.length / 15), this.y - this.speedY * (this.length / 15));
-      ctx.stroke();
+      // Draw the trailing path segment by segment with fading alpha
+      for (let i = 1; i < this.path.length; i++) {
+        const p1 = this.path[i - 1];
+        const p2 = this.path[i];
+        
+        ctx.strokeStyle = this.color.tail + p2.alpha + ')';
+        ctx.lineWidth = this.width * (i / this.path.length); // Taper tail size
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
 
-      // Draw head node
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.width * 1.1, 0, Math.PI * 2);
-      ctx.fill();
+      // Draw the glowing meteor head
+      if (this.active) {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.width * 1.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.restore();
     }
   }
@@ -598,11 +616,11 @@
       meteors.push(new Meteor());
     }
 
-    // Draw Meteors
+    // Draw & Update Meteors (remains active until trail is fully faded)
     for (let i = meteors.length - 1; i >= 0; i--) {
       const m = meteors[i];
       m.update();
-      if (m.alpha <= 0) {
+      if (!m.active && m.path.length === 0) {
         meteors.splice(i, 1);
       } else {
         m.draw();
