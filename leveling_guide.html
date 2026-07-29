@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PoE2 Leveling Guide — App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ╔══════════════════════════════════════════════╗
+   ║  MODERN SCI-FI HUD DESIGN SYSTEM             ║
+   ╚══════════════════════════════════════════════╝ */
+:root{
+  --violet:#b088ff;     --violet-glow:rgba(176,136,255,0.45); --violet-dim:rgba(176,136,255,0.15);
+  --purple:#c49aff;     --purple-glow:rgba(196,154,255,0.4);  --purple-dim:rgba(196,154,255,0.12);
+  --cyan:#38d9a9;       --cyan-glow:rgba(56,217,169,0.4);     --cyan-dim:rgba(56,217,169,0.12);
+  --gold:#ffb700;       --gold-glow:rgba(255,183,0,0.4);      --gold-dim:rgba(255,183,0,0.12);
+  --red:#ff2e63;        --red-glow:rgba(255,46,99,0.4);       --red-dim:rgba(255,46,99,0.12);
+  --green:#00ff9d;      --green-glow:rgba(0,255,157,0.4);     --green-dim:rgba(0,255,157,0.12);
+  --blue:#70a1ff;
+
+  --bg-void:#06040d;
+  --bg-panel:rgba(14, 10, 26, 0.88);
+  --bg-card:rgba(22, 15, 42, 0.65);
+  --bg-card-hover:rgba(32, 22, 60, 0.85);
+  --bg-input:rgba(10, 6, 20, 0.9);
+
+  --txt-hi:#ffffff;
+  --txt-mid:#b8b2d1;
+  --txt-dark:#5e577c;
+
+  --bdr:rgba(176, 136, 255, 0.22);
+  --bdr-hi:rgba(176, 136, 255, 0.55);
+
+  --r4:4px; --r8:8px; --r12:12px; --r20:20px;
+  --nav-h:60px; --tab-h:50px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;height:100%;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg-void);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(176, 136, 255, 0.12) 0%, transparent 70%),
+    radial-gradient(circle at 50% 0%, rgba(138, 92, 246, 0.15) 0%, transparent 60%),
+    linear-gradient(rgba(176, 136, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(176, 136, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  color:var(--txt-hi);
+  font-size:13.5px;
+  line-height:1.6;
+  height:100%;
+  overflow:hidden;
+}
+
+/* ╔══════════════════════════════════════════════╗
+   ║  APP SHELL & ANIMATIONS                      ║
+   ╚══════════════════════════════════════════════╝ */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden;position:relative;}
+
+/* Scanline Overlay Effect */
+.app::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 900;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* ── TOP NAVBAR ── */
+.navbar{
+  height:var(--nav-h);min-height:var(--nav-h);
+  background:rgba(6, 10, 19, 0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;
+  padding:0 1.5rem;gap:1.25rem;
+  position:relative;z-index:50;
+  box-shadow:0 4px 30px rgba(0,0,0,.8), 0 0 15px rgba(0,243,255,.08);
+}
+.nav-logo{display:flex;align-items:center;gap:.85rem;flex-shrink:0;}
+.logo-gem{
+  width:38px;height:38px;
+  background:linear-gradient(135deg, rgba(0,243,255,0.2), rgba(189,0,255,0.3));
+  border:1px solid var(--cyan);
+  border-radius:var(--r8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;
+  color:var(--cyan);
+  box-shadow:0 0 15px var(--cyan-glow), inset 0 0 10px var(--cyan-dim);
+  animation: logoPulse 3s infinite ease-in-out;
+}
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 15px var(--cyan-glow), inset 0 0 10px var(--cyan-dim); }
+  50% { box-shadow: 0 0 25px var(--cyan), inset 0 0 15px var(--cyan-glow); }
+}
+
+.logo-txt{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--txt-hi);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;text-shadow:0 0 10px var(--cyan-glow);}
+.logo-patch{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;}
+
+.nav-divider{width:1px;height:28px;background:var(--bdr);flex-shrink:0;}
+
+/* Global progress in navbar */
+.nav-progress{display:flex;align-items:center;gap:1rem;flex:1;max-width:380px;}
+.nav-prog-label{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;font-weight:700;white-space:nowrap;}
+.nav-prog-bar{
+  flex:1;height:8px;background:rgba(0,0,0,0.6);border:1px solid var(--bdr);border-radius:4px;overflow:hidden;position:relative;
+  box-shadow:inset 0 0 8px rgba(0,0,0,0.8);
+}
+.nav-prog-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--blue), var(--cyan), var(--green));
+  background-size:200% 100%;
+  animation: gradientMove 3s infinite linear;
+  border-radius:3px;
+  transition:width .5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:0 0 12px var(--cyan);
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.nav-prog-fill.complete{background:linear-gradient(90deg, #00b36b, var(--green));box-shadow:0 0 15px var(--green);}
+.nav-prog-pct{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);font-weight:700;white-space:nowrap;text-shadow:0 0 8px var(--cyan-glow);}
+
+.nav-right{display:flex;align-items:center;gap:.75rem;margin-left:auto;}
+
+/* SCI-FI SCI-TECH BUTTONS */
+.nav-btn{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.45rem .9rem;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  border:1px solid var(--cyan);
+  background:linear-gradient(135deg, rgba(0, 243, 255, 0.12) 0%, rgba(5, 10, 20, 0.8) 100%);
+  color:var(--cyan);
+  font-size:11px;
+  font-family:'Orbitron',sans-serif;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+.nav-btn:hover::before { left: 100%; }
+.nav-btn:hover{
+  background:var(--cyan);
+  color:#03060c;
+  box-shadow:0 0 20px var(--cyan), 0 0 30px var(--cyan-glow);
+  transform:translateY(-1px);
+}
+
+.nav-btn.exp{
+  border-color:var(--green);
+  background:linear-gradient(135deg, rgba(0, 255, 157, 0.12) 0%, rgba(5, 10, 20, 0.8) 100%);
+  color:var(--green);
+}
+.nav-btn.exp:hover{
+  background:var(--green);
+  color:#03060c;
+  box-shadow:0 0 20px var(--green), 0 0 30px var(--green-glow);
+}
+
+.nav-btn.danger{
+  border-color:var(--red);
+  background:linear-gradient(135deg, rgba(255, 0, 85, 0.12) 0%, rgba(5, 10, 20, 0.8) 100%);
+  color:var(--red);
+}
+.nav-btn.danger:hover{
+  background:var(--red);
+  color:#ffffff;
+  box-shadow:0 0 20px var(--red), 0 0 30px var(--red-glow);
+}
+
+/* ── ACT TABS ── */
+.tabs-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(12, 8, 24, 0.95);
+  border-bottom: 1px solid var(--bdr);
+  z-index: 40;
+}
+
+.tabs-nav-btn {
+  height: var(--tab-h);
+  width: 36px;
+  background: rgba(20, 14, 38, 0.95);
+  border: none;
+  border-right: 1px solid var(--bdr);
+  border-left: 1px solid var(--bdr);
+  color: var(--violet);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 5;
+  flex-shrink: 0;
+}
+.tabs-nav-btn:hover {
+  background: var(--violet);
+  color: #06040d;
+  box-shadow: 0 0 15px var(--violet-glow);
+}
+
+.tabs{
+  height:var(--tab-h);min-height:var(--tab-h);
+  background:rgba(5, 9, 17, 0.95);
+  border-bottom:1px solid var(--bdr);
+  display:flex;align-items:stretch;
+  padding:0 1.5rem;gap:.5rem;
+  overflow-x:auto;
+  scrollbar-width:none;
+  position:relative;z-index:40;
+}
+.tabs::-webkit-scrollbar{display:none;}
+
+.tab{
+  display:flex;align-items:center;gap:.65rem;
+  padding:0 1.25rem;
+  cursor:pointer;transition:all .25s ease;white-space:nowrap;
+  color:var(--txt-mid);
+  font-family:'Rajdhani',sans-serif;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border-bottom:2px solid transparent;
+  position:relative;
+  flex-shrink:0;
+}
+.tab:hover{color:var(--txt-hi);background:rgba(0,243,255,0.05);}
+.tab.active{
+  color:var(--txt-hi);
+  font-weight:700;
+  background:linear-gradient(180deg, rgba(0,243,255,0.08) 0%, rgba(0,0,0,0.4) 100%);
+}
+.tab[data-tab="overview"].active{border-bottom-color:var(--cyan);color:var(--cyan);text-shadow:0 0 10px var(--cyan-glow);}
+.tab[data-tab="act1"].active{border-bottom-color:var(--green);color:var(--green);text-shadow:0 0 10px var(--green-glow);}
+.tab[data-tab="act2"].active{border-bottom-color:var(--gold);color:var(--gold);text-shadow:0 0 10px var(--gold-glow);}
+.tab[data-tab="act3"].active{border-bottom-color:var(--red);color:var(--red);text-shadow:0 0 10px var(--red-glow);}
+.tab[data-tab="act4"].active{border-bottom-color:var(--purple);color:var(--purple);text-shadow:0 0 10px var(--purple-glow);}
+.tab[data-tab="interludes"].active{border-bottom-color:var(--violet);color:var(--violet);text-shadow:0 0 10px var(--violet-glow);}
+.tab[data-tab="crafting"].active{border-bottom-color:var(--gold);color:var(--gold);text-shadow:0 0 10px var(--gold-glow);}
+
+.tab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px currentColor;}
+.td1{background:var(--green);color:var(--green);}
+.td2{background:var(--gold);color:var(--gold);}
+.td3{background:var(--red);color:var(--red);}
+.td4{background:var(--purple);color:var(--purple);}
+.td5{background:var(--violet);color:var(--violet);}
+.td0{background:var(--cyan);color:var(--cyan);}
+
+.tab-mini-prog{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;color:var(--cyan);
+  background:rgba(0,0,0,0.6);padding:.15rem .5rem;
+  border-radius:10px;border:1px solid var(--bdr);
+}
+
+/* ── MAIN CONTENT AREA ── */
+.content{flex:1;overflow:hidden;display:flex;}
+.panel{display:none;flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--cyan-dim) transparent;}
+.panel::-webkit-scrollbar{width:4px;}
+.panel::-webkit-scrollbar-thumb{background:var(--cyan-dim);border-radius:2px;}
+
+.tabs {
+  scroll-behavior: smooth;
+}
+
+.panel {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan-dim) transparent;
+}
+.panel.active {
+  display: flex;
+  flex-direction: column;
+  animation: fadeInPanel 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ╔══════════════════════════════════════════════╗
+   ║  OVERVIEW PANEL                              ║
+   ╚══════════════════════════════════════════════╝ */
+.overview{padding:1.75rem 2rem;display:flex;flex-direction:column;gap:1.5rem;}
+
+.ov-banner{
+  background:linear-gradient(135deg, rgba(0, 243, 255, 0.1) 0%, rgba(189, 0, 255, 0.05) 50%, rgba(5, 10, 20, 0.9) 100%);
+  border:1px solid var(--bdr-hi);
+  border-left:4px solid var(--cyan);
+  border-radius:var(--r12);padding:1.5rem 1.75rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.6), 0 0 20px var(--cyan-dim);
+  backdrop-filter:blur(12px);
+  position:relative;
+  overflow:hidden;
+}
+.ov-banner::after {
+  content: '';
+  position: absolute;
+  top:0; right:0; width:120px; height:120px;
+  background: radial-gradient(circle, var(--cyan-dim) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ov-banner-title{font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--txt-hi);font-weight:800;letter-spacing:1px;margin-bottom:.35rem;text-shadow:0 0 15px var(--cyan-glow);}
+.ov-banner-sub{font-size:12.5px;color:var(--txt-mid);}
+.ov-banner-link{font-family:'Share Tech Mono',monospace;font-size:11.5px;color:var(--cyan);margin-top:.6rem;display:inline-block;text-decoration:none;transition:all .2s;}
+.ov-banner-link:hover{color:#fff;text-shadow:0 0 10px var(--cyan);}
+
+/* Stat cards row */
+.ov-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.85rem;}
+.stat-card{
+  background:var(--bg-card);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--bdr);
+  border-radius:var(--r12);
+  padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem;
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+.stat-card:hover{
+  border-color:var(--cyan);
+  background:var(--bg-card-hover);
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(0,0,0,0.5), 0 0 15px var(--cyan-dim);
+}
+.sc-icon{font-size:1.4rem;margin-bottom:.1rem;}
+.sc-val{font-family:'Share Tech Mono',monospace;font-size:1.45rem;font-weight:700;line-height:1;}
+.sc-lbl{font-size:11px;color:var(--txt-mid);font-weight:500;}
+.sc-skill{color:var(--green);text-shadow:0 0 8px var(--green-glow);} 
+.sc-spirit{color:var(--purple);text-shadow:0 0 8px var(--purple-glow);}
+.sc-cold{color:var(--cyan);text-shadow:0 0 8px var(--cyan-glow);} 
+.sc-fire{color:var(--red);text-shadow:0 0 8px var(--red-glow);}
+.sc-light{color:var(--gold);text-shadow:0 0 8px var(--gold-glow);} 
+.sc-life{color:#ff4d4d;text-shadow:0 0 8px rgba(255,77,77,0.4);}
+.sc-mana{color:var(--blue);text-shadow:0 0 8px rgba(0,162,255,0.4);} 
+.sc-charm{color:#ffaa55;text-shadow:0 0 8px rgba(255,170,85,0.4);}
+
+/* Act overview cards - Refined High-Contrast Sci-Fi HUD */
+.ov-acts{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  gap:1.1rem;
+}
+.act-card{
+  background:linear-gradient(135deg, rgba(22, 15, 42, 0.92) 0%, rgba(12, 8, 24, 0.96) 100%);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(176, 136, 255, 0.25);
+  border-radius:var(--r12);
+  padding:1.35rem 1.4rem;
+  cursor:pointer;
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(0,0,0,0.6);
+}
+.act-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Individual Act Theme Colors & Accent Lines */
+.act-card.c1 { border-left: 4px solid #00ff9d; }
+.act-card.c1::before { background: linear-gradient(90deg, #00ff9d, transparent); }
+.act-card.c1:hover { border-color: #00ff9d; box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(0,255,157,0.3); }
+
+.act-card.c2 { border-left: 4px solid #ffb700; }
+.act-card.c2::before { background: linear-gradient(90deg, #ffb700, transparent); }
+.act-card.c2:hover { border-color: #ffb700; box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(255,183,0,0.3); }
+
+.act-card.c3 { border-left: 4px solid #ff2e63; }
+.act-card.c3::before { background: linear-gradient(90deg, #ff2e63, transparent); }
+.act-card.c3:hover { border-color: #ff2e63; box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(255,46,99,0.3); }
+
+.act-card.c4 { border-left: 4px solid #b088ff; }
+.act-card.c4::before { background: linear-gradient(90deg, #b088ff, transparent); }
+.act-card.c4:hover { border-color: #b088ff; box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 25px rgba(176,136,255,0.3); }
+
+.act-card:hover { transform: translateY(-4px); }
+
+.ac-header{display:flex;align-items:center;gap:1rem;}
+.ac-num{
+  width:46px;height:46px;border-radius:10px;
+  background:rgba(5, 10, 20, 0.85);
+  border:1px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-size:1.35rem;font-weight:900;
+  flex-shrink:0;
+}
+.c1 .ac-num{color:#00ff9d;border-color:rgba(0,255,157,0.45);text-shadow:0 0 12px rgba(0,255,157,0.6);background:rgba(0,255,157,0.1);}
+.c2 .ac-num{color:#ffb700;border-color:rgba(255,183,0,0.45);text-shadow:0 0 12px rgba(255,183,0,0.6);background:rgba(255,183,0,0.1);}
+.c3 .ac-num{color:#ff2e63;border-color:rgba(255,46,99,0.45);text-shadow:0 0 12px rgba(255,46,99,0.6);background:rgba(255,46,99,0.1);}
+.c4 .ac-num{color:#b088ff;border-color:rgba(176,136,255,0.45);text-shadow:0 0 12px rgba(176,136,255,0.6);background:rgba(176,136,255,0.1);}
+
+.ac-info{display:flex;flex-direction:column;flex:1;}
+.ac-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.15rem;
+  color:#ffffff;
+  font-weight:800;
+  letter-spacing:.5px;
+  line-height:1.2;
+}
+.ac-sub{
+  font-size:12.5px;
+  color:#d1cae8;
+  font-weight:500;
+  margin-top:.25rem;
+  font-family:'Inter',sans-serif;
+}
+
+.ac-progbar{
+  height:7px;
+  background:rgba(5, 10, 20, 0.9);
+  border-radius:4px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow:inset 0 0 6px rgba(0,0,0,0.8);
+}
+.ac-progfill{
+  height:100%;border-radius:4px;
+  transition:width .5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:0 0 12px currentColor;
+}
+.c1 .ac-progfill{background:linear-gradient(90deg, #00ff9d, #38d9a9);color:#00ff9d;}
+.c2 .ac-progfill{background:linear-gradient(90deg, #ffb700, #ff8800);color:#ffb700;}
+.c3 .ac-progfill{background:linear-gradient(90deg, #ff2e63, #ff5555);color:#ff2e63;}
+.c4 .ac-progfill{background:linear-gradient(90deg, #b088ff, #c49aff);color:#b088ff;}
+
+.ac-progtxt{
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;
+  color:#e2ddf5;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+}
+
+.ac-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.2rem;}
+.ac-badge{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10.5px;
+  font-weight:700;
+  padding:.25rem .6rem;
+  border-radius:5px;
+  border:1px solid;
+  letter-spacing:.5px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.bb-skill { background:rgba(0,255,157,0.15); border-color:rgba(0,255,157,0.5); color:#00ff9d; }
+.bb-spirit{ background:rgba(196,154,255,0.15); border-color:rgba(196,154,255,0.5); color:#c49aff; }
+.bb-cold  { background:rgba(56,217,169,0.15); border-color:rgba(56,217,169,0.5); color:#38d9a9; }
+.bb-light { background:rgba(255,183,0,0.15); border-color:rgba(255,183,0,0.5); color:#ffb700; }
+.bb-fire  { background:rgba(255,46,99,0.15); border-color:rgba(255,46,99,0.5); color:#ff2e63; }
+.bb-life  { background:rgba(255,77,77,0.15); border-color:rgba(255,77,77,0.5); color:#ff4d4d; }
+.bb-mana  { background:rgba(112,161,255,0.15); border-color:rgba(112,161,255,0.5); color:#70a1ff; }
+.bb-charm { background:rgba(255,170,85,0.15); border-color:rgba(255,170,85,0.5); color:#ffaa55; }
+
+/* Smart Sci-Fi Rewards Matrix */
+.ov-rewards{
+  background:linear-gradient(135deg, rgba(0, 243, 255, 0.08) 0%, rgba(189, 0, 255, 0.04) 50%, rgba(9, 14, 26, 0.9) 100%);
+  border:1px solid var(--bdr-hi);
+  border-left:4px solid var(--cyan);
+  border-radius:var(--r12);
+  padding:1.4rem 1.6rem;
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 30px rgba(0,0,0,0.6), 0 0 20px var(--cyan-dim);
+  display:flex;flex-direction:column;gap:1.1rem;
+}
+.ov-r-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);padding-bottom:.6rem;}
+.ov-r-title{font-family:'Orbitron',sans-serif;font-size:11.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-weight:800;text-shadow:0 0 10px var(--cyan-glow);}
+.ov-r-tag{font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--txt-mid);background:rgba(0,243,255,0.1);padding:.2rem .5rem;border-radius:4px;border:1px solid var(--bdr);}
+
+.ov-r-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.85rem;}
+
+.r-item-card{
+  background:rgba(5, 10, 20, 0.85);
+  border:1px solid var(--bdr);
+  border-radius:var(--r8);
+  padding:.75rem .9rem;
+  display:flex;align-items:center;gap:.85rem;
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+.r-item-card:hover{
+  border-color:var(--cyan);
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,0,0,0.5), 0 0 12px var(--cyan-dim);
+}
+.r-item-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(0,243,255,0.08);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.15rem;flex-shrink:0;
+}
+.r-item-details{display:flex;flex-direction:column;flex:1;}
+.r-item-val{font-family:'Share Tech Mono',monospace;font-size:1.1rem;font-weight:700;line-height:1.1;}
+.r-item-name{font-size:11px;color:var(--txt-mid);font-weight:500;margin-top:.15rem;}
+.r-item-act{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  padding:.15rem .45rem;border-radius:3px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  color:var(--txt-mid);white-space:nowrap;align-self:flex-start;
+}
+
+/* Card Glow Variants */
+.r-card-skill .r-item-val{color:var(--green);text-shadow:0 0 8px var(--green-glow);}
+.r-card-skill:hover{border-color:var(--green);box-shadow:0 0 15px var(--green-dim);}
+
+.r-card-spirit .r-item-val{color:var(--purple);text-shadow:0 0 8px var(--purple-glow);}
+.r-card-spirit:hover{border-color:var(--purple);box-shadow:0 0 15px var(--purple-dim);}
+
+.r-card-cold .r-item-val{color:var(--cyan);text-shadow:0 0 8px var(--cyan-glow);}
+.r-card-cold:hover{border-color:var(--cyan);box-shadow:0 0 15px var(--cyan-dim);}
+
+.r-card-light .r-item-val{color:var(--gold);text-shadow:0 0 8px var(--gold-glow);}
+.r-card-light:hover{border-color:var(--gold);box-shadow:0 0 15px var(--gold-dim);}
+
+.r-card-fire .r-item-val{color:var(--red);text-shadow:0 0 8px var(--red-glow);}
+.r-card-fire:hover{border-color:var(--red);box-shadow:0 0 15px var(--red-dim);}
+
+.r-card-life .r-item-val{color:#ff4d4d;text-shadow:0 0 8px rgba(255,77,77,0.4);}
+.r-card-life:hover{border-color:#ff4d4d;box-shadow:0 0 15px rgba(255,77,77,0.2);}
+
+.r-card-mana .r-item-val{color:var(--blue);text-shadow:0 0 8px rgba(0,162,255,0.4);}
+.r-card-mana:hover{border-color:var(--blue);box-shadow:0 0 15px rgba(0,162,255,0.2);}
+
+.r-card-charm .r-item-val{color:#ffaa55;text-shadow:0 0 8px rgba(255,170,85,0.4);}
+.r-card-charm:hover{border-color:#ffaa55;box-shadow:0 0 15px rgba(255,170,85,0.2);}
+
+/* ╔══════════════════════════════════════════════╗
+   ║  ACT PANEL                                   ║
+   ╚══════════════════════════════════════════════╝ */
+.act-panel{padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1.1rem;}
+
+/* Filter bar */
+.filter-bar{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.75rem 1rem;
+  background:var(--bg-card);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--bdr);border-radius:var(--r12);
+  flex-wrap:wrap;
+}
+.filter-lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-weight:700;flex-shrink:0;}
+.f-btn{
+  padding:.35rem .85rem;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  border:1px solid var(--bdr);
+  background:rgba(5, 10, 20, 0.8);
+  color:var(--txt-mid);
+  font-size:11px;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .2s ease;
+  display:flex;align-items:center;gap:.4rem;
+}
+.f-btn:hover{border-color:var(--cyan);color:var(--txt-hi);box-shadow:0 0 10px var(--cyan-dim);}
+.f-btn.active{background:var(--cyan);color:#03060c;border-color:var(--cyan);font-weight:700;box-shadow:0 0 15px var(--cyan-glow);}
+.f-btn .fdot{width:6px;height:6px;border-radius:50%;}
+
+/* Search */
+.search-wrap{margin-left:auto;position:relative;}
+.search-wrap input{
+  background:var(--bg-input);border:1px solid var(--bdr);border-radius:var(--r20);
+  padding:.35rem .85rem .35rem 2.2rem;color:var(--txt-hi);font-size:12px;
+  font-family:'Share Tech Mono',monospace;width:200px;outline:none;
+  transition:all .2s ease;
+}
+.search-wrap input:focus{border-color:var(--cyan);box-shadow:0 0 12px var(--cyan-glow);}
+.search-wrap input::placeholder{color:var(--txt-dark);}
+.search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--cyan);font-size:12px;pointer-events:none;}
+
+/* Act header banner */
+.act-banner{
+  border-radius:var(--r12);padding:1.2rem 1.5rem;
+  display:flex;align-items:center;gap:1.25rem;
+  border:1px solid var(--bdr);
+  backdrop-filter:blur(10px);
+}
+.ab1{background:linear-gradient(135deg,rgba(0,255,157,.12),rgba(5,10,20,.85) 70%);border-left:4px solid var(--green);box-shadow:0 0 20px var(--green-dim);}
+.ab2{background:linear-gradient(135deg,rgba(255,183,0,.12),rgba(5,10,20,.85) 70%);border-left:4px solid var(--gold);box-shadow:0 0 20px var(--gold-dim);}
+.ab3{background:linear-gradient(135deg,rgba(255,0,85,.12),rgba(5,10,20,.85) 70%);border-left:4px solid var(--red);box-shadow:0 0 20px var(--red-dim);}
+.ab4{background:linear-gradient(135deg,rgba(189,0,255,.12),rgba(5,10,20,.85) 70%);border-left:4px solid var(--purple);box-shadow:0 0 20px var(--purple-dim);}
+.ab-num{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;line-height:1;flex-shrink:0;}
+.ab1 .ab-num{color:var(--green);text-shadow:0 0 12px var(--green-glow);} 
+.ab2 .ab-num{color:var(--gold);text-shadow:0 0 12px var(--gold-glow);}
+.ab3 .ab-num{color:var(--red);text-shadow:0 0 12px var(--red-glow);} 
+.ab4 .ab-num{color:var(--purple);text-shadow:0 0 12px var(--purple-glow);}
+.ab-title{font-family:'Orbitron',sans-serif;font-size:1.15rem;color:var(--txt-hi);font-weight:700;}
+.ab-sub{font-size:12px;color:var(--txt-mid);margin-top:.2rem;}
+
+.ab-progress{min-width:120px;display:flex;flex-direction:column;gap:.35rem;align-items:flex-end;}
+.ab-pct{font-family:'Share Tech Mono',monospace;font-size:1.25rem;font-weight:700;}
+.ab1 .ab-pct{color:var(--green);} .ab2 .ab-pct{color:var(--gold);}
+.ab3 .ab-pct{color:var(--red);} .ab4 .ab-pct{color:var(--purple);}
+.ab-pb{width:110px;height:6px;background:rgba(0,0,0,0.6);border:1px solid var(--bdr);border-radius:3px;overflow:hidden;}
+.ab-pbf{height:100%;border-radius:3px;transition:width .5s;box-shadow:0 0 8px currentColor;}
+.ab1 .ab-pbf{background:var(--green);color:var(--green);} .ab2 .ab-pbf{background:var(--gold);color:var(--gold);}
+.ab3 .ab-pbf{background:var(--red);color:var(--red);} .ab4 .ab-pbf{background:var(--purple);color:var(--purple);}
+.ab-pbtxt{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt-mid);}
+
+/* Zones list */
+.zones-list{display:flex;flex-direction:column;gap:.75rem;}
+
+/* ── ZONE CARD ── */
+.zone-card{
+  background:var(--bg-card);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--bdr);
+  border-radius:var(--r12);
+  overflow:hidden;
+  transition:all .25s ease;
+}
+.zone-card:hover{
+  border-color:var(--cyan);
+  box-shadow:0 6px 25px rgba(0,0,0,0.6), 0 0 15px var(--cyan-dim);
+}
+.zone-card.zc-perm{border-left:4px solid var(--green);}
+.zone-card.zc-boss{border-left:4px solid var(--red);}
+.zone-card.zc-final{border-left:4px solid var(--purple);}
+.zone-card.zc-done{opacity:.45;}
+.zone-card[data-hidden="true"]{display:none;}
+
+/* Zone top bar */
+.zc-bar{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.65rem 1.1rem;
+  background:rgba(5, 10, 20, 0.7);
+  border-bottom:1px solid var(--bdr);
+}
+.zc-icon{font-size:15px;flex-shrink:0;}
+.zc-name{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--txt-hi);font-weight:700;flex:1;letter-spacing:.5px;}
+.zc-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+.zt{font-family:'Share Tech Mono',monospace;font-size:8.5px;padding:.12rem .45rem;border-radius:3px;border:1px solid;letter-spacing:.5px;text-transform:uppercase;}
+.zt-wp  {background:rgba(0,243,255,.1);border-color:rgba(0,243,255,.3);color:var(--cyan);}
+.zt-perm{background:rgba(0,255,157,.1);border-color:rgba(0,255,157,.3);color:var(--green);}
+.zt-boss{background:rgba(255,0,85,.1);border-color:rgba(255,0,85,.3);color:var(--red);}
+.zt-skip{background:rgba(255,183,0,.1);border-color:rgba(255,183,0,.3);color:var(--gold);}
+.zt-final{background:rgba(189,0,255,.1);border-color:rgba(189,0,255,.3);color:var(--purple);}
+.zc-counter{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);flex-shrink:0;}
+
+/* Zone body */
+.zc-body{padding:.75rem 1.1rem .85rem;}
+
+/* Warning */
+.warn{
+  display:flex;align-items:flex-start;gap:.6rem;
+  background:rgba(255,0,85,.08);border:1px solid rgba(255,0,85,.3);
+  border-radius:var(--r8);padding:.5rem .75rem;margin-bottom:.6rem;
+  font-size:11.5px;color:var(--red);font-family:'Share Tech Mono',monospace;
+  line-height:1.5;
+  box-shadow:0 0 10px var(--red-dim);
+}
+
+/* Checklist */
+.cl{list-style:none;display:flex;flex-direction:column;gap:.2rem;}
+.cl-item{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.45rem .4rem;
+  border-bottom:1px solid rgba(0,243,255,.05);
+  transition:all .2s ease;
+}
+.cl-item:last-child{border-bottom:none;}
+.cl-item.done{opacity:.4;}
+
+.cl-label{display:flex;align-items:center;gap:.75rem;cursor:pointer;flex:1;font-size:13px;line-height:1.5;}
+.cl-label:hover{color:var(--cyan);}
+
+/* SCI-FI GLOWING CHECKBOX */
+.cl-item input[type=checkbox]{position:absolute;opacity:0;width:0;height:0;}
+.cb{
+  width:18px;height:18px;border:1.5px solid var(--bdr-hi);border-radius:3px;
+  background:rgba(5,10,20,0.9);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);cursor:pointer;
+  box-shadow:inset 0 0 5px rgba(0,0,0,0.8);
+}
+.cl-item:hover .cb { border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+.cl-item input:checked + .cb{
+  background:var(--cyan);
+  border-color:var(--cyan);
+  box-shadow:0 0 12px var(--cyan), 0 0 20px var(--cyan-glow);
+  transform:scale(1.05);
+}
+.cl-item input:checked + .cb::after{content:'✓';font-size:11px;color:#03060c;font-weight:900;line-height:1;}
+
+.cl-icon{font-size:13px;flex-shrink:0;}
+.cl-txt{flex:1;}
+.cl-txt strong{color:var(--txt-hi);}
+
+/* Reward badge */
+.rwd{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:.12rem .45rem;border-radius:4px;border:1px solid;
+  white-space:nowrap;flex-shrink:0;
+}
+.r-skill {background:rgba(0,255,157,.1);border-color:rgba(0,255,157,.3);color:var(--green);}
+.r-spirit{background:rgba(189,0,255,.1);border-color:rgba(189,0,255,.3);color:var(--purple);}
+.r-cold  {background:rgba(0,243,255,.1);border-color:rgba(0,243,255,.3);color:var(--cyan);}
+.r-fire  {background:rgba(255,0,85,.1);border-color:rgba(255,0,85,.3);color:var(--red);}
+.r-light {background:rgba(255,183,0,.1);border-color:rgba(255,183,0,.3);color:var(--gold);}
+.r-life  {background:rgba(255,77,77,.1);border-color:rgba(255,77,77,.3);color:#ff4d4d;}
+.r-mana  {background:rgba(0,162,255,.1);border-color:rgba(0,162,255,.3);color:var(--blue);}
+.r-charm {background:rgba(255,170,85,.1);border-color:rgba(255,170,85,.3);color:#ffaa55;}
+
+.cl-note{font-size:11.5px;color:var(--txt-mid);font-style:italic;margin-top:.15rem;padding-left:1.75rem;}
+
+/* ╔══════════════════════════════════════════════╗
+   ║  TOAST                                       ║
+   ╚══════════════════════════════════════════════╝ */
+.toast{
+  position:fixed;bottom:25px;right:25px;
+  background:rgba(6, 10, 19, 0.95);
+  border:1px solid var(--cyan);color:var(--cyan);
+  padding:.75rem 1.25rem;border-radius:var(--r8);
+  font-family:'Orbitron',sans-serif;font-size:11.5px;letter-spacing:1px;
+  z-index:999;opacity:0;pointer-events:none;
+  transform:translateY(15px);
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:0 8px 30px rgba(0,0,0,.8), 0 0 20px var(--cyan-glow);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ╔══════════════════════════════════════════════╗
+   ║  RESPONSIVE                                  ║
+   ╚══════════════════════════════════════════════╝ */
+@media(max-width:680px){
+  .nav-progress{display:none;}
+  .logo-patch{display:none;}
+  .act-panel{padding:1rem .9rem;}
+  .overview{padding:1rem .9rem;}
+  .search-wrap input{width:130px;}
+}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+
+/* Codex Content Styles */
+:root {
+  --r-normal:  #c8c8c8;
+  --r-magic:   #8888ff;
+  --r-rare:    #ffff77;
+  --r-unique:  #af6025;
+  --r-fract:   #b8a374;
+  --r-corrupt: #ff5050;
+  --r-desec:   #4ade80;
+  --c-aldur:   #e8b878;
+}
+.rarity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.6rem;
+  margin: 0.8rem 0 1.2rem;
+}
+.chip {
+  background: rgba(20,25,35,0.7);
+  border: 1px solid var(--border);
+  padding: 0.65rem 0.8rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 12px;
+}
+.chip .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+.chip .label { color: var(--txt-hi); font-weight: 600; line-height: 1.2; }
+.chip .label small { display: block; color: var(--txt-muted); font-size: 10.5px; font-weight: 400; margin-top: 0.15rem; }
+.c-normal .dot { color: var(--r-normal); background: var(--r-normal); }
+.c-magic .dot { color: var(--r-magic); background: var(--r-magic); }
+.c-rare .dot { color: var(--r-rare); background: var(--r-rare); }
+.c-unique .dot { color: var(--r-unique); background: var(--r-unique); }
+.c-fract .dot { color: var(--r-fract); background: var(--r-fract); }
+.c-desec .dot { color: var(--r-desec); background: var(--r-desec); }
+.c-corrupt .dot { color: var(--r-corrupt); background: var(--r-corrupt); }
+
+.tbl-wrap {
+  overflow-x: auto;
+  margin: 0.8rem 0 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(15,20,30,0.6);
+}
+table {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+}
+table caption {
+  text-align: left; padding: 0.7rem 1rem;
+  font-family: 'Orbitron', sans-serif; font-weight: 600;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold); background: rgba(255,183,0,0.08);
+  border-bottom: 1px solid var(--border);
+}
+th, td {
+  text-align: left; padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--border); vertical-align: top;
+}
+th {
+  font-family: 'Orbitron', sans-serif; font-weight: 600;
+  color: var(--gold); font-size: 10.5px; letter-spacing: 1px;
+  text-transform: uppercase; background: rgba(255,255,255,0.03);
+}
+tbody tr:hover { background: rgba(255,183,0,0.05); }
+
+.tier-pill {
+  display: inline-block; padding: 0.1rem 0.5rem;
+  border-radius: 100px; font-size: 9.5px; font-weight: 600;
+  font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+  text-transform: uppercase; margin-left: 0.3rem;
+}
+.tier-pill.lesser { background: rgba(255,255,255,0.08); color: var(--txt-mid); border: 1px solid var(--border); }
+.tier-pill.greater { background: rgba(255,183,0,0.15); color: var(--gold); border: 1px solid var(--gold); }
+.tier-pill.perfect { background: rgba(176,136,255,0.15); color: var(--violet); border: 1px solid var(--violet); }
+.tier-pill.normal { background: rgba(56,189,248,0.15); color: var(--sky); border: 1px solid var(--sky); }
+
+.callout {
+  background: rgba(20,25,35,0.6);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  padding: 0.85rem 1.1rem; margin: 1rem 0;
+  font-size: 12.5px; border-radius: 0 6px 6px 0;
+  color: var(--txt-hi); line-height: 1.6;
+}
+.callout.warn { border-left-color: var(--burnt); background: rgba(255,102,0,0.06); }
+.callout.tip { border-left-color: var(--sky); background: rgba(56,189,248,0.06); }
+.callout.new { border-left-color: var(--violet); background: rgba(176,136,255,0.06); }
+.callout.aldur { border-left-color: var(--c-aldur); background: rgba(232,184,120,0.08); }
+.callout .label {
+  display: block; font-family: 'Orbitron', sans-serif;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.3rem; font-weight: 700;
+}
+.callout.warn .label { color: var(--burnt); }
+.callout.tip .label { color: var(--sky); }
+.callout.new .label { color: var(--violet); }
+.callout.aldur .label { color: var(--c-aldur); }
+
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.75rem; margin: 1rem 0 1.2rem;
+}
+.card {
+  background: rgba(20,25,35,0.65);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.95rem 1.1rem;
+}
+.card h4 { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 12.5px; margin-bottom: 0.35rem; }
+.card .role { font-family: monospace; color: var(--txt-muted); font-size: 10px; text-transform: uppercase; margin-bottom: 0.5rem; }
+
+.tricks {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem; margin: 1.2rem 0;
+}
+.trick {
+  background: rgba(20,25,35,0.7);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  padding: 1.1rem 1.2rem 1rem; border-radius: 0 8px 8px 0;
+}
+.trick .tag { font-family: 'Orbitron', sans-serif; font-size: 9.5px; letter-spacing: 1.5px; color: var(--gold); text-transform: uppercase; font-weight: 700; margin-bottom: 0.4rem; display: inline-block; }
+.trick h4 { font-family: 'Orbitron', sans-serif; color: var(--txt-hi); font-size: 13.5px; margin-bottom: 0.5rem; }
+.trick .how { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 0.7rem 0.9rem; margin: 0.6rem 0; font-size: 12px; }
+.trick .how > strong { display: block; font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.4rem; }
+.trick .why { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px dashed var(--border); font-style: italic; color: var(--txt-muted); font-size: 12px; }
+
+.canonical { background: rgba(20,25,35,0.75); border: 1px solid var(--gold); border-radius: 8px; padding: 1.2rem 1.4rem; margin: 1rem 0 1.4rem; }
+.canonical .can-title { font-family: 'Orbitron', sans-serif; color: var(--gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 0.9rem; font-weight: 700; }
+.flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: center; margin-bottom: 0.7rem; }
+.pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border); font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--txt-hi); border-radius: 4px; }
+.pill .n { color: var(--gold); font-weight: 700; }
+
+
+/* ── TOP HORIZONTAL SUBNAV BAR FOR CRAFTING CHAPTERS ── */
+.craft-subnav-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(12, 8, 24, 0.95);
+  border: 1px solid var(--bdr);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.craft-subnav-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.craft-subnav-items {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex: 1;
+  scrollbar-width: thin;
+}
+.csn-btn {
+  background: rgba(255, 183, 0, 0.06);
+  border: 1px solid rgba(255, 183, 0, 0.2);
+  border-radius: 6px;
+  color: #d8c29d;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.csn-btn:hover {
+  background: rgba(255, 183, 0, 0.15);
+  border-color: var(--gold);
+  color: #ffffff;
+}
+.csn-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #06040d;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(255, 183, 0, 0.4);
+}
+
+</style>
+</head>
+<body>
+<canvas id="plexusBg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.6;"></canvas>
+<div class="app">
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <div class="logo-gem" style="padding:0; overflow:hidden; border:2px solid var(--cyan); box-shadow:0 0 15px var(--cyan-glow);">
+        <img src="assets/gaming_cheeser_logo.jpg" alt="GAMING CHEESER" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:8px;" />
+      </div>
+    <div>
+      <div class="logo-txt">POE2 ALPHACHUU GUIDE — Leveling</div>
+      <div class="logo-patch">PATCH 0.5 · RUNES OF ALDUR</div>
+    </div>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <div class="nav-progress">
+    <span class="nav-prog-label">Progress</span>
+    <div class="nav-prog-bar"><div class="nav-prog-fill" id="gBar" style="width:0%"></div></div>
+    <span class="nav-prog-pct" id="gPct">0%</span>
+  </div>
+
+  <div class="nav-right">
+    <button class="nav-btn exp" onclick="exportP()">⬆ Export</button>
+    <button class="nav-btn"    onclick="importP()">⬇ Import</button>
+    <button class="nav-btn danger" onclick="resetAll()">↺ Reset</button>
+  </div>
+</nav>
+
+<!-- ══════════════ TABS ══════════════ -->
+<div class="tabs-wrapper">
+  <button class="tabs-nav-btn" onclick="scrollTabs('prev')" title="Previous Tab">❮</button>
+  <div class="tabs" id="tabsContainer">
+    <div class="tab active" data-tab="overview" onclick="switchTab('overview')">
+      <span class="tab-dot td0"></span> Overview
+    </div>
+    <div class="tab" data-tab="act1" onclick="switchTab('act1')">
+      <span class="tab-dot td1"></span> Act I · Clearfell
+      <span class="tab-mini-prog" id="tmini1">0%</span>
+    </div>
+    <div class="tab" data-tab="act2" onclick="switchTab('act2')">
+      <span class="tab-dot td2"></span> Act II · Vastiri
+      <span class="tab-mini-prog" id="tmini2">0%</span>
+    </div>
+    <div class="tab" data-tab="act3" onclick="switchTab('act3')">
+      <span class="tab-dot td3"></span> Act III · Ziggurat
+      <span class="tab-mini-prog" id="tmini3">0%</span>
+    </div>
+    <div class="tab" data-tab="act4" onclick="switchTab('act4')">
+      <span class="tab-dot td4"></span> Act IV · Utzaal
+      <span class="tab-mini-prog" id="tmini4">0%</span>
+    </div>
+    <div class="tab" data-tab="interludes" onclick="switchTab('interludes')">
+      <span class="tab-dot td5"></span> Interludes · V.1, V.2, V.3
+      <span class="tab-mini-prog" id="tmini5">0%</span>
+    </div>
+    
+  </div>
+  <button class="tabs-nav-btn" onclick="scrollTabs('next')" title="Next Tab">❯</button>
+</div>
+
+<!-- ══════════════ CONTENT ══════════════ -->
+<div class="content">
+
+  <!-- ── OVERVIEW ── -->
+  <div class="panel active" id="panel-overview">
+    <div class="overview">
+      <div class="ov-banner">
+        <div class="ov-banner-title">PoE2 Leveling Guide — Acts I–IV</div>
+        <div class="ov-banner-sub">Interactive checklist · Patch 0.5 RUNES OF ALDUR · Tick tasks as you progress through the campaign</div>
+        <a class="ov-banner-link" href="https://domistae.github.io/poe2-leveling/" target="_blank">↗ Original guide by domistae (MIT License)</a>
+      </div>
+
+
+      <!-- Campaign Progression Act Cards (domistae Patch 0.5) -->
+      <div class="ov-acts">
+        <!-- ACT I -->
+        <div class="act-card c1" onclick="switchTab('act1')">
+          <div class="ac-header">
+            <div class="ac-num">I</div>
+            <div class="ac-info">
+              <div class="ac-title">ACT I — CLEARFELL TO OGHAM</div>
+              <div class="ac-sub">Lvl 1–14 · ~65 steps · Boss: Doryani</div>
+            </div>
+          </div>
+          <div class="ac-progbar"><div class="ac-progfill" id="ovb1" style="width:0%"></div></div>
+          <div class="ac-progtxt"><span id="ovt1a">0 / 0 tasks</span><span id="ovt1b">0%</span></div>
+          <div class="ac-badges">
+            <span class="ac-badge bb-skill">+4 Skill Points</span>
+            <span class="ac-badge bb-spirit">+30 Spirit</span>
+            <span class="ac-badge bb-life">+20 Life</span>
+            <span class="ac-badge bb-cold">+10% Cold Res</span>
+            <span class="ac-badge bb-charm">Salvage Bench</span>
+          </div>
+        </div>
+
+        <!-- ACT II -->
+        <div class="act-card c2" onclick="switchTab('act2')">
+          <div class="ac-header">
+            <div class="ac-num">II</div>
+            <div class="ac-info">
+              <div class="ac-title">ACT II — VASTIRI TO DREADNOUGHT</div>
+              <div class="ac-sub">Lvl 14–29 · ~78 steps · Boss: Jamanra</div>
+            </div>
+          </div>
+          <div class="ac-progbar"><div class="ac-progfill" id="ovb2" style="width:0%"></div></div>
+          <div class="ac-progtxt"><span id="ovt2a">0 / 0 tasks</span><span id="ovt2b">0%</span></div>
+          <div class="ac-badges">
+            <span class="ac-badge bb-skill">+4 Skill Points</span>
+            <span class="ac-badge bb-light">+10% Lightning Res</span>
+            <span class="ac-badge bb-spirit">1st Ascendancy</span>
+            <span class="ac-badge bb-charm">+1 Charm Slot</span>
+          </div>
+        </div>
+
+        <!-- ACT III -->
+        <div class="act-card c3" onclick="switchTab('act3')">
+          <div class="ac-header">
+            <div class="ac-num">III</div>
+            <div class="ac-info">
+              <div class="ac-title">ACT III — SANDSWEPT TO ZIGGURAT</div>
+              <div class="ac-sub">Lvl 30–42 · ~87 steps · Boss: Zarokh</div>
+            </div>
+          </div>
+          <div class="ac-progbar"><div class="ac-progfill" id="ovb3" style="width:0%"></div></div>
+          <div class="ac-progtxt"><span id="ovt3a">0 / 0 tasks</span><span id="ovt3b">0%</span></div>
+          <div class="ac-badges">
+            <span class="ac-badge bb-skill">+4 Skill Points</span>
+            <span class="ac-badge bb-spirit">+30 Spirit</span>
+            <span class="ac-badge bb-fire">+10% Fire Res</span>
+            <span class="ac-badge bb-spirit">2nd Ascendancy</span>
+            <span class="ac-badge bb-mana">Permanent Choice</span>
+          </div>
+        </div>
+
+        <!-- ACT IV -->
+        <div class="act-card c4" onclick="switchTab('act4')">
+          <div class="ac-header">
+            <div class="ac-num">IV</div>
+            <div class="ac-info">
+              <div class="ac-title">ACT IV — KARUI ARCHIPELAGO</div>
+              <div class="ac-sub">Lvl 42–52 · ~67 steps · Boss: Arbiter of Ash</div>
+            </div>
+          </div>
+          <div class="ac-progbar"><div class="ac-progfill" id="ovb4" style="width:0%"></div></div>
+          <div class="ac-progtxt"><span id="ovt4a">0 / 0 tasks</span><span id="ovt4b">0%</span></div>
+          <div class="ac-badges">
+            <span class="ac-badge bb-skill">+4 Skill Points</span>
+            <span class="ac-badge bb-mana">+5% Max Mana</span>
+            <span class="ac-badge bb-charm">Tattoo Choice</span>
+            <span class="ac-badge bb-cold">Hideout</span>
+          </div>
+        </div>
+
+        <!-- INTERLUDES -->
+        <div class="act-card c4" style="border-left-color: var(--violet);" onclick="switchTab('interludes')">
+          <div class="ac-header">
+            <div class="ac-num" style="color:var(--violet);border-color:rgba(176,136,255,0.45);text-shadow:0 0 12px rgba(176,136,255,0.6);background:rgba(176,136,255,0.1);">V</div>
+            <div class="ac-info">
+              <div class="ac-title">INTERLUDES — V.1, V.2, V.3</div>
+              <div class="ac-sub">Lvl 52–59 · Reward Ref · Endgame Atlas</div>
+            </div>
+          </div>
+          <div class="ac-progbar"><div class="ac-progfill" id="ovb5" style="width:0%;background:var(--violet);color:var(--violet);"></div></div>
+          <div class="ac-progtxt"><span id="ovt5a">0 / 0 tasks</span><span id="ovt5b">0%</span></div>
+          <div class="ac-badges">
+            <span class="ac-badge bb-skill">+8 Skill Points</span>
+            <span class="ac-badge bb-life">+5% Max Life</span>
+            <span class="ac-badge bb-spirit">+40 Spirit</span>
+            <span class="ac-badge bb-charm">Free Unique</span>
+            <span class="ac-badge bb-light">7 Boons</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Sci-Fi Campaign Rewards Database Matrix -->
+      <div class="ov-rewards">
+        <div class="ov-r-header">
+          <div class="ov-r-title">🏆 ALL PERMANENT CAMPAIGN REWARDS</div>
+          <span class="ov-r-tag">DATABASE MATRIX · ACTS I–IV &amp; INTERLUDES</span>
+        </div>
+
+        <div class="ov-r-grid">
+          <!-- Reward Item 1 -->
+          <div class="r-item-card r-card-skill">
+            <div class="r-item-icon">🌟</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+24</div>
+              <div class="r-item-name">Passive Skill Points</div>
+            </div>
+            <span class="r-item-act">Acts I–IV + Interludes</span>
+          </div>
+
+          <!-- Reward Item 2 -->
+          <div class="r-item-card r-card-spirit">
+            <div class="r-item-icon">💜</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+100</div>
+              <div class="r-item-name">Spirit Reserve</div>
+            </div>
+            <span class="r-item-act">Acts I, III &amp; Interludes</span>
+          </div>
+
+          <!-- Reward Item 3 -->
+          <div class="r-item-card r-card-cold">
+            <div class="r-item-icon">❄️</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+10%</div>
+              <div class="r-item-name">Cold Resistance</div>
+            </div>
+            <span class="r-item-act">Act I</span>
+          </div>
+
+          <!-- Reward Item 4 -->
+          <div class="r-item-card r-card-light">
+            <div class="r-item-icon">⚡</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+10%</div>
+              <div class="r-item-name">Lightning Resistance</div>
+            </div>
+            <span class="r-item-act">Act II</span>
+          </div>
+
+          <!-- Reward Item 5 -->
+          <div class="r-item-card r-card-fire">
+            <div class="r-item-icon">🔥</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+10%</div>
+              <div class="r-item-name">Fire Resistance</div>
+            </div>
+            <span class="r-item-act">Act III</span>
+          </div>
+
+          <!-- Reward Item 6 -->
+          <div class="r-item-card r-card-life">
+            <div class="r-item-icon">❤️</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+20 &amp; +5%</div>
+              <div class="r-item-name">Max Life Bonus</div>
+            </div>
+            <span class="r-item-act">Act I &amp; Interludes</span>
+          </div>
+
+          <!-- Reward Item 7 -->
+          <div class="r-item-card r-card-mana">
+            <div class="r-item-icon">🔵</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+5%</div>
+              <div class="r-item-name">Maximum Mana</div>
+            </div>
+            <span class="r-item-act">Act IV</span>
+          </div>
+
+          <!-- Reward Item 8 -->
+          <div class="r-item-card r-card-charm">
+            <div class="r-item-icon">⚙️</div>
+            <div class="r-item-details">
+              <div class="r-item-val">+1</div>
+              <div class="r-item-name">Charm Slot</div>
+            </div>
+            <span class="r-item-act">Act II</span>
+          </div>
+
+          <!-- Reward Item 9 -->
+          <div class="r-item-card r-card-spirit">
+            <div class="r-item-icon">🎁</div>
+            <div class="r-item-details">
+              <div class="r-item-val">Free Unique</div>
+              <div class="r-item-name">+ 7 Atlas Boons</div>
+            </div>
+            <span class="r-item-act">Interludes V.3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACT I ── -->
+  <div class="panel" id="panel-act1">
+    <div class="act-panel" id="act1">
+      <div class="act-banner ab1">
+        <div class="ab-num">I</div>
+        <div class="ab-info">
+          <div class="ab-title">Act I — Clearfell to Ogham</div>
+          <div class="ab-sub">Patch 0.5 · Lvl 1–14 · All Classes · Boss: Geonor</div>
+          <div class="ab-badges">
+            <span class="ab-badge bb-skill">🌟 +4 Skill Points</span>
+            <span class="ab-badge bb-spirit">💜 +30 Spirit</span>
+            <span class="ab-badge bb-cold">❄ +10% Cold Res</span>
+            <span class="ab-badge bb-life">❤ +20 Max Life</span>
+            <span class="ab-badge bb-charm">⚙ Salvage Bench</span>
+          </div>
+        </div>
+        <div class="ab-progress">
+          <div class="ab-pct" id="a1pct">0%</div>
+          <div class="ab-pb"><div class="ab-pbf" id="a1bar" style="width:0%"></div></div>
+          <div class="ab-pbtxt" id="a1txt">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Speedrun Tips Callout -->
+      <div style="background:rgba(0,255,157,0.06);border:1px solid rgba(0,255,157,0.25);border-left:4px solid var(--green);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:12.5px;">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--green);margin-bottom:.5rem;letter-spacing:1px;">⚡ ACT I SPEEDRUN &amp; ROUTING TIPS</div>
+        <div style="color:var(--txt-hi);line-height:1.6;">
+          • <strong>Focus Magic Packs</strong>: Magic (blue-name) monsters give ~3.5× XP. Skip white packs unless underleveled.<br/>
+          • <strong>Red Vale Weapon Racks</strong>: Guaranteed 2nd-tier Martial weapon drop — no muling needed.<br/>
+          • <strong>Cemetery Strategy</strong>: Slay Draven first, then manually exit &amp; re-enter before Asinia to scale her drops with higher area level.<br/>
+          • <strong>Verisium Anvil</strong>: Starts with Farrow in Clearfell (Runeseeker quest) — collect 3 Runestones to unlock Armour Runeforging.
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-lbl">Filter</span>
+        <button class="f-btn active" data-f="all" onclick="setFilter('act1','all')">All</button>
+        <button class="f-btn" data-f="wp"   onclick="setFilter('act1','wp')"><span class="fdot" style="background:var(--sky)"></span>Waypoints</button>
+        <button class="f-btn" data-f="perm" onclick="setFilter('act1','perm')"><span class="fdot" style="background:var(--sage)"></span>Perm Rewards</button>
+        <button class="f-btn" data-f="boss" onclick="setFilter('act1','boss')"><span class="fdot" style="background:var(--burnt)"></span>Bosses</button>
+        <button class="f-btn" data-f="todo" onclick="setFilter('act1','todo')">Remaining</button>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search zones…" oninput="searchZones('act1',this.value)"/></div>
+      </div>
+
+      <div class="zones-list" id="zones-act1">
+        <!-- Riverbank -->
+        <div class="zone-card" data-types="wp" data-name="riverbank miller">
+          <div class="zc-bar"><span class="zc-icon">🌊</span><span class="zc-name">Riverbank (Lvl 1)</span><div class="zc-tags"><span class="zt zt-skip">Start</span></div><span class="zc-counter" id="zc-riverbank">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="riverbank">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to Wounded Man, equip starter weapon</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📦</span><span class="cl-txt">Loot Large Chests, equip items + skills</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Kill <strong>The Bloated Miller</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏕️</span><span class="cl-txt">Enter Clearfell Encampment behind boss</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Clearfell Encampment -->
+        <div class="zone-card" data-types="wp" data-name="clearfell encampment town renly">
+          <div class="zc-bar"><span class="zc-icon">🏕️</span><span class="zc-name">Clearfell Encampment (Town - Lvl 2)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span></div><span class="zc-counter" id="zc-encampment">0/2</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="encampment">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to <strong>Renly</strong></span></label><span class="rwd r-skill">Skill Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌲</span><span class="cl-txt">Enter Clearfell</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Clearfell -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="clearfell beira rotten pack devourer mud burrow farrow">
+          <div class="zc-bar"><span class="zc-icon">🌲</span><span class="zc-name">Clearfell (Lvl 2–3)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-clearfell">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="clearfell">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Talk to <strong>Farrow</strong> → starts <strong>The Runeseeker</strong> quest (Runeforging tutorial)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Kill <strong>Beira of the Rotten Pack</strong> (north)</span></label><span class="rwd r-cold">+10% Cold Res</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🐉</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Mud Burrow</strong> → Slay <strong>The Devourer</strong></span></label><span class="rwd r-skill">Skill Gem Lv2</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏕️</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Abandoned Stash</strong> inside Mysterious Campsite</span></label><span class="rwd r-skill">Skill Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter The Grelwood</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- The Grelwood -->
+        <div class="zone-card" data-types="wp" data-name="grelwood una gerung brambleghast areagne">
+          <div class="zc-bar"><span class="zc-icon">🌳</span><span class="zc-name">The Grelwood (Lvl 3–5)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span></div><span class="zc-counter" id="zc-grelwood">0/7</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="grelwood">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Find/talk to <strong>Una</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📍</span><span class="cl-txt">Take Waypoint</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🕸️</span><span class="cl-txt">Enter Grim Tangle → take WP → return</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🍂</span><span class="cl-txt">Enter The Red Vale → take WP → return</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><span class="skip">(Opt)</span> Kill <strong>Gerung, the Brambleghast</strong></span></label><span class="rwd r-skill">Skill Gem Lv2</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🧪</span><span class="cl-txt"><span class="skip">(Opt)</span> Hut with Cauldron → Slay <strong>Areagne</strong></span></label><span class="rwd r-skill">Support Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter The Red Vale</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- The Red Vale -->
+        <div class="zone-card" data-types="wp boss" data-name="red vale obelisks rust king">
+          <div class="zc-bar"><span class="zc-icon">🍂</span><span class="zc-name">The Red Vale (Lvl 5–6)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-redvale">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="redvale">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt">Find 3 <strong>Obelisks of Rust</strong>, loot Runed Girdle each</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>The Rust King</strong> (spawns on 3rd obelisk)</span></label><span class="rwd r-skill">Skill Gem Lv3</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔄</span><span class="cl-txt">TP to town → Renly (Runed Spikes) → Grelwood (3 Runic Seals) → town (Una) → Grim Tangle</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Grim Tangle -->
+        <div class="zone-card" data-types="wp boss" data-name="grim tangle ervig rotted druid runestone">
+          <div class="zc-bar"><span class="zc-icon">🕸️</span><span class="zc-name">Grim Tangle (Lvl 6)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-grimtangle">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="grimtangle">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Runeseeker — Runestone 1 of 3</strong> (Grim Tangle)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><span class="skip">(Opt)</span> Kill <strong>Ervig, the Rotted Druid</strong> (follow mushrooms)</span></label><span class="rwd r-skill">Support Gem</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Cemetery of the Eternals (follow caskets)</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Cemetery of the Eternals -->
+        <div class="zone-card" data-types="boss" data-name="cemetery eternals lachlann draven asinia">
+          <div class="zc-bar"><span class="zc-icon">⚰️</span><span class="zc-name">Cemetery of the Eternals (Lvl 6–9)</span><div class="zc-tags"><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-cemetery">0/7</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="cemetery">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to <strong>Lachlann the Lost</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><strong>Mausoleum of the Praetor</strong> → Slay <strong>Draven</strong> → loot Key Piece</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗝️</span><span class="cl-txt"><span class="skip">(Opt)</span> Mausoleum hidden switch → <strong>Forgotten Riches</strong> cache</span></label><span class="rwd r-skill">Support Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><strong>Tomb of the Consort</strong> → Slay <strong>Asinia</strong> → loot Key Piece</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🚪</span><span class="cl-txt">Open Memorial Gate next to Lachlann</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Lachlann</strong> → loot Ring</span></label><span class="rwd r-skill">Skill Gem Lv3</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Exit to Hunting Grounds → take Waypoint → TP to town (Hooded One revived)</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Hunting Grounds -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="hunting grounds crowbell farrow runestone delwyn">
+          <div class="zc-bar"><span class="zc-icon">🏹</span><span class="zc-name">Hunting Grounds (Lvl 10)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-hunting">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="hunting">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt">Talk to Farrow → <strong>Runestone 2 of 3</strong> (Hunting Grounds)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to <strong>Delwyn</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦅</span><span class="cl-txt">Follow blood trails → <strong>Slay The Crowbell</strong></span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌾</span><span class="cl-txt">Follow locusts → Enter Freythorn (WP) &amp; Ogham Farmlands (WP)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔮</span><span class="cl-txt"><span class="skip">(Opt)</span> Small ritual event</span></label><span class="rwd r-skill">Support Gem Lv1</span></li>
+          </ul></div>
+        </div>
+
+        <!-- Freythorn -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="freythorn king mists spirit finn charm">
+          <div class="zc-bar"><span class="zc-icon">👑</span><span class="zc-name">Freythorn (Lvl 11–12)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">+30 Spirit</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-freythorn">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="freythorn">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔮</span><span class="cl-txt">Activate 3 small Ritual Altars (follow smoke tendrils from big altar)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Big Altar → <strong>Slay The King in the Mists</strong></span></label><span class="rwd r-spirit">+30 Spirit</span><span class="rwd r-skill">Spirit Gem Lv4</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🛡️</span><span class="cl-txt"><span class="skip">(Opt)</span> Ominous Altars → Cleanse → claim Charm from Finn in town</span></label><span class="rwd r-charm">Charm</span></li>
+          </ul></div>
+        </div>
+
+        <!-- Ogham Farmlands -->
+        <div class="zone-card zc-perm" data-types="wp perm" data-name="ogham farmlands una lute runestone verisium anvil">
+          <div class="zc-bar"><span class="zc-icon">🌾</span><span class="zc-name">Ogham Farmlands (Lvl 12)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span></div><span class="zc-counter" id="zc-oghamfarm">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="oghamfarm">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🎵</span><span class="cl-txt">Loot Una's Lute Box → Deliver <strong>Una's Lute</strong> to Una in town</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Runeseeker — Runestone 3 of 3</strong> (crop field) → Grelwood Tree of Souls → Lost Catacombs → Liquid Verisium → <strong>Verisium Anvil unlocked</strong>!</span></label><span class="rwd r-charm">Verisium Anvil</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🐺</span><span class="cl-txt"><span class="skip">(Opt)</span> Rare dogs in crop circle</span></label><span class="rwd r-skill">Skill Gem Lv4</span></li>
+          </ul></div>
+        </div>
+
+        <!-- Ogham Village -->
+        <div class="zone-card zc-perm" data-types="perm boss" data-name="ogham village smithing tools salvage bench executioner leitis">
+          <div class="zc-bar"><span class="zc-icon">🏘️</span><span class="zc-name">Ogham Village (Lvl 12–13)</span><div class="zc-tags"><span class="zt zt-perm">Salvage Bench</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-oghamvillage">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="oghamvillage">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔨</span><span class="cl-txt">Loot <strong>Smithing Tools</strong> in smithing house (1st character)</span></label><span class="rwd r-charm">Salvage Bench</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>The Executioner</strong> (north village)</span></label><span class="rwd r-skill">Support Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🚪</span><span class="cl-txt">Upstairs → Pull Lever → Talk to <strong>Leitis</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter The Manor Ramparts</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- The Manor Ramparts -->
+        <div class="zone-card" data-types="wp" data-name="manor ramparts gallows">
+          <div class="zc-bar"><span class="zc-icon">🏰</span><span class="zc-name">The Manor Ramparts (Lvl 13)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span></div><span class="zc-counter" id="zc-ramparts">0/2</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="ramparts">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🪢</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Gallows secret</strong> (rope on hanging man)</span></label><span class="rwd r-skill">Support Gem Lv1</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Ogham Manor</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Ogham Manor -->
+        <div class="zone-card zc-final" data-types="boss final" data-name="ogham manor candlemass geonor act boss">
+          <div class="zc-bar"><span class="zc-icon">👑</span><span class="zc-name">Ogham Manor (Lvl 13–14)</span><div class="zc-tags"><span class="zt zt-final">Act I Boss</span></div><span class="zc-counter" id="zc-oghammanor">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="oghammanor">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🕯️</span><span class="cl-txt">1st Floor → Slay <strong>Candlemass</strong></span></label><span class="rwd r-life">+20 Max Life</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚔️</span><span class="cl-txt">Downstairs → <strong>Slay Count Geonor (Act Boss)</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">TP to town → Talk to all NPCs → <strong>The Hooded One ("Follow the Beast's Trail")</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏆</span><span class="cl-txt">🎉 <strong>Act I Complete</strong> — Proceed to Act II!</span></label></li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACT II ── -->
+  <div class="panel" id="panel-act2">
+    <div class="act-panel" id="act2">
+      <div class="act-banner ab2">
+        <div class="ab-num">II</div>
+        <div class="ab-info">
+          <div class="ab-title">Act II — Vastiri to Dreadnought</div>
+          <div class="ab-sub">Patch 0.5 · Lvl 14–29 · All Classes · Boss: Jamanra</div>
+          <div class="ab-badges">
+            <span class="ab-badge bb-skill">🌟 +4 Skill Points</span>
+            <span class="ab-badge bb-light">⚡ +10% Lightning Res</span>
+            <span class="ab-badge bb-charm">⚙ +1 Charm Slot</span>
+            <span class="ab-badge bb-spirit">1st Ascendancy</span>
+          </div>
+        </div>
+        <div class="ab-progress">
+          <div class="ab-pct" id="a2pct">0%</div>
+          <div class="ab-pb"><div class="ab-pbf" id="a2bar" style="width:0%"></div></div>
+          <div class="ab-pbtxt" id="a2txt">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Speedrun & Routing Tips Callout -->
+      <div style="background:rgba(255,183,0,0.06);border:1px solid rgba(255,183,0,0.25);border-left:4px solid var(--gold);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:12.5px;">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--gold);margin-bottom:.5rem;letter-spacing:1px;">⚡ ACT II SPEEDRUN &amp; ROUTING TIPS</div>
+        <div style="color:var(--txt-hi);line-height:1.6;">
+          • <strong>Run Mastodon Badlands BEFORE Keth</strong>: Kabala then drops a Lvl 7 skill gem (huge power spike).<br/>
+          • <strong>Delay Ascendancy to Lvl 28</strong>: Skip the Balbala fight in Traitor's Passage. Instead, farm a backup Djinn Barya from the Watchful Twins in Deshar and pick the Lvl 28 Barya at Trial entry for better end-trial resistances.<br/>
+          • <strong>Trial Room Preference</strong>: Ritual &gt; Chalice &gt; Hourglass &gt; Gauntlet.<br/>
+          • <strong>Target Level</strong>: Aim for Lvl 29 for Jamanra; Lvl 30 entering Act III.
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-lbl">Filter</span>
+        <button class="f-btn active" data-f="all" onclick="setFilter('act2','all')">All</button>
+        <button class="f-btn" data-f="wp"   onclick="setFilter('act2','wp')"><span class="fdot" style="background:var(--sky)"></span>Waypoints</button>
+        <button class="f-btn" data-f="perm" onclick="setFilter('act2','perm')"><span class="fdot" style="background:var(--sage)"></span>Perm Rewards</button>
+        <button class="f-btn" data-f="boss" onclick="setFilter('act2','boss')"><span class="fdot" style="background:var(--burnt)"></span>Bosses</button>
+        <button class="f-btn" data-f="todo" onclick="setFilter('act2','todo')">Remaining</button>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search zones…" oninput="searchZones('act2',this.value)"/></div>
+      </div>
+
+      <div class="zones-list" id="zones-act2">
+        <!-- Vastiri Outskirts -->
+        <div class="zone-card" data-types="wp boss" data-name="vastiri outskirts rathbreaker zarka ardura caravan">
+          <div class="zc-bar"><span class="zc-icon">🏜️</span><span class="zc-name">Vastiri Outskirts (Lvl 14–15)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-vastiri">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="vastiri">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to The Hooded One</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Rathbreaker</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to <strong>Zarka</strong></span></label><span class="rwd r-skill">Uncut Skill Gem Lv5</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⛺</span><span class="cl-txt">Enter <strong>The Ardura Caravan (Town)</strong></span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Mawdun Quarry & Mine -->
+        <div class="zone-card" data-types="wp boss" data-name="mawdun quarry mine rudja risu">
+          <div class="zc-bar"><span class="zc-icon">⛏️</span><span class="zc-name">Mawdun Quarry &amp; Mine (Lvl 15–16)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-mawdun">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="mawdun">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🛤️</span><span class="cl-txt">Follow railroad tracks through Mawdun Mine</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Rudja</strong> → Free <strong>Risu</strong> from cage</span></label><span class="rwd r-skill">Uncut Skill Gem Lv6</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔄</span><span class="cl-txt">TP to town → Talk to Risu &amp; Sekhema Asala</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Traitor's Passage & Halani Gates -->
+        <div class="zone-card" data-types="wp boss" data-name="traitors passage balbala halani gates jamanra">
+          <div class="zc-bar"><span class="zc-icon">🚪</span><span class="zc-name">Traitor's Passage &amp; Halani Gates (Lvl 17–18)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-traitor">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="traitor">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗝️</span><span class="cl-txt">Interact with Ancient Seal door + Runic Seals</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚔️</span><span class="cl-txt"><span class="skip">(Opt)</span> Slay <strong>Balbala, the Traitor</strong></span></label><span class="rwd r-charm">Djinn Barya</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏛️</span><span class="cl-txt">The Halani Gates → Summon Asala to open gates</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">First Encounter: Slay <strong>Jamanra</strong> → TP to town</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Mastodon Badlands & Bone Pits -->
+        <div class="zone-card" data-types="wp boss" data-name="mastodon badlands bone pits iktab ekbab tusks">
+          <div class="zc-bar"><span class="zc-icon">🦣</span><span class="zc-name">Mastodon Badlands &amp; Bone Pits (Lvl 19–21)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-badlands">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="badlands">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦴</span><span class="cl-txt">Kill hyenas for <strong>Sun Clan Relic</strong> (save for Relic Altar)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">The Bone Pits → Slay <strong>Iktab &amp; Ekbab</strong> → loot Mastodon Tusks</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔄</span><span class="cl-txt">TP to town → Talk to Zarka → Travel to Keth</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Keth & Lost City -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="keth kabala constrictor queen lost city azarian">
+          <div class="zc-bar"><span class="zc-icon">🏺</span><span class="zc-name">Keth &amp; The Lost City (Lvl 22–24)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-keth">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="keth">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🐍</span><span class="cl-txt">Keth → Slay <strong>Kabala, Constrictor Queen</strong> (Venom Pit)</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏛️</span><span class="cl-txt">Lost City → Buried Shrines → Enter Heart of Keth</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Heart of Keth → Slay <strong>Azarian</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💧</span><span class="cl-txt">Talk to Water Goddess (Halani) → ignite Goddess with Everburning Cinders</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Valley of the Titans & Titan Grotto -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="valley titans grotto zalmarath charm slot">
+          <div class="zc-bar"><span class="zc-icon">🗿</span><span class="zc-name">Valley of the Titans &amp; Titan Grotto (Lvl 25–26)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">+1 Charm Slot</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-valley">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="valley">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚙️</span><span class="cl-txt">Relic Altar → Place Sun &amp; Kabala Relics</span></label><span class="rwd r-charm">+1 Charm Slot + Buff Choice</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">The Titan Grotto → Slay <strong>Zalmarath, the Colossus</strong> → loot Flame Ruby</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔄</span><span class="cl-txt">TP to town → Zarka → sound Horn at caravan top → Travel to Deshar</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Deshar & Spires of Deshar -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="deshar spires fallen dekhara lightning res tor gul">
+          <div class="zc-bar"><span class="zc-icon">🏙️</span><span class="zc-name">Deshar &amp; Spires of Deshar (Lvl 26–27)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-deshar">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="deshar">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Find/loot <strong>Fallen Dekhara</strong> near tower</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦅</span><span class="cl-txt">Kill 2 <strong>Vultures</strong> (Watchful Twins) → loot backup <strong>Lvl 28 Djinn Barya</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚡</span><span class="cl-txt">Spires of Deshar → Sisters of Garukhan shrine</span></label><span class="rwd r-light">+10% Lightning Res</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Tor Gul</strong> (cap lightning res!)</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Trial of Sekhemas & The Dreadnought -->
+        <div class="zone-card zc-final" data-types="wp final boss" data-name="trial sekhemas ascendancy dreadnought jamanra act boss">
+          <div class="zc-bar"><span class="zc-icon">⚔️</span><span class="zc-name">Trial of Sekhemas &amp; The Dreadnought (Lvl 28–29)</span><div class="zc-tags"><span class="zt zt-final">Act II Boss</span><span class="zt zt-perm">1st Ascendancy</span></div><span class="zc-counter" id="zc-dreadnought">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="dreadnought">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚡</span><span class="cl-txt">Enter Trial of Sekhemas → Select <strong>Lvl 28 Djinn Barya</strong> → Complete Trial</span></label><span class="rwd r-spirit">1st Ascendancy</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🚢</span><span class="cl-txt">Travel to <strong>The Dreadnought</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><strong>Slay Jamanra, the Abomination (Act Boss)</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏆</span><span class="cl-txt">🎉 <strong>Act II Complete</strong> — Proceed to Act III (Sandswept Marsh)!</span></label></li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACT III ── -->
+  <div class="panel" id="panel-act3">
+    <div class="act-panel" id="act3">
+      <div class="act-banner ab3">
+        <div class="ab-num">III</div>
+        <div class="ab-info">
+          <div class="ab-title">Act III — Sandswept to Ziggurat</div>
+          <div class="ab-sub">Patch 0.5 · Lvl 30–42 · All Classes · Boss: Doryani</div>
+          <div class="ab-badges">
+            <span class="ab-badge bb-skill">🌟 +6 Skill Points</span>
+            <span class="ab-badge bb-spirit">💜 +30 Spirit</span>
+            <span class="ab-badge bb-fire">🔥 +10% Fire Res</span>
+            <span class="ab-badge bb-charm">⚙ Reforging Bench</span>
+            <span class="ab-badge bb-spirit">2nd Ascendancy</span>
+          </div>
+        </div>
+        <div class="ab-progress">
+          <div class="ab-pct" id="a3pct">0%</div>
+          <div class="ab-pb"><div class="ab-pbf" id="a3bar" style="width:0%"></div></div>
+          <div class="ab-pbtxt" id="a3txt">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Speedrun & Routing Tips Callout -->
+      <div style="background:rgba(255,102,0,0.06);border:1px solid rgba(255,102,0,0.25);border-left:4px solid var(--burnt);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:12.5px;">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--burnt);margin-bottom:.5rem;letter-spacing:1px;">⚡ ACT III SPEEDRUN &amp; ROUTING TIPS</div>
+        <div style="color:var(--txt-hi);line-height:1.6;">
+          • <strong>0.5 Fate of the Vaal Beacons</strong>: Activate 6 Vaal Beacons across Act III (Venom Crypts → Infested Barrens → Machine → Sanctum → Waterways) to unlock Vaal Ruins portal.<br/>
+          • <strong>0.5 Runestoning</strong>: 3 Runestones in Act 3 (Barrens, Machinarium, Azak Bog) unlock <strong>Unique Verisium Runeforging</strong> at Mystic Refuge.<br/>
+          • <strong>2nd Ascendancy</strong>: Trial of Chaos inside Infested Barrens requires Inscribed Ultimatum (Lvl 34+). Complete before Doryani for 2nd Ascendancy.<br/>
+          • <strong>Mektul Flood Timer</strong>: Mektul has ~4-min molten-flood timer — overlevel and cap Fire Res.
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-lbl">Filter</span>
+        <button class="f-btn active" data-f="all" onclick="setFilter('act3','all')">All</button>
+        <button class="f-btn" data-f="wp"   onclick="setFilter('act3','wp')"><span class="fdot" style="background:var(--sky)"></span>Waypoints</button>
+        <button class="f-btn" data-f="perm" onclick="setFilter('act3','perm')"><span class="fdot" style="background:var(--sage)"></span>Perm Rewards</button>
+        <button class="f-btn" data-f="boss" onclick="setFilter('act3','boss')"><span class="fdot" style="background:var(--burnt)"></span>Bosses</button>
+        <button class="f-btn" data-f="todo" onclick="setFilter('act3','todo')">Remaining</button>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search zones…" oninput="searchZones('act3',this.value)"/></div>
+      </div>
+
+      <div class="zones-list" id="zones-act3">
+        <!-- Sandswept Marsh & Encampment -->
+        <div class="zone-card" data-types="wp" data-name="sandswept marsh ziggurat encampment alva Oswald">
+          <div class="zc-bar"><span class="zc-icon">🌴</span><span class="zc-name">Sandswept Marsh &amp; Ziggurat Encampment (Lvl 30)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span></div><span class="zc-counter" id="zc-marsh">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="marsh">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to The Hooded One &amp; Alva</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌿</span><span class="cl-txt">Enter Sandswept Marsh → Ziggurat Encampment (Town)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to <strong>Alva &amp; Oswald</strong> in town</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Jungle Ruins</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Jungle Ruins & Venom Crypts -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="jungle ruins venom crypts mictlan spirit beacon">
+          <div class="zc-bar"><span class="zc-icon">🌿</span><span class="zc-name">Jungle Ruins &amp; Venom Crypts (Lvl 30–31)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-jungle">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="jungle">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 1 of 6</strong> (Jungle Ruins)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Find <strong>Golden Idol</strong> → return to Oswald</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 2 of 6</strong> (Venom Crypts)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Venom Crypts → Slay <strong>Mictlan, the Viper Spirit</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Infested Barrens</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Infested Barrens & Trial of Chaos -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="infested barrens trial of chaos ascendancy runestone 1">
+          <div class="zc-bar"><span class="zc-icon">🕷️</span><span class="zc-name">Infested Barrens &amp; Trial of Chaos (Lvl 31–32)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">2nd Ascendancy</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-barrens">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="barrens">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 3 of 6</strong> (Infested Barrens)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Runeseeker — Runestone 1 of 3</strong> (Infested Barrens)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Groz, the Broodmother</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌀</span><span class="cl-txt">Enter <strong>Trial of Chaos</strong> (Inscribed Ultimatum Lvl 34) → Complete 3 waves</span></label><span class="rwd r-spirit">2nd Ascendancy</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Chimeral Wetlands</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Chimeral Wetlands & Jiquani's Machinarium -->
+        <div class="zone-card" data-types="wp boss" data-name="chimeral wetlands machinarium soul cores runestone 2">
+          <div class="zc-bar"><span class="zc-icon">🐊</span><span class="zc-name">Chimeral Wetlands &amp; Machinarium (Lvl 32–33)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-wetlands">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="wetlands">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 4 of 6</strong> (Wetlands)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Runeseeker — Runestone 2 of 3</strong> (Machinarium)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📦</span><span class="cl-txt">Loot 4 Small Soul Cores → Open Blackjaw door</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Blackjaw, the Remnant</strong> → Flame Core</span></label><span class="rwd r-fire">+10% Fire Res</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter Jiquani's Sanctum</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Jiquani's Sanctum & Matlan Waterways -->
+        <div class="zone-card" data-types="wp boss" data-name="jiquani sanctum matlan waterways zicoatl beacon 5 6">
+          <div class="zc-bar"><span class="zc-icon">🏛️</span><span class="zc-name">Jiquani's Sanctum &amp; Waterways (Lvl 33–35)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-sanctum">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="sanctum">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 5 of 6</strong> (Sanctum) + Paquate's Mechanism</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Zicoatl, Warden of the Core</strong> → loot Large Soul Core</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌊</span><span class="cl-txt">Return to Jungle Ruins → Use Large Soul Core → Enter Matlan Waterways</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Vaal Beacon 6 of 6</strong> (Matlan Waterways) → Opens Vaal Ruins portal!</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Azak Bog -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="azak bog ignagduk gemrot skull spirit gemrunestone 3 servi">
+          <div class="zc-bar"><span class="zc-icon">🐸</span><span class="zc-name">Azak Bog (Side Zone - Lvl 33–34)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">+30 Spirit</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-azakbog">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="azakbog">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt"><strong>Runeseeker — Runestone 3 of 3</strong> (Azak Bog) → Mystic Refuge → <strong>Unique Runeforging unlocked</strong>!</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Ignagduk, the Bog Witch</strong> → loot Gemrot Skull</span></label><span class="rwd r-spirit">+30 Spirit</span><span class="rwd r-skill">Uncut Spirit Gem Lv10</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Deliver Ghastly Spear to Servi in town</span></label><span class="rwd r-charm">Charm Choice</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">TP to Ziggurat → Enter The Drowned City</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- The Drowned City & The Molten Vault -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="drowned city molten vault mektul reforging bench">
+          <div class="zc-bar"><span class="zc-icon">🌊</span><span class="zc-name">The Drowned City &amp; Molten Vault (Lvl 35–36)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Reforging Bench</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-drowned">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="drowned">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📍</span><span class="cl-txt">Take Apex of Filth WP &amp; Molten Vault WP</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔨</span><span class="cl-txt">Molten Vault → Slay <strong>Mektul, the Forgemaster</strong> → Hammer of Kamasa</span></label><span class="rwd r-charm">Reforging Bench</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔄</span><span class="cl-txt">Deliver Hammer to Oswald in town → TP to Apex of Filth</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Apex of Filth & Temple of Kopec -->
+        <div class="zone-card" data-types="wp boss" data-name="apex of filth queen filth temple kopec ketzuli">
+          <div class="zc-bar"><span class="zc-icon">🕷️</span><span class="zc-name">Apex of Filth &amp; Temple of Kopec (Lvl 36–37)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-apex">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="apex">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🧪</span><span class="cl-txt"><span class="skip">(Opt)</span> 3 Mushrooms → Cauldron Keeper</span></label><span class="rwd r-skill">Quality Flasks</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Queen of Filth</strong> → loot Temple Door Idol</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏛️</span><span class="cl-txt">Temple of Kopec → Slay <strong>Ketzuli, High Priest of the Sun</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to Alva → Gateway → Enter Utzaal</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Utzaal & Aggorat -->
+        <div class="zone-card zc-perm" data-types="perm boss" data-name="utzaal aggorat viper napuatzi sacrificial altar heart">
+          <div class="zc-bar"><span class="zc-icon">🏛️</span><span class="zc-name">Utzaal &amp; Aggorat (Lvl 38–40)</span><div class="zc-tags"><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-utzaal">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="utzaal">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🐍</span><span class="cl-txt">Utzaal → Slay <strong>Viper Napuatzi</strong> → Enter Aggorat</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🖤</span><span class="cl-txt">Loot <strong>Sacrificial Heart</strong> from Vaal Goliath</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗡️</span><span class="cl-txt">Aggorat Sacrificial Altar → Place Heart &amp; Stab Dagger</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Enter The Black Chambers</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- The Black Chambers -->
+        <div class="zone-card zc-final" data-types="final boss" data-name="black chambers doryani thaumaturge act boss">
+          <div class="zc-bar"><span class="zc-icon">👑</span><span class="zc-name">The Black Chambers (Lvl 40–42)</span><div class="zc-tags"><span class="zt zt-final">Act III Boss</span></div><span class="zc-counter" id="zc-chambers">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="chambers">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><strong>Slay Doryani, Royal Thaumaturge (Act Boss)</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">TP to Ziggurat → Talk to Doryani → Alva → Hooded One</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏆</span><span class="cl-txt">🎉 <strong>Act III Complete</strong> — Proceed to Act IV (Kingsmarch)!</span></label></li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ACT IV ── -->
+  <div class="panel" id="panel-act4">
+    <div class="act-panel" id="act4">
+      <div class="act-banner ab4">
+        <div class="ab-num">IV</div>
+        <div class="ab-info">
+          <div class="ab-title">Act IV — Wraeclast Awakens</div>
+          <div class="ab-sub">Patch 0.5 · Lvl 42–52 · All Classes · Boss: Tavakai</div>
+          <div class="ab-badges">
+            <span class="ab-badge bb-skill">🌟 +4 Skill Points</span>
+            <span class="ab-badge bb-mana">🔵 +5% Max Mana</span>
+            <span class="ab-badge bb-charm">⚙ Tattoo Choice</span>
+            <span class="ab-badge bb-spirit">⛺ Hideout + Ancient Runes</span>
+          </div>
+        </div>
+        <div class="ab-progress">
+          <div class="ab-pct" id="a4pct">0%</div>
+          <div class="ab-pb"><div class="ab-pbf" id="a4bar" style="width:0%"></div></div>
+          <div class="ab-pbtxt" id="a4txt">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Speedrun & Routing Tips Callout -->
+      <div style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.25);border-left:4px solid var(--sky);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:12.5px;">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--sky);margin-bottom:.5rem;letter-spacing:1px;">⚡ ACT IV SPEEDRUN &amp; ROUTING TIPS</div>
+        <div style="color:var(--txt-hi);line-height:1.6;">
+          • <strong>Randomized Island Layout</strong>: Weapon Fragments &amp; Matiki are randomized across the four islands (Whakapanu, Shrike, Isle of Kin, Kedge Bay) each league — Kingsmarch dialogue tells you which.<br/>
+          • <strong>Free Matiki</strong>: Matiki is held captive in a cage on the islands — you MUST click the cage to free her to progress.<br/>
+          • <strong>4 Torn Map Pieces Required</strong>: Collect 4 Torn Maps across the 4 islands to open Plunder's Point &amp; unlock <strong>13 Ancient Runes</strong> (Runekeeper quest with Farrow).<br/>
+          • <strong>Halls of the Dead Tattoo</strong>: Pick <strong>+5% Fire/Cold/Lightning Resistance</strong> for most builds.<br/>
+          • <strong>Waterfall Secret</strong>: Eye of Hinekora hidden chest behind waterfall drops Spirit Gem Lv12.
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-lbl">Filter</span>
+        <button class="f-btn active" data-f="all" onclick="setFilter('act4','all')">All</button>
+        <button class="f-btn" data-f="wp"   onclick="setFilter('act4','wp')"><span class="fdot" style="background:var(--sky)"></span>Waypoints</button>
+        <button class="f-btn" data-f="perm" onclick="setFilter('act4','perm')"><span class="fdot" style="background:var(--sage)"></span>Perm Rewards</button>
+        <button class="f-btn" data-f="boss" onclick="setFilter('act4','boss')"><span class="fdot" style="background:var(--burnt)"></span>Bosses</button>
+        <button class="f-btn" data-f="todo" onclick="setFilter('act4','todo')">Remaining</button>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search zones…" oninput="searchZones('act4',this.value)"/></div>
+      </div>
+
+      <div class="zones-list" id="zones-act4">
+        <!-- Kingsmarch & Hideout -->
+        <div class="zone-card zc-perm" data-types="wp perm" data-name="kingsmarch hub town farrow ancient runes makoru shoreline hideout ange">
+          <div class="zc-bar"><span class="zc-icon">⚓</span><span class="zc-name">Kingsmarch &amp; Shoreline Hideout (Lvl 42)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Hideout</span></div><span class="zc-counter" id="zc-kingsmarch">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="kingsmarch">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to Doryani, Alva, Rog &amp; Tujen</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Talk to Farrow → Quest 4 (Unlocks 13 Ancient Runes via Remnants)</span></label><span class="rwd r-charm">13 Ancient Runes</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⛵</span><span class="cl-txt">Talk to Makoru on ship to choose island destination</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏡</span><span class="cl-txt">Talk to Ange → Clear Shoreline Hideout → Talk to Ange</span></label><span class="rwd r-charm">Hideout + Trading</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Sail to Whakapanu Island</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Whakapanu Island & Singing Caverns -->
+        <div class="zone-card" data-types="wp boss" data-name="whakapanu island singing caverns diamora torn map 1 shark fin clawcrunch">
+          <div class="zc-bar"><span class="zc-icon">🏝️</span><span class="zc-name">Whakapanu Island &amp; Singing Caverns (Lvl 42–43)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-whakapanu">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="whakapanu">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗺️</span><span class="cl-txt"><span class="skip">(Opt)</span> Petrified Pirate → <strong>Torn Map Piece 1 of 4</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦈</span><span class="cl-txt"><span class="skip">(Opt)</span> Shark Pit: Slay Great White One → Shark Fin → Kaimana (Gem + Tukuama Blessing)</span></label><span class="rwd r-skill">Uncut Gem Lv11</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦀</span><span class="cl-txt"><span class="skip">(Opt)</span> Crabshell Cavern: Slay Clawcrunch</span></label><span class="rwd r-skill">Support Gem 4</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Singing Caverns → Slay <strong>Diamora, Song of Death</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Talk to Hooded One → Sail to Shrike Island</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Shrike Island & Abandoned Prison -->
+        <div class="zone-card" data-types="wp boss" data-name="shrike island abandoned prison solitary prisoner forael torn map 2">
+          <div class="zc-bar"><span class="zc-icon">🦅</span><span class="zc-name">Shrike Island &amp; Abandoned Prison (Lvl 43–44)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-shrike">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="shrike">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗺️</span><span class="cl-txt"><span class="skip">(Opt)</span> Corpse Nest → <strong>Torn Map Piece 2 of 4</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Slay <strong>Scourge of the Skies</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗝️</span><span class="cl-txt">Abandoned Prison → Chapel Key → Slay Forael</span></label><span class="rwd r-skill">Flask Choice</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Solitary Confinement → Slay <strong>The Prisoner</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Talk to Hooded One → Sail to Isle of Kin</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Isle of Kin & Volcanic Warrens -->
+        <div class="zone-card" data-types="wp boss" data-name="isle of kin volcanic warrens mimok krutog magma twins torn map 3">
+          <div class="zc-bar"><span class="zc-icon">🌋</span><span class="zc-name">Isle of Kin &amp; Volcanic Warrens (Lvl 45–46)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-kin">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="kin">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗺️</span><span class="cl-txt"><span class="skip">(Opt)</span> Flayed Sailor → <strong>Torn Map Piece 3 of 4</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Beast Pen → Slay <strong>Mimok the Enslaved</strong></span></label><span class="rwd r-skill">Tier 4 Support Gem</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔥</span><span class="cl-txt"><span class="skip">(Opt)</span> Volcanic Nest: Slay Magma Twins (Lightning first → Ruby Ring | Fire first → Topaz Ring)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Tyrant Throne → Slay <strong>Krutog, Lord of Kin</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">TP to Kingsmarch → Proceed to Eye of Hinekora</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Eye of Hinekora & Halls of the Dead -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="eye of hinekora halls dead trial ancestors matiki mana tattoo navali hinekora">
+          <div class="zc-bar"><span class="zc-icon">👁️</span><span class="zc-name">Eye of Hinekora &amp; Halls of the Dead (Lvl 46–48)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">+5% Max Mana</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-hinekora">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="hinekora">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Free Matiki from cage → Talk to Matiki at Hinekora well</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💧</span><span class="cl-txt">Complete 3 Tests → Silent Hall Altar → Navali</span></label><span class="rwd r-mana">+5% Max Mana</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Halls of the Dead → Trial of Ngakanu → Loot Tattoos</span></label><span class="rwd r-charm">+5% Fire/Cold/Lightning Res</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Fight Yama the White → Enter Trial of the Ancestors</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌟</span><span class="cl-txt">Talk to Navali &amp; Hinekora</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+          </ul></div>
+        </div>
+
+        <!-- Kedge Bay & Journey's End -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="kedge bay journeys end harlin omniphobia tujen verisium torn map 4">
+          <div class="zc-bar"><span class="zc-icon">🏴‍☠️</span><span class="zc-name">Kedge Bay &amp; Journey's End (Lvl 47–49)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Boss</span></div><span class="zc-counter" id="zc-kedge">0/5</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="kedge">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗺️</span><span class="cl-txt"><span class="skip">(Opt)</span> Smuggler's Stash → <strong>Torn Map Piece 4 of 4</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Journey's End → Slay Captain Harlin → Loot Verisium → Freya Hartlin</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚔️</span><span class="cl-txt">Town Dannig → Verisium Spikes → Back to Journey's End → Totem → <strong>Slay Omniphobia</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Talk to Tujen in town</span></label><span class="rwd r-skill">+2 Skill Points</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">Give 4 Maps to Makoru → Plunder's Point Deserted Post → Farrow (Runekeeper quest complete!)</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Arastas & The Excavation -->
+        <div class="zone-card" data-types="wp boss" data-name="arastas excavation torvian benedictus precursors">
+          <div class="zc-bar"><span class="zc-icon">🏛️</span><span class="zc-name">Arastas &amp; The Excavation (Lvl 49–51)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-arastas">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="arastas">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔔</span><span class="cl-txt"><span class="skip">(Opt)</span> Evening / Morning Bells (3 Exalted / 3 Regal Orbs)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">Arastas → Slay <strong>Torvian</strong> (let him stone the 2 priests above)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt">The Excavation → Precursor Forge → Slay <strong>Benedictus</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">➡</span><span class="cl-txt">TP to Kingsmarch → Sail to Ngakanu</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- Ngakanu & Heart of the Tribe -->
+        <div class="zone-card zc-final" data-types="final boss" data-name="ngakanu heart of tribe tavakai act boss">
+          <div class="zc-bar"><span class="zc-icon">🌋</span><span class="zc-name">Ngakanu &amp; Heart of the Tribe (Lvl 51–52)</span><div class="zc-tags"><span class="zt zt-final">Act IV Boss</span></div><span class="zc-counter" id="zc-ngakanu">0/3</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="ngakanu">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💀</span><span class="cl-txt"><strong>Slay Tavakai (Act IV Final Boss)</strong> → Talk to Tavakai</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💬</span><span class="cl-txt">Return → Talk to The Hooded One</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏆</span><span class="cl-txt">🎉 <strong>Act IV &amp; Main Campaign Complete</strong> — Unlocks Interludes (5.1, 5.2, 5.3)!</span></label></li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INTERLUDES (5.1 Ogham, 5.2 Khari Bazaar, 5.3 Mount Kriar) ── -->
+  <div class="panel" id="panel-interludes">
+    <div class="act-panel" id="act5">
+      <div class="act-banner ab5" style="border-left-color: var(--violet);">
+        <div class="ab-num" style="color:var(--violet);border-color:rgba(176,136,255,0.45);text-shadow:0 0 12px rgba(176,136,255,0.6);background:rgba(176,136,255,0.1);">V</div>
+        <div class="ab-info">
+          <div class="ab-title">INTERLUDES — 5.1 Ogham, 5.2 Khari Bazaar, 5.3 Mount Kriar</div>
+          <div class="ab-sub">Patch 0.5 · Lvl 52–58 · All Classes · Endgame Atlas Unlocks</div>
+          <div class="ab-badges">
+            <span class="ab-badge bb-skill">🌟 +8 Skill Points</span>
+            <span class="ab-badge bb-spirit">💜 +40 Spirit</span>
+            <span class="ab-badge bb-life">❤️ +5% Max Life</span>
+            <span class="ab-badge bb-charm">⚙️ Free Unique</span>
+            <span class="ab-badge bb-light">⚡ 7 Boons</span>
+          </div>
+        </div>
+        <div class="ab-progress">
+          <div class="ab-pct" id="a5pct" style="color:var(--violet);">0%</div>
+          <div class="ab-pb"><div class="ab-pbf" id="a5bar" style="width:0%;background:var(--violet);color:var(--violet);"></div></div>
+          <div class="ab-pbtxt" id="a5txt">0 / 0</div>
+        </div>
+      </div>
+
+      <!-- Sci-Fi Routing & Speedrun Tips Box -->
+      <div style="background:rgba(176,136,255,0.06);border:1px solid rgba(176,136,255,0.25);border-left:4px solid var(--violet);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:12.5px;">
+        <div style="font-family:'Orbitron',sans-serif;font-weight:700;color:var(--violet);margin-bottom:.5rem;letter-spacing:1px;">⚡ INTERLUDES ROUTING &amp; SPEEDRUN NOTES</div>
+        <div style="color:var(--txt-hi);line-height:1.6;">
+          • <strong>Recommended Order: 5.3 → 5.1 → 5.2</strong>. Do <strong>5.3 (Mount Kriar) first</strong> for early <strong>+40 Spirit</strong> power spike, then 5.1 (Ogham), then 5.2 (Khari Bazaar).<br/>
+          • <strong>Missable Permanent Rewards</strong>: Every reward listed below is permanent and missable — complete all 3 interludes before starting Tier 1 Maps.<br/>
+          • <strong>Resistances Drop</strong>: Resistances drop the moment you enter an interlude — ensure gear is prepared before zoning in.<br/>
+          • <strong>Orbala's 7 Boons (Khari Bazaar)</strong>: Can be swapped anytime by returning to Orbala's Pillar.
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-lbl">Filter</span>
+        <button class="f-btn active" data-f="all" onclick="setFilter('act5','all')">All</button>
+        <button class="f-btn" data-f="wp" onclick="setFilter('act5','wp')"><span class="fdot" style="background:var(--sky)"></span>Waypoints</button>
+        <button class="f-btn" data-f="perm" onclick="setFilter('act5','perm')"><span class="fdot" style="background:var(--sage)"></span>Perm Rewards</button>
+        <button class="f-btn" data-f="boss" onclick="setFilter('act5','boss')"><span class="fdot" style="background:var(--burnt)"></span>Bosses</button>
+        <button class="f-btn" data-f="todo" onclick="setFilter('act5','todo')">Remaining</button>
+        <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Search interludes…" oninput="searchZones('act5',this.value)"/></div>
+      </div>
+
+      <div class="zones-list" id="zones-act5">
+        
+        <!-- INTERLUDE 5.1 -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="interlude 5.1 ogham refuge blackwood holten wolvenhold estate">
+          <div class="zc-bar"><span class="zc-icon">🌲</span><span class="zc-name">Interlude 5.1 — Ogham, The Refuge (Lvl 52–53)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-interlude51">0/9</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="interlude51">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📍</span><span class="cl-txt">Arrive at <strong>The Refuge (Ogham)</strong> via The Hooded One — talk to The Hooded One</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔥</span><span class="cl-txt">Enter <strong>Scorched Farmlands</strong> (WP). Blackwood entrance (N) sealed by Darkness — clear via Stones of Serle. (Opt) Slay boss duo <strong>Isolde &amp; Heldra</strong> (E)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🪨</span><span class="cl-txt"><strong>Stones of Serle</strong> (S) — activate 6 Runed Megaliths to lift Darkness curse</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚓</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Soul of the Ferryman</strong> (docks inside Holten) — buy Greater Runes ~2000g</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏰</span><span class="cl-txt">Through Blackwood → reach <strong>Holten</strong>. Altars of Omen drop Omens / Dark Omens</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚔️</span><span class="cl-txt">In Holten: boss duo <strong>Godwin &amp; Sigbert</strong> (drops Blacksmith's Whetstone). Two routes branch: Wolvenhold &amp; Holten Estate</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt"><strong>Wolvenhold → Slay Oswin, the Dread Warden</strong> → loot Warden's Ledger</span></label><span class="rwd r-skill">+2 Skill Pts</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">👑</span><span class="cl-txt"><strong>Holten Estate → Slay Thane Wulfric &amp; Lady Elswyth</strong> (manor courtyard story bosses)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏁</span><span class="cl-txt">Complete Interlude 5.1 — return to town</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- INTERLUDE 5.2 -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="interlude 5.2 khari bazaar crossing pools kathal sel khari qimah azmadi">
+          <div class="zc-bar"><span class="zc-icon">🏜️</span><span class="zc-name">Interlude 5.2 — Khari Bazaar (Lvl 54–55)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-interlude52">0/13</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="interlude52">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📍</span><span class="cl-txt">Travel to <strong>Khari Crossing</strong> via Hooded One</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt"><strong>Slay Akthi &amp; Anundr</strong> (Worm + Scorpion, SE) → talk to Risu</span></label><span class="rwd r-skill">+2 Skill Pts</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗡️</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Torbek</strong> (Khari Crossing) — discount rare caster weapons</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌊</span><span class="cl-txt">Travel to <strong>Pools of Kathal</strong> (WP) — guaranteed Expedition spawn &amp; Sel Khari entrance</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💍</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Sel Khari Sanctuary</strong> — Two Wishes: place Barya items for 2 rare jewelry picks</span></label><span class="rwd r-charm">2 Rare Jewelry</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🐍</span><span class="cl-txt">End of Sel Khari Sanctuary → <strong>Slay Elzarah, the Cobra Lord</strong> → Asala &amp; Jado appear</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">❤️</span><span class="cl-txt"><strong>Activate Molten One's Gift</strong> — enter Skullmaw Stairway in Molten Shrine</span></label><span class="rwd r-life">+5% Max Life</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚡</span><span class="cl-txt">Enter <strong>Qimah → Use Orbala's Pillar</strong> — pick 1 of 7 Boons (swap anytime)</span></label><span class="rwd r-light">7 Boons</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🔑</span><span class="cl-txt"><strong>Summon Jado</strong> to open the entrance to Qimah Reservoir</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💧</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>Qimah Reservoir</strong> — 2x Sacred Wells (Sacred Water vials for currency)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏺</span><span class="cl-txt"><span class="skip">(Opt)</span> Slay rare boss <strong>Bloodbilge</strong> (click giant vase in Qimah Reservoir)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">👑</span><span class="cl-txt"><strong>Slay final boss Azmadi, the Faridun Prince</strong> (~70% HP: Zarokh appears &amp; stops time) → interact with Grand Barya</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏁</span><span class="cl-txt">Complete Interlude 5.2 — return to town</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- INTERLUDE 5.3 -->
+        <div class="zone-card zc-perm" data-types="wp perm boss" data-name="interlude 5.3 mount kriar ashen forest kriar village glacial tarn Peak stormgore cuachic">
+          <div class="zc-bar"><span class="zc-icon">🏔️</span><span class="zc-name">Interlude 5.3 — Mount Kriar, The Glade (Lvl 55–58)</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-boss">Bosses</span></div><span class="zc-counter" id="zc-interlude53">0/10</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="interlude53">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📍</span><span class="cl-txt">Travel to <strong>Mount Kriar</strong> via Hooded One → enter Ashen Forest (no WP)</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗿</span><span class="cl-txt">Find <strong>Ancient Monument</strong> in Ashen Forest (Vaal Beacon present)</span></label><span class="rwd r-skill">Skill Gem</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">💜</span><span class="cl-txt">Travel to <strong>Kriar Village → Slay Lythara, the Wayward Spear</strong></span></label><span class="rwd r-spirit">+40 Spirit</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🧊</span><span class="cl-txt">Glacial Tarn → enter Howling Caves → <strong>Slay The Abominable Yeti</strong> → loot Icy Tusks</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">📜</span><span class="cl-txt">Return Icy Tusks to <strong>Hilda</strong> → receive Book of Specialization</span></label><span class="rwd r-skill">+2 Skill Pts</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🦅</span><span class="cl-txt">Glacial Tarn → <strong>Slay Rakkar, the Frozen Talon</strong> (NW) to reveal Kriar Peaks passage</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🎁</span><span class="cl-txt"><strong>Kriar Peaks → Find Elder Maddox</strong> (10–11 o'clock, follow blue spirit owls)</span></label><span class="rwd r-charm">Free Unique</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⚡</span><span class="cl-txt">Etched Ravine → <strong>Slay Stormgore, the Guardian</strong> → unlocks The Cuachic Vault</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗝️</span><span class="cl-txt"><span class="skip">(Opt)</span> <strong>The Cuachic Vault</strong> — open Sealed Vaults at Stone Altars using Small Soul Cores</span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🩸</span><span class="cl-txt">Reach final boss <strong>Zolin &amp; Zelina</strong> ("Blood Priest" duo) → defeat to advance Fate of the Vaal</span></label></li>
+          </ul></div>
+        </div>
+
+        <!-- COMPLETION & MAPS -->
+        <div class="zone-card zc-perm zc-final" data-types="wp perm final" data-name="interludes completion kingsmarch maps oriath atlas">
+          <div class="zc-bar"><span class="zc-icon">🌌</span><span class="zc-name">Interludes Completion &amp; Maps Unlock</span><div class="zc-tags"><span class="zt zt-wp">Waypoint</span><span class="zt zt-perm">Perm Reward</span><span class="zt zt-final">Endgame</span></div><span class="zc-counter" id="zc-interludecomp">0/4</span></div>
+          <div class="zc-body"><ul class="cl" data-zone="interludecomp">
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🌟</span><span class="cl-txt"><strong>After all 3 interludes: Talk to The Hooded One in Kingsmarch</strong></span></label><span class="rwd r-skill">+2 Skill Pts</span></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">⛵</span><span class="cl-txt">Travel to <strong>Oriath</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🗣️</span><span class="cl-txt">Speak to <strong>Farrow</strong>, then <strong>The Hooded One</strong>, then <strong>Doryani</strong></span></label></li>
+            <li class="cl-item"><label class="cl-label"><input type="checkbox"/><span class="cb"></span><span class="cl-icon">🏆</span><span class="cl-txt">🎉 <strong>Endgame Atlas / Maps Unlocked</strong> — Start your first Tier 1 Map (Lvl 58–60)!</span></label><span class="rwd r-light">Endgame Atlas</span></li>
+          </ul></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<div class="toast" id="toast">
+</div><!-- /app -->
+
+<div class="toast" id="toast">  <script>
+const KEY='poe2-app-v1';
+
+/* ── TAB SWITCHING & AUTO SCROLL ── */
+function switchTab(id){
+  const tabsList = [...document.querySelectorAll('.tab')];
+  const tabsContainer = document.querySelector('.tabs');
+
+  tabsList.forEach(t => {
+    const isActive = t.dataset.tab === id;
+    t.classList.toggle('active', isActive);
+    if (isActive && tabsContainer) {
+      const tabOffset = t.offsetLeft - (tabsContainer.clientWidth / 2) + (t.clientWidth / 2);
+      tabsContainer.scrollTo({ left: Math.max(0, tabOffset), behavior: 'smooth' });
+    }
+  });
+
+  document.querySelectorAll('.panel').forEach(p => {
+    const isTarget = p.id === 'panel-' + id;
+    if (isTarget) {
+      p.classList.add('active');
+      p.scrollTop = 0;
+    } else {
+      p.classList.remove('active');
+    }
+  });
+}
+
+function scrollTabs(direction) {
+  const tabsList = [...document.querySelectorAll('.tab')];
+  const activeIndex = tabsList.findIndex(t => t.classList.contains('active'));
+  let newIndex = activeIndex;
+
+  if (direction === 'next') {
+    newIndex = (activeIndex + 1) % tabsList.length;
+  } else if (direction === 'prev') {
+    newIndex = (activeIndex - 1 + tabsList.length) % tabsList.length;
+  }
+
+  if (tabsList[newIndex]) {
+    switchTab(tabsList[newIndex].dataset.tab);
+  }
+}
+
+
+
+/* ── CRAFTING SUBTAB SELECTION ── */
+function selectCraftSubtab(subId){
+  document.querySelectorAll('.craft-subtab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.craftSub === subId);
+  });
+  document.querySelectorAll('.csn-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.craftSub === subId);
+  });
+  
+  if (subId === 'all') {
+    document.querySelectorAll('.codex-section').forEach(sec => {
+      sec.style.display = 'block';
+    });
+    const firstSec = document.querySelector('.codex-section');
+    if (firstSec) firstSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  document.querySelectorAll('.codex-section').forEach(sec => {
+    if (sec.id === 'craft-sec-' + subId) {
+      sec.style.display = 'block';
+      sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      sec.style.display = 'none';
+    }
+  });
+}
+
+/* ── FILTER ── */
+function setFilter(act,f){
+  const panel=document.getElementById('panel-'+act);
+  panel.querySelectorAll('.filter-bar .f-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  const zones=document.querySelectorAll('#zones-'+act+' .zone-card');
+  zones.forEach(card=>{
+    const types=(card.dataset.types||'').split(' ');
+    const isDone=card.classList.contains('zc-done');
+    if(f==='all'){card.dataset.hidden='false';card.style.display='';}
+    else if(f==='wp'){card.style.display=types.includes('wp')?'':'none';}
+    else if(f==='perm'){card.style.display=types.includes('perm')?'':'none';}
+    else if(f==='boss'){card.style.display=types.includes('boss')?'':'none';}
+    else if(f==='todo'){card.style.display=!isDone?'':'none';}
+  });
+}
+
+/* ── SEARCH ── */
+function searchZones(act,q){
+  const zones=document.querySelectorAll('#zones-'+act+' .zone-card');
+  const lq=q.toLowerCase();
+  zones.forEach(card=>{
+    const name=(card.dataset.name||'').toLowerCase();
+    card.style.display=(!lq||name.includes(lq))?'':'none';
+  });
+}
+
+/* ── INIT ── */
+function init(){
+  const saved=load();
+  document.querySelectorAll('.cl input[type=checkbox]').forEach(cb=>{
+    const id=getId(cb);
+    if(saved[id]){cb.checked=true;cb.closest('.cl-item').classList.add('done');}
+    cb.addEventListener('change',onChange);
+  });
+  updateAll();
+  
+  const hash = (window.location.hash || '').replace('#', '');
+  if (hash && document.getElementById('panel-' + hash)) {
+    switchTab(hash);
+  }
+  window.addEventListener('hashchange', () => {
+    const h = (window.location.hash || '').replace('#', '');
+    if (h && document.getElementById('panel-' + h)) {
+      switchTab(h);
+    }
+  });
+}
+
+function getId(cb){
+  const zone=cb.closest('[data-zone]').dataset.zone;
+  const all=[...cb.closest('[data-zone]').querySelectorAll('input[type=checkbox]')];
+  return zone+'-'+all.indexOf(cb);
+}
+
+function onChange(e){
+  const cb=e.target,li=cb.closest('.cl-item');
+  li.classList.toggle('done',cb.checked);
+  const d=load(),id=getId(cb);
+  cb.checked?d[id]=1:delete d[id];
+  save(d);updateAll();
+}
+
+/* ── UPDATE ALL ── */
+function updateAll(){
+  let gT=0,gD=0;
+  // Zone counters
+  document.querySelectorAll('[data-zone]').forEach(z=>{
+    const id=z.dataset.zone;
+    const cbs=z.querySelectorAll('input[type=checkbox]');
+    const done=z.querySelectorAll('input[type=checkbox]:checked');
+    const el=document.getElementById('zc-'+id);
+    if(el) el.textContent=done.length+'/'+cbs.length;
+    const card=z.closest('.zone-card');
+    if(card) card.classList.toggle('zc-done',done.length===cbs.length&&cbs.length>0);
+    gT+=cbs.length;gD+=done.length;
+  });
+  // Act bars
+  [1,2,3,4,5].forEach(n=>{
+    const sec=document.getElementById('act'+n);
+    if(!sec) return;
+    const cbs=sec.querySelectorAll('input[type=checkbox]');
+    const done=sec.querySelectorAll('input[type=checkbox]:checked');
+    const pct=cbs.length?Math.round(done.length/cbs.length*100):0;
+    setEl('a'+n+'bar','style.width',pct+'%');
+    setEl('a'+n+'pct','textContent',pct+'%');
+    setEl('a'+n+'txt','textContent',done.length+' / '+cbs.length);
+    // overview cards
+    setEl('ovb'+n,'style.width',pct+'%');
+    setEl('ovt'+n+'a','textContent',done.length+' / '+cbs.length+' tasks');
+    setEl('ovt'+n+'b','textContent',pct+'%');
+    // tab mini
+    setEl('tmini'+n,'textContent',pct+'%');
+  });
+  // Global
+  const pct=gT?Math.round(gD/gT*100):0;
+  const bar=document.getElementById('gBar');
+  bar.style.width=pct+'%';
+  bar.classList.toggle('complete',pct===100);
+  document.getElementById('gPct').textContent=pct+'%';
+  if(pct===100) showToast('🏆 Campaign Complete! All tasks done!');
+}
+
+function setEl(id,prop,val){
+  const el=document.getElementById(id);
+  if(!el) return;
+  if(prop.includes('.')) el[prop.split('.')[0]][prop.split('.')[1]]=val;
+  else el[prop]=val;
+}
+
+/* ── PERSIST ── */
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return{}}}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
+
+function resetAll(){
+  if(!confirm('Reset all progress? Cannot be undone.')) return;
+  localStorage.removeItem(KEY);
+  document.querySelectorAll('.cl input[type=checkbox]').forEach(cb=>{cb.checked=false;cb.closest('.cl-item').classList.remove('done');});
+  document.querySelectorAll('.zone-card').forEach(c=>c.classList.remove('zc-done'));
+  updateAll();showToast('Progress reset.');
+}
+function exportP(){const c=btoa(localStorage.getItem(KEY)||'{}');navigator.clipboard.writeText(c).then(()=>showToast('✓ Copied to clipboard!'));}
+function importP(){const c=prompt('Paste progress code:');if(!c)return;try{save(JSON.parse(atob(c)));init();showToast('✓ Imported!');}catch{showToast('✗ Invalid code.');}}
+
+/* ── COSMIC PLEXUS VORTEX TUNNEL ANIMATION ── */
+(function() {
+  const canvas = document.getElementById('plexusBg');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width, height, cx, cy;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    cx = width / 2;
+    cy = height / 2;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const rings = 9;
+  const pointsPerRing = 14;
+  let angleOffset = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    angleOffset += 0.0025;
+
+    let allPoints = [];
+
+    for (let r = 1; r <= rings; r++) {
+      const radius = Math.pow(r / rings, 1.7) * (Math.min(width, height) * 0.62) + 25;
+      const alpha = (r / rings) * 0.45 + 0.1;
+      const ringPoints = [];
+
+      for (let i = 0; i < pointsPerRing; i++) {
+        const angle = (i / pointsPerRing) * Math.PI * 2 + angleOffset * (r % 2 === 0 ? 1 : -1) + (r * 0.15);
+        const x = cx + Math.cos(angle) * radius;
+        const y = cy + Math.sin(angle) * radius;
+        ringPoints.push({ x, y, radius, alpha });
+      }
+
+      // Draw Polygon Mesh Line for Ring
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(176, 136, 255, ${alpha * 0.65})`;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < pointsPerRing; i++) {
+        const next = ringPoints[(i + 1) % pointsPerRing];
+        ctx.moveTo(ringPoints[i].x, ringPoints[i].y);
+        ctx.lineTo(next.x, next.y);
+      }
+      ctx.stroke();
+
+      allPoints.push(ringPoints);
+    }
+
+    // Draw Radial Tunnel Rays & Low-Poly Faces
+    for (let r = 0; r < rings - 1; r++) {
+      const currentRing = allPoints[r];
+      const nextRing = allPoints[r + 1];
+      for (let i = 0; i < pointsPerRing; i++) {
+        const p1 = currentRing[i];
+        const p2 = nextRing[i];
+        const p2Next = nextRing[(i + 1) % pointsPerRing];
+
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(138, 92, 246, ${p1.alpha * 0.4})`;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+
+        // Poly Mesh face shading
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(138, 92, 246, 0.035)`;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.lineTo(p2Next.x, p2Next.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    // Draw Glowing Node Particles
+    for (let r = 0; r < rings; r++) {
+      for (let i = 0; i < pointsPerRing; i++) {
+        const p = allPoints[r][i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r % 2 === 0 ? 2.2 : 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = r > 5 ? `rgba(255, 255, 255, ${p.alpha + 0.4})` : `rgba(176, 136, 255, ${p.alpha + 0.25})`;
+        ctx.shadowColor = '#b088ff';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+
+init();
+</script>
+</body>
+</html>

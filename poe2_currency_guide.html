@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>POE2 ALPHACHUU GUIDE — Currency &amp; Tips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+:root {
+  --bg-deep: #06040d;
+  --bg-sidebar: rgba(12, 8, 24, 0.95);
+  --bg-panel: rgba(16, 11, 32, 0.85);
+  --bg-card: rgba(24, 16, 48, 0.65);
+  --gold: #ffb700;
+  --gold-glow: rgba(255, 183, 0, 0.4);
+  --green: #00ff9d;
+  --green-glow: rgba(0, 255, 157, 0.4);
+  --violet: #b088ff;
+  --txt-hi: #ffffff;
+  --txt-mid: #d1cae8;
+  --txt-dark: #7b739e;
+  --bdr: rgba(176, 136, 255, 0.22);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  height: 100vh; width: 100vw; overflow: hidden;
+  background: var(--bg-deep); color: var(--txt-mid);
+  font-family: 'Inter', sans-serif; display: flex; flex-direction: column;
+}
+
+/* NAVBAR */
+.app-navbar {
+  height: 52px; min-height: 52px;
+  background: var(--bg-sidebar); border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; z-index: 50; backdrop-filter: blur(16px);
+}
+.app-brand {
+  font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--green); letter-spacing: 1.5px; display: flex; align-items: center; gap: 0.6rem;
+  text-shadow: 0 0 12px var(--green-glow);
+}
+.app-search-wrap {
+  display: flex; align-items: center; background: rgba(5, 10, 20, 0.7);
+  border: 1px solid var(--bdr); border-radius: 20px; padding: 0.35rem 0.85rem;
+  width: 300px; gap: 0.5rem; transition: all 0.2s ease;
+}
+.app-search-wrap:focus-within { border-color: var(--green); box-shadow: 0 0 15px var(--green-glow); }
+.app-search-input {
+  background: transparent; border: none; outline: none; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 12px; width: 100%;
+}
+.app-patch-badge {
+  font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green);
+  background: rgba(0, 255, 157, 0.12); padding: 0.25rem 0.7rem; border-radius: 6px;
+  border: 1px solid var(--bdr);
+}
+
+/* LAYOUT CONTAINER */
+.app-container { flex: 1; display: flex; overflow: hidden; position: relative; }
+
+/* SIDEBAR SUBTABS */
+.app-sidebar {
+  width: 270px; min-width: 270px; background: var(--bg-sidebar);
+  border-right: 1px solid var(--bdr); display: flex; flex-direction: column;
+  padding: 1rem 0.75rem; overflow-y: auto; backdrop-filter: blur(12px);
+  scrollbar-width: thin; scrollbar-color: var(--bdr) transparent;
+}
+.sidebar-title {
+  font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800;
+  color: var(--green); letter-spacing: 2px; text-transform: uppercase;
+  padding-bottom: 0.6rem; margin-bottom: 0.65rem; border-bottom: 1px solid var(--bdr);
+  padding-left: 0.5rem;
+}
+.app-subtab {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%;
+  padding: 0.6rem 0.75rem; background: transparent; border: none;
+  border-bottom: 1px dotted rgba(0, 255, 157, 0.25); color: #c4f7e5;
+  font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500;
+  text-align: left; cursor: pointer; transition: all 0.2s ease; border-radius: 4px;
+}
+.app-subtab:hover { background: rgba(0, 255, 157, 0.1); color: #ffffff; }
+.app-subtab.active {
+  background: rgba(0, 255, 157, 0.18); color: #ffffff; font-weight: 700;
+  border-left: 3px solid var(--green); border-bottom-color: transparent;
+  box-shadow: inset 0 0 15px rgba(0, 255, 157, 0.15);
+}
+.cs-num {
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 12px;
+  color: var(--green); min-width: 24px; text-align: right;
+}
+.cs-name { flex: 1; line-height: 1.3; }
+
+/* MAIN CONTENT AREA */
+.app-main {
+  flex: 1; overflow-y: auto; padding: 1.5rem 2rem 4rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+  scrollbar-width: thin; scrollbar-color: var(--bdr) transparent;
+}
+
+/* TOP HORIZONTAL SUBNAV BAR */
+.top-subnav-bar {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: var(--bg-panel); border: 1px solid var(--bdr);
+  border-left: 4px solid var(--green); border-radius: 8px; padding: 0.65rem 1rem;
+  flex-shrink: 0; backdrop-filter: blur(12px);
+}
+.top-subnav-label {
+  font-family: 'Orbitron', sans-serif; font-size: 10.5px; font-weight: 800;
+  color: var(--green); letter-spacing: 1.5px; flex-shrink: 0; text-transform: uppercase;
+}
+.top-subnav-items { display: flex; gap: 0.4rem; overflow-x: auto; white-space: nowrap; flex: 1; }
+.csn-btn {
+  background: rgba(0, 255, 157, 0.06); border: 1px solid rgba(0, 255, 157, 0.2);
+  border-radius: 6px; color: #c4f7e5; font-family: 'Inter', sans-serif;
+  font-size: 11.5px; font-weight: 600; padding: 0.4rem 0.8rem; cursor: pointer;
+  transition: all 0.2s ease; flex-shrink: 0;
+}
+.csn-btn:hover { background: rgba(0, 255, 157, 0.15); border-color: var(--green); color: #fff; }
+.csn-btn.active { background: var(--green); border-color: var(--green); color: #06040d; font-weight: 800; }
+
+/* CHAPTER CARDS */
+.chapter-card {
+  background: var(--bg-panel); border: 1px solid var(--bdr);
+  border-radius: 12px; padding: 1.5rem 1.75rem; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.chapter-header {
+  display: flex; align-items: center; gap: 1rem; padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem; border-bottom: 1px solid var(--bdr);
+}
+.chapter-num {
+  width: 40px; height: 40px; border-radius: 8px; background: rgba(0, 255, 157, 0.12);
+  border: 1px solid var(--green); color: var(--green); font-family: 'Cinzel', serif;
+  font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; justify-content: center;
+}
+.chapter-title {
+  font-family: 'Orbitron', sans-serif; font-size: 1.25rem; font-weight: 800;
+  color: var(--txt-hi); letter-spacing: 0.5px;
+}
+
+.sub-title { font-family: 'Orbitron', sans-serif; color: var(--green); font-size: 13.5px; font-weight: 700; margin: 1.2rem 0 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+p { margin-bottom: 0.8rem; line-height: 1.6; }
+ul, ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+li { margin-bottom: 0.3rem; }
+
+.callout { background: rgba(20,25,35,0.6); border: 1px solid var(--bdr); border-left: 4px solid var(--green); padding: 0.85rem 1.1rem; margin: 1rem 0; font-size: 12.5px; border-radius: 0 6px 6px 0; color: var(--txt-hi); line-height: 1.6; }
+.callout.warn { border-left-color: #ff5555; background: rgba(255,85,85,0.06); }
+.callout.tip { border-left-color: var(--green); background: rgba(0,255,157,0.06); }
+.callout.aldur { border-left-color: var(--gold); background: rgba(255,183,0,0.08); }
+.callout .label { display: block; font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 0.3rem; font-weight: 700; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; margin: 1rem 0 1.2rem; }
+.card { background: rgba(20,25,35,0.65); border: 1px solid var(--bdr); border-radius: 8px; padding: 0.95rem 1.1rem; }
+.card h4 { font-family: 'Orbitron', sans-serif; color: var(--green); font-size: 12.5px; margin-bottom: 0.35rem; }
+.card .role { font-family: monospace; color: var(--txt-dark); font-size: 10px; text-transform: uppercase; margin-bottom: 0.5rem; }
+
+.canonical { background: rgba(20,25,35,0.75); border: 1px solid var(--green); border-radius: 8px; padding: 1.2rem 1.4rem; margin: 1rem 0 1.4rem; }
+.canonical .can-title { font-family: 'Orbitron', sans-serif; color: var(--green); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-align: center; margin-bottom: 0.9rem; font-weight: 700; }
+.flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; justify-content: center; margin-bottom: 0.7rem; }
+.pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--bdr); font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--txt-hi); border-radius: 4px; }
+.pill .n { color: var(--green); font-weight: 700; }
+
+.subnav-arrow-btn {
+  height: 32px;
+  width: 28px;
+  background: rgba(20, 14, 38, 0.95);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.subnav-arrow-btn:hover {
+  background: var(--green);
+  color: #06040d;
+  box-shadow: 0 0 12px var(--green-glow);
+}
+
+</style>
+</head>
+<body>
+<canvas id="plexusBgCurrency" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
+
+<!-- NAVBAR -->
+<header class="app-navbar">
+  <div class="app-brand">
+    <span>💎</span> POE2 ALPHACHUU GUIDE — Currency &amp; Tips
+  </div>
+
+  <div class="app-search-wrap">
+    <span>🔍</span>
+    <input type="text" class="app-search-input" id="currencySearch" placeholder="Search strategy, filters, trading..." oninput="searchCurrencyApp(this.value)"/>
+  </div>
+
+  <div class="app-patch-badge">MAXROLL POE2 REFERENCE</div>
+</header>
+
+<!-- LAYOUT CONTAINER -->
+<div class="app-container">
+  <!-- LEFT SIDEBAR SUBTABS -->
+  <aside class="app-sidebar">
+    <div class="sidebar-title">CURRENCY GUIDE INDEX</div>
+    <button class="app-subtab active" data-sub="all" onclick="switchCurrencyTab('all')">
+  <span class="cs-num">💎</span>
+  <span class="cs-name">All Overview &amp; Rules</span>
+</button>
+<button class="app-subtab" data-sub="basics" onclick="switchCurrencyTab('basics')">
+  <span class="cs-num">I</span>
+  <span class="cs-name">The Basics & Trading</span>
+</button>
+<button class="app-subtab" data-sub="filters" onclick="switchCurrencyTab('filters')">
+  <span class="cs-num">II</span>
+  <span class="cs-name">Loot Filters Setup</span>
+</button>
+<button class="app-subtab" data-sub="sales" onclick="switchCurrencyTab('sales')">
+  <span class="cs-num">III</span>
+  <span class="cs-name">The Consistent Sales</span>
+</button>
+<button class="app-subtab" data-sub="dumping" onclick="switchCurrencyTab('dumping')">
+  <span class="cs-num">IV</span>
+  <span class="cs-name">Dump Tabbing & Pricing</span>
+</button>
+<button class="app-subtab" data-sub="efficiency" onclick="switchCurrencyTab('efficiency')">
+  <span class="cs-num">V</span>
+  <span class="cs-name">Mapping & Time Efficiency</span>
+</button>
+<button class="app-subtab" data-sub="farming" onclick="switchCurrencyTab('farming')">
+  <span class="cs-num">VI</span>
+  <span class="cs-name">Farming Mechanics</span>
+</button>
+<button class="app-subtab" data-sub="bases" onclick="switchCurrencyTab('bases')">
+  <span class="cs-num">VII</span>
+  <span class="cs-name">High Value Crafting Bases</span>
+</button>
+<button class="app-subtab" data-sub="extra" onclick="switchCurrencyTab('extra')">
+  <span class="cs-num">VIII</span>
+  <span class="cs-name">Extra Currency Methods</span>
+</button>
+<button class="app-subtab" data-sub="asynctrade" onclick="switchCurrencyTab('asynctrade')">
+  <span class="cs-num">IX</span>
+  <span class="cs-name">Asynchronous Trade (Ange)</span>
+</button>
+<button class="app-subtab" data-sub="summary" onclick="switchCurrencyTab('summary')">
+  <span class="cs-num">X</span>
+  <span class="cs-name">Key Summary & Rules</span>
+</button>
+
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="app-main" id="currencyMainArea">
+    <!-- TOP HORIZONTAL SUBNAV BAR -->
+    <div class="top-subnav-bar">
+      <div class="top-subnav-label">CHAPTERS:</div>
+      <button class="subnav-arrow-btn" onclick="scrollSubNav('prev')" title="Previous Chapter">❮</button>
+      <div class="top-subnav-items" id="topSubNavContainer">
+        <button class="csn-btn active" data-sub="all" onclick="switchCurrencyTab('all')">💎 All Overview</button>
+<button class="csn-btn" data-sub="basics" onclick="switchCurrencyTab('basics')">I. The Basics & Trading</button>
+<button class="csn-btn" data-sub="filters" onclick="switchCurrencyTab('filters')">II. Loot Filters Setup</button>
+<button class="csn-btn" data-sub="sales" onclick="switchCurrencyTab('sales')">III. The Consistent Sales</button>
+<button class="csn-btn" data-sub="dumping" onclick="switchCurrencyTab('dumping')">IV. Dump Tabbing & Pricing</button>
+<button class="csn-btn" data-sub="efficiency" onclick="switchCurrencyTab('efficiency')">V. Mapping & Time Efficiency</button>
+<button class="csn-btn" data-sub="farming" onclick="switchCurrencyTab('farming')">VI. Farming Mechanics</button>
+<button class="csn-btn" data-sub="bases" onclick="switchCurrencyTab('bases')">VII. High Value Crafting Bases</button>
+<button class="csn-btn" data-sub="extra" onclick="switchCurrencyTab('extra')">VIII. Extra Currency Methods</button>
+<button class="csn-btn" data-sub="asynctrade" onclick="switchCurrencyTab('asynctrade')">IX. Asynchronous Trade (Ange)</button>
+<button class="csn-btn" data-sub="summary" onclick="switchCurrencyTab('summary')">X. Key Summary & Rules</button>
+
+      </div>
+      <button class="subnav-arrow-btn" onclick="scrollSubNav('next')" title="Next Chapter">❯</button>
+    </div>
+
+    <!-- CHAPTER CARDS CONTAINER -->
+    
+<div class="chapter-card" id="card-basics" data-sub="basics">
+  <div class="chapter-header">
+    <span class="chapter-num">I</span>
+    <h2 class="chapter-title">The Basics & Trading</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout tip">
+      <span class="label">💡 THE FOUNDATION OF POE2 ECONOMY</span>
+      In Path of Exile 2, currency items serve a dual purpose: they are direct crafting materials for items AND the global medium of trade exchange. Understanding when to spend vs when to sell is the core of wealth generation.
+    </div>
+    <h3 class="sub-title">1. Gold vs Trade Currency</h3>
+    <p>Gold drops directly from monsters and chests in PoE2. Gold cannot be traded directly between players, but it is required to pay listing fees at the <strong>Currency Exchange (Ange in Kingsmarch)</strong> and vendor items.</p>
+    <ul>
+      <li><strong>Exalted Orbs & Divine Orbs</strong>: The primary high-tier trade standard currencies for buying gear, uniques, and high-value bases.</li>
+      <li><strong>Chaos Orbs & Alchemy Orbs</strong>: Mid-tier standard currencies for map rolling and mid-level item trades.</li>
+      <li><strong>Gold Management</strong>: Always maintain at least 50k–100k Gold so you never run out of currency exchange fee capacity during mapping.</li>
+    </ul>
+    <h3 class="sub-title">2. Trading Mindset</h3>
+    <p>Currency generation is about <strong>liquid volume</strong> and <strong>minimizing hideout downtime</strong>. Wealth accumulates exponentially when items move out of your inventory quickly rather than sitting in tabs waiting for over-priced buyers.</p>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-filters" data-sub="filters">
+  <div class="chapter-header">
+    <span class="chapter-num">II</span>
+    <h2 class="chapter-title">Loot Filters Setup</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout warn">
+      <span class="label">⚠️ HIDE THE CLUTTER</span>
+      Picking up 1-gold vendor magic items in Tier 10 maps loses you up to 70% of your potential Divine Orbs per hour!
+    </div>
+    <h3 class="sub-title">1. Strictness Escalation</h3>
+    <p>As your character strength grows, increase your loot filter strictness:</p>
+    <ul>
+      <li><strong>Campaign (Regular / Semi-Strict)</strong>: Show gear upgrades, sockets, gold, and all currency types.</li>
+      <li><strong>Early Mapping (Strict)</strong>: Hide low-level base items, white items without sockets, and sub-tier 1 flask bases.</li>
+      <li><strong>Endgame T15+ (Very Strict / Strict+)</strong>: Show ONLY high-tier currency, high-value bases (ilvl 82+), valuable runes, catalysts, omens, and tier 1 uniques.</li>
+    </ul>
+    <h3 class="sub-title">2. Customizing Filters for Profit</h3>
+    <p>Highlight high-demand league items such as <strong>Uncut Gems (Lv19+)</strong>, <strong>Barya Djinn Keys</strong>, <strong>Catalysts</strong>, and <strong>Waystones (T14+)</strong> with bright distinct colors and audio drop alerts.</p>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-sales" data-sub="sales">
+  <div class="chapter-header">
+    <span class="chapter-num">III</span>
+    <h2 class="chapter-title">The Consistent Sales</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout aldur">
+      <span class="label">🔥 THE GUARANTEED CASH FLOW</span>
+      Consistent sales of small stackable items generate steady Divine Orbs faster than waiting for lucky unique drops.
+    </div>
+    <h3 class="sub-title">Top Consistent Revenue Sellers:</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>1. Essences &amp; Omens</h4>
+        <div class="role">HIGH LIQUIDITY</div>
+        <p>Perfect Essences and Omen of Greater Annulment / Catalysing Exaltation sell in seconds on the Currency Exchange.</p>
+      </div>
+      <div class="card">
+        <h4>2. Uncut Skill &amp; Spirit Gems</h4>
+        <div class="role">CONSTANT DEMAND</div>
+        <p>Uncut Gems Lv15–20 are required by all players leveling alt builds or gem swapping.</p>
+      </div>
+      <div class="card">
+        <h4>3. Catalysts &amp; Runes</h4>
+        <div class="role">CRAFTING ESSENTIALS</div>
+        <p>Attribute and Elemental Resistance Catalysts + Runes of Aldur sell instantly in bulk stacks.</p>
+      </div>
+      <div class="card">
+        <h4>4. Barya &amp; Trial Logbooks</h4>
+        <div class="role">ENDGAME KEYS</div>
+        <p>Sekhema Barya djinn keys and Chaos Trial keys carry high per-item value for ascendancy runners.</p>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-dumping" data-sub="dumping">
+  <div class="chapter-header">
+    <span class="chapter-num">IV</span>
+    <h2 class="chapter-title">Dump Tabbing & Pricing</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout tip">
+      <span class="label">📦 DUMP TAB METHODOLOGY</span>
+      Do not price individual 5-chaos rares after every map. Dump everything into a designated quad tab and keep mapping!
+    </div>
+    <h3 class="sub-title">Step-by-Step Dump Tab Process:</h3>
+    <ol>
+      <li><strong>Set Quad Tab to Fixed Price</strong>: Set an entire Quad Dump Tab to <code>1 Exalted Orb</code> (or <code>15 Chaos</code>).</li>
+      <li><strong>Fill the Tab</strong>: Dump all unidentified/identified rare items into the tab after each map.</li>
+      <li><strong>Lower Price Daily</strong>: If items don't sell after 1 day, lower the tab price to <code>10 Chaos</code> → <code>5 Chaos</code> → Vendor remainder for Gold/Reforging.</li>
+      <li><strong>Instant Whispers Warning</strong>: If you receive 5 whispers within 10 seconds of dumping an item, you mispriced a high-tier item! Take it out and price check on Trade.</li>
+    </ol>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-efficiency" data-sub="efficiency">
+  <div class="chapter-header">
+    <span class="chapter-num">V</span>
+    <h2 class="chapter-title">Mapping & Time Efficiency</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout new">
+      <span class="label">⏱️ THE "HIDEOUT IS LAVA" RULE</span>
+      Every minute spent standing still in your hideout is 0 Exalted Orbs earned.
+    </div>
+    <h3 class="sub-title">1. Map Preparation in Batches</h3>
+    <p>Never roll one map at a time. Roll <strong>10 to 20 Waystones at once</strong> using Transmutations/Alchemies, check for dangerous mods (e.g. No Mana Regen, Reflect), store them in a Map Bag, and run them sequentially.</p>
+
+    <h3 class="sub-title">2. Inventory &amp; Portal Hygiene</h3>
+    <ul>
+      <li>Keep Portal Scrolls / Uncut Gems in fixed corners of your inventory.</li>
+      <li>Only return to hideout when inventory is 100% full.</li>
+      <li>Use <code>Ctrl + Right Click</code> for instant stash transfers.</li>
+    </ul>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-farming" data-sub="farming">
+  <div class="chapter-header">
+    <span class="chapter-num">VI</span>
+    <h2 class="chapter-title">Farming Mechanics</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <h3 class="sub-title">Top Currency Farming Strategies</h3>
+    <div class="tricks">
+      <div class="trick">
+        <span class="tag">STRATEGY 1</span>
+        <h4>Essence &amp; Omen Rushing</h4>
+        <p>Spec your Atlas nodes into Essence duplication and Omen drop chance. Run fast linear maps, burst Essence frozen packs, and exit.</p>
+        <div class="how">
+          <strong>Requirements:</strong> Fast movement skill + high single-target DPS.
+        </div>
+      </div>
+
+      <div class="trick">
+        <span class="tag">STRATEGY 2</span>
+        <h4>Expedition Logbook Farming</h4>
+        <p>Farm Dannig and Tujen logbooks. Tujen gambles yield immense stacks of Chaos, Exalted, and Divine Orbs.</p>
+        <div class="how">
+          <strong>Requirements:</strong> High Area Damage + Explosive Immunity management.
+        </div>
+      </div>
+
+      <div class="trick">
+        <span class="tag">STRATEGY 3</span>
+        <h4>High Tier Waystone Boss Rushing</h4>
+        <p>Run T15/T16 maps straight to the boss for High Tier Waystone drops and Pinnacle Boss Key fragments.</p>
+        <div class="how">
+          <strong>Requirements:</strong> Boss burst DPS + Movement speed.
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-bases" data-sub="bases">
+  <div class="chapter-header">
+    <span class="chapter-num">VII</span>
+    <h2 class="chapter-title">High Value Crafting Bases</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout warn">
+      <span class="label">🛡️ HIGH ITEM LEVEL BASES = BIG GOLD &amp; TRADE</span>
+      High Item Level (ilvl 82+) white bases with maximum sockets sell for high trade value to crafters.
+    </div>
+    <h3 class="sub-title">Bases to Always Filter &amp; Check:</h3>
+    <ul>
+      <li><strong>ilvl 82+ Science Scale &amp; Vaal Regalia Bases</strong>: Top energy shield &amp; hybrid crafting armours.</li>
+      <li><strong>ilvl 82+ Gemini Bows &amp; Rattling Sceptres</strong>: Premier attack &amp; caster weapon bases.</li>
+      <li><strong>5-Socket &amp; 6-Socket Weapons/Body Armours</strong>: High value for socketing Runes of Aldur or vendor salvaging.</li>
+    </ul>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-extra" data-sub="extra">
+  <div class="chapter-header">
+    <span class="chapter-num">VIII</span>
+    <h2 class="chapter-title">Extra Currency Methods</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <h3 class="sub-title">Alternative Wealth Generation Methods</h3>
+    <ul>
+      <li><strong>Salvage Bench Crafting</strong>: Salvage 5-socket armours at the Smithing bench to recover raw Verisium &amp; High Runes.</li>
+      <li><strong>Early League Vendor Flipping</strong>: Buy uncut gems from town vendors early in league launch and sell desired meta gems on Trade.</li>
+      <li><strong>Boss Carrying</strong>: Sell pinnacle boss kills (Tavakai, Doryani, Sekhema) to players needing campaign/ascendancy completion.</li>
+    </ul>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-asynctrade" data-sub="asynctrade">
+  <div class="chapter-header">
+    <span class="chapter-num">IX</span>
+    <h2 class="chapter-title">Asynchronous Trade (Ange)</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="callout aldur">
+      <span class="label">⚖️ CURRENCY EXCHANGE (ANGE IN KINGSMARCH)</span>
+      Trade currency, omens, essences, and fragments instantly without whispering or waiting for players!
+    </div>
+    <h3 class="sub-title">How to Maximize Asynchronous Trade:</h3>
+    <ol>
+      <li>Talk to <strong>Ange in Kingsmarch</strong> (unlocked in Act 4).</li>
+      <li>Place your items (e.g. 50 Essences) into the seller box and select your desired currency output (e.g. Divine Orbs).</li>
+      <li>Set competitive market prices by checking the live ratio tab.</li>
+      <li>Collect your profits directly from Ange whenever you return from mapping!</li>
+    </ol>
+  
+  </div>
+</div>
+
+<div class="chapter-card" id="card-summary" data-sub="summary">
+  <div class="chapter-header">
+    <span class="chapter-num">X</span>
+    <h2 class="chapter-title">Key Summary & Rules</h2>
+  </div>
+  <div class="chapter-body">
+    
+    <div class="canonical">
+      <div class="can-title">🏆 THE 10 GOLDEN RULES FOR POE2 WEALTH</div>
+      <div class="flow">
+        <div class="pill"><span class="n">1</span> Hideout is Lava</div>
+        <div class="pill"><span class="n">2</span> Strict Loot Filter</div>
+        <div class="pill"><span class="n">3</span> Batch Roll Maps</div>
+        <div class="pill"><span class="n">4</span> Dump Tabbing</div>
+        <div class="pill"><span class="n">5</span> Use Currency Exchange</div>
+      </div>
+      <div class="flow">
+        <div class="pill"><span class="n">6</span> Sell Essences/Omens</div>
+        <div class="pill"><span class="n">7</span> Keep Gold Reserve</div>
+        <div class="pill"><span class="n">8</span> Filter ilvl 82+ Bases</div>
+        <div class="pill"><span class="n">9</span> Fast Movement DPS</div>
+        <div class="pill"><span class="n">10</span> Continuous Mapping</div>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+  </main>
+</div>
+
+<script>
+/* INTERACTIVE SUBTAB SWITCHING & AUTO CENTER SCROLL */
+function switchCurrencyTab(tabId) {
+  document.querySelectorAll('.app-subtab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sub === tabId);
+  });
+  document.querySelectorAll('.csn-btn').forEach(btn => {
+    const isActive = btn.dataset.sub === tabId;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  });
+
+  const cards = document.querySelectorAll('.chapter-card');
+  if (tabId === 'all') {
+    cards.forEach(card => card.style.display = 'block');
+  } else {
+    cards.forEach(card => {
+      if (card.dataset.sub === tabId) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  const mainArea = document.getElementById('currencyMainArea');
+  if (mainArea) mainArea.scrollTop = 0;
+}
+
+function scrollSubNav(direction) {
+  const container = document.getElementById('topSubNavContainer');
+  if (!container) return;
+  const buttons = [...container.querySelectorAll('.csn-btn')];
+  const activeIndex = buttons.findIndex(b => b.classList.contains('active'));
+  let newIndex = activeIndex;
+  
+  if (direction === 'next') {
+    newIndex = (activeIndex + 1) % buttons.length;
+  } else if (direction === 'prev') {
+    newIndex = (activeIndex - 1 + buttons.length) % buttons.length;
+  }
+  
+  if (buttons[newIndex]) {
+    switchCurrencyTab(buttons[newIndex].dataset.sub);
+  }
+}
+
+/* LOCAL SEARCH FUNCTION */
+function searchCurrencyApp(query) {
+  const q = query.toLowerCase().trim();
+  const cards = document.querySelectorAll('.chapter-card');
+  
+  if (!q) {
+    const activeSub = document.querySelector('.app-subtab.active');
+    const activeTab = activeSub ? activeSub.dataset.sub : 'all';
+    switchCurrencyTab(activeTab);
+    return;
+  }
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>
