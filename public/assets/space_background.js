@@ -48,7 +48,7 @@
       this.y = y;
       this.vx = vx * -0.25 + (Math.random() - 0.5) * 2;
       this.vy = vy * -0.25 + (Math.random() - 0.5) * 2;
-      this.size = Math.random() * 1.5 + 0.5;
+      this.size = Math.random() * 1.8 + 0.6;
       this.alpha = 1.0;
       this.decay = Math.random() * 0.05 + 0.035;
       this.color = color;
@@ -71,7 +71,7 @@
     }
   }
 
-  // Twinkling, drifting star class with 3D layers and special flares
+  // Twinkling, drifting star class with realistic larger sizes and 3D layers
   class Star {
     constructor() {
       this.reset(true);
@@ -85,27 +85,27 @@
       if (roll < 0.6) {
         // Far stars
         this.layer = 1;
-        this.size = Math.random() * 0.6 + 0.3;
-        this.speedX = (Math.random() - 0.2) * 0.05;
-        this.speedY = Math.random() * 0.08 + 0.03;
+        this.size = Math.random() * 0.8 + 0.6; // Large & visible
+        this.speedX = (Math.random() - 0.2) * 0.04;
+        this.speedY = Math.random() * 0.06 + 0.02;
         this.parallax = 0.15;
-        this.baseAlpha = Math.random() * 0.4 + 0.15;
+        this.baseAlpha = Math.random() * 0.4 + 0.2;
       } else if (roll < 0.9) {
         // Mid stars
         this.layer = 2;
-        this.size = Math.random() * 0.8 + 0.6;
-        this.speedX = (Math.random() - 0.2) * 0.1;
-        this.speedY = Math.random() * 0.15 + 0.08;
+        this.size = Math.random() * 1.2 + 1.2; // Pronounced mid stars
+        this.speedX = (Math.random() - 0.2) * 0.08;
+        this.speedY = Math.random() * 0.12 + 0.06;
         this.parallax = 0.45;
-        this.baseAlpha = Math.random() * 0.5 + 0.35;
+        this.baseAlpha = Math.random() * 0.5 + 0.4;
       } else {
         // Close stars
         this.layer = 3;
-        this.size = Math.random() * 1.2 + 1.2;
-        this.speedX = (Math.random() - 0.2) * 0.18;
-        this.speedY = Math.random() * 0.25 + 0.15;
+        this.size = Math.random() * 1.8 + 2.2; // High definition stars
+        this.speedX = (Math.random() - 0.2) * 0.15;
+        this.speedY = Math.random() * 0.2 + 0.1;
         this.parallax = 0.85;
-        this.baseAlpha = Math.random() * 0.4 + 0.55;
+        this.baseAlpha = Math.random() * 0.4 + 0.6;
       }
 
       this.alpha = this.baseAlpha;
@@ -241,6 +241,186 @@
     }
   }
 
+  // Realistic 3D Planet class with spherical shading & rings
+  class Planet {
+    constructor(relX, relY, radius, type, colors, ringSettings = null) {
+      this.relX = relX; // Position percentage relative to screen size
+      this.relY = relY;
+      this.radius = radius;
+      this.type = type; // 'gas', 'ice', 'rocky'
+      this.colors = colors; // { light, mid, dark }
+      this.ringSettings = ringSettings; // { rx, ry, angle, color }
+      this.spinAngle = Math.random() * Math.PI * 2;
+    }
+    update() {
+      // Slow orbital spin
+      this.spinAngle += 0.0002;
+    }
+    draw() {
+      const baseX = this.relX * width;
+      const baseY = this.relY * height;
+      
+      // Dynamic parallax (planets sit deep in space, slower than stars)
+      const px = baseX + (mouseX - width / 2) * 0.012;
+      const py = baseY + (mouseY - height / 2) * 0.012;
+
+      ctx.save();
+
+      // 1. Draw BACK part of Saturn-like Ring
+      if (this.ringSettings) {
+        ctx.save();
+        ctx.strokeStyle = this.ringSettings.color;
+        ctx.lineWidth = this.radius * 0.12;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.ringSettings.color;
+        
+        ctx.beginPath();
+        // Ellipse drawn from PI to 2*PI (top half is behind the planet)
+        ctx.ellipse(
+          px, py, 
+          this.ringSettings.rx, 
+          this.ringSettings.ry, 
+          this.ringSettings.angle, 
+          Math.PI, 
+          2 * Math.PI
+        );
+        ctx.stroke();
+
+        // Faint outer ring border
+        ctx.strokeStyle = this.ringSettings.color.replace('0.8', '0.3').replace('0.6', '0.2');
+        ctx.lineWidth = this.radius * 0.03;
+        ctx.beginPath();
+        ctx.ellipse(
+          px, py, 
+          this.ringSettings.rx * 1.25, 
+          this.ringSettings.ry * 1.25, 
+          this.ringSettings.angle, 
+          Math.PI, 
+          2 * Math.PI
+        );
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 2. Draw Planet Sphere Body
+      const sphereGrad = ctx.createRadialGradient(
+        px - this.radius * 0.3, 
+        py - this.radius * 0.3, 
+        this.radius * 0.1, 
+        px, py, 
+        this.radius
+      );
+      sphereGrad.addColorStop(0, this.colors.light);
+      sphereGrad.addColorStop(0.5, this.colors.mid);
+      sphereGrad.addColorStop(1, this.colors.dark);
+
+      ctx.fillStyle = sphereGrad;
+      ctx.shadowBlur = 40;
+      ctx.shadowColor = this.colors.mid;
+      ctx.beginPath();
+      ctx.arc(px, py, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0; // Reset shadow
+
+      // 3. Draw Surface details (Clipped inside the sphere)
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(px, py, this.radius, 0, Math.PI * 2);
+      ctx.clip();
+
+      ctx.translate(px, py);
+      ctx.rotate(this.spinAngle);
+
+      if (this.type === 'gas') {
+        // Gas giant stripes
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.fillRect(-this.radius * 2, -this.radius * 0.4, this.radius * 4, this.radius * 0.16);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+        ctx.fillRect(-this.radius * 2, -this.radius * 0.1, this.radius * 4, this.radius * 0.22);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.fillRect(-this.radius * 2, this.radius * 0.25, this.radius * 4, this.radius * 0.12);
+        
+        // Large gas storm oval (Jupiter-like storm)
+        ctx.fillStyle = 'rgba(160, 50, 50, 0.25)';
+        ctx.beginPath();
+        ctx.ellipse(this.radius * 0.2, this.radius * 0.15, this.radius * 0.25, this.radius * 0.13, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (this.type === 'ice') {
+        // Ice giant stripes
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.fillRect(-this.radius * 2, -this.radius * 0.5, this.radius * 4, this.radius * 0.1);
+        ctx.fillStyle = 'rgba(0, 243, 255, 0.08)';
+        ctx.fillRect(-this.radius * 2, this.radius * 0.1, this.radius * 4, this.radius * 0.18);
+      } else if (this.type === 'rocky') {
+        // Rocky molten craters
+        ctx.fillStyle = 'rgba(255, 80, 0, 0.28)';
+        ctx.beginPath();
+        ctx.arc(-this.radius * 0.35, -this.radius * 0.25, this.radius * 0.32, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(255, 180, 0, 0.22)';
+        ctx.beginPath();
+        ctx.arc(this.radius * 0.4, this.radius * 0.3, this.radius * 0.25, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 4. Draw 3D Spherical Shadow (Crescent overlay)
+      const shadowGrad = ctx.createRadialGradient(
+        px - this.radius * 0.3, 
+        py - this.radius * 0.3, 
+        this.radius * 0.65, 
+        px, py, 
+        this.radius * 1.05
+      );
+      shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      shadowGrad.addColorStop(0.7, 'rgba(6, 4, 13, 0.72)');
+      shadowGrad.addColorStop(1, 'rgba(6, 4, 13, 0.99)');
+      ctx.fillStyle = shadowGrad;
+      ctx.beginPath();
+      ctx.arc(px, py, this.radius + 1, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 5. Draw FRONT part of Saturn-like Ring
+      if (this.ringSettings) {
+        ctx.save();
+        ctx.strokeStyle = this.ringSettings.color;
+        ctx.lineWidth = this.radius * 0.12;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.ringSettings.color;
+        
+        ctx.beginPath();
+        // Ellipse drawn from 0 to PI (bottom half is in front of the planet)
+        ctx.ellipse(
+          px, py, 
+          this.ringSettings.rx, 
+          this.ringSettings.ry, 
+          this.ringSettings.angle, 
+          0, 
+          Math.PI
+        );
+        ctx.stroke();
+
+        // Faint outer ring border
+        ctx.strokeStyle = this.ringSettings.color.replace('0.8', '0.3').replace('0.6', '0.2');
+        ctx.lineWidth = this.radius * 0.03;
+        ctx.beginPath();
+        ctx.ellipse(
+          px, py, 
+          this.ringSettings.rx * 1.25, 
+          this.ringSettings.ry * 1.25, 
+          this.ringSettings.angle, 
+          0, 
+          Math.PI
+        );
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+  }
+
   // Burning Meteor class with particle spark exhaust
   class Meteor {
     constructor() {
@@ -316,17 +496,39 @@
     }
   }
 
-  // Setup instances
+  // Setup stars
   const stars = [];
   const starCount = 150;
   for (let i = 0; i < starCount; i++) {
     stars.push(new Star());
   }
 
+  // Setup nebulas
   const nebulae = [
     new Nebula(width * 0.15, height * 0.3, Math.min(width, height) * 0.7, 'rgba(176, 136, 255, 0.06)', 0.0004), 
     new Nebula(width * 0.85, height * 0.7, Math.min(width, height) * 0.6, 'rgba(0, 243, 255, 0.05)', 0.0003),  
     new Nebula(width * 0.5, height * 0.5, Math.min(width, height) * 0.8, 'rgba(120, 80, 240, 0.04)', 0.00025)
+  ];
+
+  // Setup 3D realistic planets (spaced out cleanly to prevent overlapping main guides)
+  const planets = [
+    // Saturn-like golden gas giant in upper right
+    new Planet(
+      0.82, 0.22, 70, 'gas', 
+      { light: '#fed330', mid: '#f39c12', dark: '#2c3e50' }, 
+      { rx: 125, ry: 24, angle: -0.2, color: 'rgba(254, 202, 87, 0.75)' }
+    ),
+    // Neptune-like cyan ice giant in bottom left
+    new Planet(
+      0.14, 0.8, 55, 'ice', 
+      { light: '#00d2ff', mid: '#0072ff', dark: '#0b0c10' }, 
+      { rx: 90, ry: 16, angle: 0.25, color: 'rgba(0, 243, 255, 0.55)' }
+    ),
+    // Volcanic rocky red planet in upper left
+    new Planet(
+      0.45, 0.14, 38, 'rocky', 
+      { light: '#ff3f34', mid: '#7f0000', dark: '#1b0000' }
+    )
   ];
 
   const meteors = [];
@@ -350,6 +552,12 @@
 
     // Reset composite operation to normal
     ctx.globalCompositeOperation = 'source-over';
+
+    // Draw Planets (sitting deep in space behind stars)
+    for (let i = 0; i < planets.length; i++) {
+      planets[i].update();
+      planets[i].draw();
+    }
 
     // Draw Constellation Lines (Cosmic Plexus Web) between close Layer 3 stars
     ctx.save();
