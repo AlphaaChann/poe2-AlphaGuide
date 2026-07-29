@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Buka UI dalam VS Code",
+      "type": "shell",
+      "command": "code --goto \"C:\\Users\\Nash\\Downloads\\Compressed\\poe2-AlphaGuide\\public\\index.html\"",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PoE2 Gaming Launcher & Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ╔══════════════════════════════════════════════╗
+   ║  GAME LAUNCHER DESIGN SYSTEM (MATCHING UI)   ║
+   ╚══════════════════════════════════════════════╝ */
+:root {
+  --bg-deep:      #0b0c10;
+  --bg-sidebar:   #07080a;
+  --bg-panel:     #0f1117;
+  --bg-card:      #161922;
+  --bg-card-hover:#1e222e;
+  --bg-active:    #1c202c;
+
+  --mint-glow:    #7bf0a5;
+  --mint-bg:      linear-gradient(135deg, #a8ffb2 0%, #4df0ff 100%);
+  --cyan-accent:  #36d6ff;
+  --gold-accent:  #ffb830;
+  --purple-accent:#b070d0;
+
+  --txt-hi:       #ffffff;
+  --txt-mid:      #9aa0b0;
+  --txt-dark:     #4c5364;
+
+  --bdr:          rgba(255, 255, 255, 0.06);
+  --bdr-active:   rgba(123, 240, 165, 0.4);
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 30px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Outfit', 'Inter', sans-serif; background: var(--bg-deep); color: var(--txt-hi); overflow: hidden; }
+
+/* Main Shell */
+.hub-shell { display: flex; width: 100vw; height: 100vh; overflow: hidden; background: var(--bg-deep); }
+
+/* ╔══════════════════════════════════════════════╗
+   ║  LEFTMOST THIN ICON SIDEBAR                  ║
+   ╚══════════════════════════════════════════════╝ */
+.icon-nav {
+  width: 76px; min-width: 76px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--bdr);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 1.25rem 0; gap: 1.5rem; z-index: 50;
+}
+
+/* Glowing Top Controller Logo */
+.app-logo-btn {
+  width: 48px; height: 48px; border-radius: var(--r-md);
+  background: var(--mint-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: #050b07; cursor: pointer;
+  box-shadow: 0 0 25px rgba(123, 240, 165, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.app-logo-btn:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(123, 240, 165, 0.6); }
+
+/* Navigation Icon Menu */
+.icon-menu-group { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+.menu-cat-label { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--txt-dark); text-transform: uppercase; letter-spacing: 1.5px; }
+
+.icon-item {
+  width: 100%; height: 44px; display: flex; align-items: center; justify-content: center;
+  color: var(--txt-dark); font-size: 1.2rem; cursor: pointer; position: relative;
+  transition: all 0.2s ease;
+}
+.icon-item:hover { color: var(--txt-mid); }
+.icon-item.active { color: var(--mint-glow); }
+.icon-item.active::before {
+  content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px;
+  background: var(--mint-glow); border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px var(--mint-glow);
+}
+
+/* Tooltip badge */
+.tooltip-badge {
+  position: absolute; left: 70px; background: #1a1d26; color: var(--txt-hi);
+  font-size: 11px; font-weight: 500; padding: 0.25rem 0.6rem; border-radius: var(--r-sm);
+  border: 1px solid var(--bdr); white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translateX(-5px); transition: all 0.2s ease;
+}
+.icon-item:hover .tooltip-badge { opacity: 1; transform: translateX(0); }
+
+.nav-spacer { flex: 1; }
+
+/* Profile Avatar at Bottom Left */
+.profile-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-accent), var(--cyan-accent));
+  border: 2px solid var(--mint-glow); display: flex; align-items: center;
+  justify-content: center; font-size: 1rem; cursor: pointer;
+  box-shadow: 0 0 15px rgba(123, 240, 165, 0.3);
+  transition: transform 0.2s ease;
+}
+.profile-avatar:hover { transform: scale(1.08); }
+
+/* ╔══════════════════════════════════════════════╗
+   ║  SECOND PANEL — MY GAMES LIST                ║
+   ╚══════════════════════════════════════════════╝ */
+.games-panel {
+  width: 280px; min-width: 280px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--bdr);
+  display: flex; flex-direction: column;
+  padding: 1.5rem 1rem; gap: 1.25rem;
+}
+.games-header { display: flex; align-items: center; justify-content: space-between; }
+.gh-title { font-size: 1.1rem; font-weight: 700; color: var(--txt-hi); }
+.add-btn {
+  display: flex; align-items: center; gap: 0.3rem; font-size: 11px; font-weight: 700;
+  color: var(--cyan-accent); background: rgba(54, 214, 255, 0.1); border: 1px solid rgba(54, 214, 255, 0.25);
+  padding: 0.25rem 0.6rem; border-radius: var(--r-pill); cursor: pointer; transition: all 0.2s ease;
+}
+.add-btn:hover { background: rgba(54, 214, 255, 0.2); }
+
+/* Games / Guides List */
+.games-list { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; overflow-y: auto; scrollbar-width: none; }
+.games-list::-webkit-scrollbar { display: none; }
+
+.game-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; border-radius: var(--r-md);
+  color: var(--txt-dark); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+.game-item:hover { color: var(--txt-mid); background: rgba(255, 255, 255, 0.02); }
+.game-item.active {
+  background: var(--bg-active); color: var(--txt-hi); font-weight: 600;
+  border-left-color: var(--cyan-accent);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.game-item .mini-icon { font-size: 1rem; color: var(--gold-accent); }
+
+/* ╔══════════════════════════════════════════════╗
+   ║  MAIN CONTENT CANVAS (RIGHT)                 ║
+   ╚══════════════════════════════════════════════╝ */
+.main-canvas { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-deep); position: relative; }
+
+/* ── GAME HERO BANNER (CS:GO STYLE) ── */
+.hero-banner {
+  padding: 2.5rem 3rem 1.5rem;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  position: relative; background: radial-gradient(circle at 50% 30%, rgba(255, 184, 48, 0.08) 0%, transparent 60%);
+}
+
+.hero-avatar-box {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-accent) 0%, #d48800 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; margin-bottom: 1rem;
+  box-shadow: 0 0 35px rgba(255, 184, 48, 0.3);
+}
+
+.hero-title { font-size: 1.6rem; font-weight: 700; color: var(--txt-hi); letter-spacing: -0.3px; }
+.hero-subtitle { font-size: 12px; color: var(--txt-dark); margin-top: 0.25rem; margin-bottom: 1.25rem; }
+
+/* MINT PLAY GAME BUTTON */
+.play-game-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.75rem 2.5rem; border-radius: var(--r-pill);
+  background: var(--mint-bg); color: #040e07; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: none; box-shadow: 0 0 30px rgba(123, 240, 165, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.play-game-btn:hover { transform: scale(1.05); box-shadow: 0 0 45px rgba(123, 240, 165, 0.6); }
+
+/* Next Arrow Button */
+.next-nav-btn {
+  position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card);
+  border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center;
+  color: var(--txt-hi); cursor: pointer; transition: all 0.2s ease;
+}
+.next-nav-btn:hover { background: var(--bg-card-hover); border-color: var(--mint-glow); }
+
+/* ── CARDS GRID SECTION ── */
+.cards-container {
+  padding: 1rem 3rem 2.5rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  flex: 1; overflow-y: auto;
+}
+
+.dashboard-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bdr);
+  border-radius: var(--r-lg);
+  padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+  position: relative;
+}
+
+.card-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-head-title { font-size: 1.1rem; font-weight: 700; color: var(--txt-hi); }
+.card-head-sub { font-size: 12px; color: var(--txt-dark); margin-top: 0.15rem; }
+.card-head-sub span { color: var(--cyan-accent); font-weight: 600; }
+
+/* Friends / Rewards Avatar Stack */
+.avatar-stack { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; }
+.mini-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #252a38; border: 2px solid var(--bg-card);
+  display: flex; align-items: center; justify-content: center; font-size: 12px;
+}
+.avatar-more {
+  width: 34px; height: 34px; border-radius: 50%; background: #1a1e29;
+  color: var(--cyan-accent); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Donut Chart Mockup (Matching Screenshot 64%) */
+.donut-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem 0; position: relative; }
+.donut-svg { width: 140px; height: 140px; transform: rotate(-90deg); }
+.donut-bg { fill: none; stroke: #1a1e29; stroke-width: 8; }
+.donut-fill {
+  fill: none; stroke: var(--cyan-accent); stroke-width: 8;
+  stroke-dasharray: 364; stroke-dashoffset: 130;
+  stroke-linecap: round; filter: drop-shadow(0 0 8px var(--cyan-accent));
+}
+.donut-center-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 1.6rem; font-weight: 800; color: var(--txt-hi);
+}
+
+.donut-legend { display: flex; align-items: center; gap: 1.5rem; margin-top: 0.5rem; font-size: 11px; color: var(--txt-dark); }
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── EMBEDDED LEVELING APP PANEL (LOADS ON DEMAND) ── */
+.app-view-fullscreen {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-deep); z-index: 90; display: none; flex-direction: column;
+}
+.app-view-fullscreen.active { display: flex; }
+
+.app-fullscreen-bar {
+  height: 44px; background: var(--bg-sidebar); border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem;
+}
+.back-hub-btn {
+  display: flex; align-items: center; gap: 0.4rem; font-size: 12px; font-weight: 600;
+  color: var(--mint-glow); cursor: pointer; background: transparent; border: none;
+}
+.back-hub-btn:hover { color: var(--txt-hi); }
+.iframe-embedded { flex: 1; width: 100%; height: 100%; border: none; background: #000; }
+</style>
+</head>
+<body>
+
+<div class="hub-shell">
+
+  <!-- ╔══════════════════════════════════════════════╗
+       ║  1. LEFTMOST THIN ICON SIDEBAR               ║
+       ╚══════════════════════════════════════════════╝ -->
+  <aside class="icon-nav">
+    <!-- Glowing Top Controller Logo -->
+    <div class="app-logo-btn" onclick="showDashboard()">🎮</div>
+
+    <!-- Icon Menu Group -->
+    <div class="icon-menu-group">
+      <span class="menu-cat-label">HOME</span>
+      
+      <div class="icon-item active" onclick="showDashboard()">
+        ⚡ <span class="tooltip-badge">Dashboard</span>
+      </div>
+      <div class="icon-item" onclick="openEmbeddedApp()">
+        🗺️ <span class="tooltip-badge">Leveling App</span>
+      </div>
+      <div class="icon-item" onclick="showDashboard()">
+        🛒 <span class="tooltip-badge">Store</span>
+      </div>
+      <div class="icon-item" onclick="showDashboard()">
+        🏺 <span class="tooltip-badge">Library</span>
+      </div>
+      <div class="icon-item" onclick="showDashboard()">
+        👥 <span class="tooltip-badge">Community</span>
+      </div>
+      <div class="icon-item" onclick="showDashboard()">
+        🔍 <span class="tooltip-badge">Search</span>
+      </div>
+    </div>
+
+    <div class="nav-spacer"></div>
+
+    <div class="icon-menu-group">
+      <span class="menu-cat-label">PROFILE</span>
+      <div class="icon-item">📁 <span class="tooltip-badge">Files</span></div>
+      <div class="icon-item">✉️ <span class="tooltip-badge">Messages</span></div>
+      <div class="icon-item">🔔 <span class="tooltip-badge">Notifications</span></div>
+    </div>
+
+    <!-- Profile Avatar -->
+    <div class="profile-avatar">⚔</div>
+  </aside>
+
+  <!-- ╔══════════════════════════════════════════════╗
+       ║  2. SECOND PANEL — MY GAMES LIST             ║
+       ╚══════════════════════════════════════════════╝ -->
+  <aside class="games-panel">
+    <div class="games-header">
+      <h2 class="gh-title">My Games</h2>
+      <button class="add-btn">⊕ ADD</button>
+    </div>
+
+    <div class="games-list">
+      <div class="game-item" onclick="showDashboard()">Survivor Pass: Vikendi</div>
+      <div class="game-item" onclick="showDashboard()">Assassin's Creed® Odyssey</div>
+      
+      <!-- Active Item: PoE2 Leveling Guide / CS:GO -->
+      <div class="game-item active" onclick="openEmbeddedApp()">
+        <span>Path of Exile 2: Guide</span>
+        <span class="mini-icon">⚔</span>
+      </div>
+
+      <div class="game-item" onclick="showDashboard()">Dota 2</div>
+      <div class="game-item" onclick="showDashboard()">Jurassic World Evolution</div>
+      <div class="game-item" onclick="showDashboard()">Insurgency: Sandstorm</div>
+      <div class="game-item" onclick="showDashboard()">Battlerite Royale</div>
+      <div class="game-item" onclick="showDashboard()">Pathfinder: Kingmaker</div>
+    </div>
+  </aside>
+
+  <!-- ╔══════════════════════════════════════════════╗
+       ║  3. MAIN CONTENT CANVAS (RIGHT)              ║
+       ╚══════════════════════════════════════════════╝ -->
+  <main class="main-canvas">
+
+    <!-- HERO SECTION (MATCHING SCREENSHOT) -->
+    <section class="hero-banner">
+      <div class="hero-avatar-box">⚔</div>
+      <h1 class="hero-title">Path of Exile 2: Leveling Guide</h1>
+      <p class="hero-subtitle">Last Play : 15h ago · Patch 0.5 RUNES OF ALDUR</p>
+
+      <!-- MINT PLAY GAME BUTTON -->
+      <button class="play-game-btn" onclick="openEmbeddedApp()">Play Game</button>
+
+      <!-- Next Arrow Button -->
+      <div class="next-nav-btn">❯</div>
+    </section>
+
+    <!-- CARDS CONTAINER GRID -->
+    <section class="cards-container">
+
+      <!-- CARD 1: FRIENDS / REWARDS -->
+      <div class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-head-title">Friends &amp; Guild</div>
+            <div class="card-head-sub"><span>11 Friends</span> who play Path of Exile 2</div>
+          </div>
+        </div>
+
+        <div class="avatar-stack">
+          <div class="mini-avatar">🧙</div>
+          <div class="mini-avatar">🏹</div>
+          <div class="mini-avatar">🛡️</div>
+          <div class="mini-avatar">🗡️</div>
+          <div class="avatar-more">+12</div>
+        </div>
+      </div>
+
+      <!-- CARD 2: ACHIEVEMENTS DONUT CHART (MATCHING 64% DONUT SCREENSHOT) -->
+      <div class="dashboard-card">
+        <div class="card-header-row">
+          <div>
+            <div class="card-head-title">Achievements</div>
+            <div class="card-head-sub">You have unlocked: <span>106/167</span></div>
+          </div>
+        </div>
+
+        <div class="donut-wrapper">
+          <svg class="donut-svg" viewBox="0 0 140 140">
+            <circle class="donut-bg" cx="70" cy="70" r="58"></circle>
+            <circle class="donut-fill" cx="70" cy="70" r="58"></circle>
+          </svg>
+          <div class="donut-center-text">64%</div>
+        </div>
+
+        <div class="donut-legend" style="justify-content:center;">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--cyan-accent)"></span> Unlocked</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#1a1e29"></span> Locked</div>
+        </div>
+      </div>
+
+      <!-- CARD 3: LOCKED ACHIEVEMENTS -->
+      <div class="dashboard-card" style="grid-column: span 2;">
+        <div class="card-header-row">
+          <div>
+            <div class="card-head-title">Locked Achievements</div>
+            <div class="card-head-sub">Recent Activity · 15.1 hours past 2 weeks</div>
+          </div>
+        </div>
+
+        <div class="avatar-stack" style="margin-top:0.75rem;">
+          <div class="mini-avatar">🏆</div>
+          <div class="mini-avatar">🌟</div>
+          <div class="mini-avatar">👑</div>
+          <div class="avatar-more">+125</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FULLSCREEN EMBEDDED APP VIEW (SLIDES IN WHEN PLAY GAME / ITEM CLICKED) -->
+    <div class="app-view-fullscreen" id="embeddedAppPanel">
+      <div class="app-fullscreen-bar">
+        <button class="back-hub-btn" onclick="closeEmbeddedApp()">❮ Back to Game Hub</button>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt-mid);">Path of Exile 2: Leveling App Active</span>
+      </div>
+      <iframe class="iframe-embedded" src="index.html"></iframe>
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+function openEmbeddedApp() {
+  document.getElementById('embeddedAppPanel').classList.add('active');
+}
+function closeEmbeddedApp() {
+  document.getElementById('embeddedAppPanel').classList.remove('active');
+}
+function showDashboard() {
+  closeEmbeddedApp();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>POE2 ALPHACHUU GUIDE — Resistance Benchmarks &amp; Pinnacle Bosses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+:root {
+  --bg-deep: #06040d;
+  --bg-sidebar: rgba(12, 8, 24, 0.95);
+  --bg-panel: rgba(16, 11, 32, 0.85);
+  --bg-card: rgba(24, 16, 48, 0.65);
+  --gold: #ffb700;
+  --gold-glow: rgba(255, 183, 0, 0.4);
+  --red: #ff2e63;
+  --red-glow: rgba(255, 46, 99, 0.4);
+  --cyan: #00f3ff;
+  --cyan-glow: rgba(0, 243, 255, 0.4);
+  --green: #00ff9d;
+  --green-glow: rgba(0, 255, 157, 0.4);
+  --purple: #c49aff;
+  --violet: #b088ff;
+  --txt-hi: #ffffff;
+  --txt-mid: #d1cae8;
+  --txt-dark: #7b739e;
+  --bdr: rgba(176, 136, 255, 0.22);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  height: 100vh; width: 100vw; overflow: hidden;
+  background: var(--bg-deep); color: var(--txt-mid);
+  font-family: 'Inter', sans-serif; display: flex; flex-direction: column;
+}
+
+/* NAVBAR */
+.app-navbar {
+  height: 52px; min-height: 52px;
+  background: var(--bg-sidebar); border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; z-index: 50; backdrop-filter: blur(16px);
+}
+.app-brand {
+  font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--violet); letter-spacing: 1.5px; display: flex; align-items: center; gap: 0.6rem;
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+.app-search-wrap {
+  display: flex; align-items: center; background: rgba(5, 10, 20, 0.7);
+  border: 1px solid var(--bdr); border-radius: 20px; padding: 0.35rem 0.85rem;
+  width: 300px; gap: 0.5rem; transition: all 0.2s ease;
+}
+.app-search-wrap:focus-within { border-color: var(--violet); box-shadow: 0 0 15px var(--gold-glow); }
+.app-search-input {
+  background: transparent; border: none; outline: none; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 12px; width: 100%;
+}
+.app-patch-badge {
+  font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--violet);
+  background: rgba(176, 136, 255, 0.12); padding: 0.25rem 0.7rem; border-radius: 6px;
+  border: 1px solid var(--bdr);
+}
+
+/* LAYOUT CONTAINER */
+.app-container { flex: 1; display: flex; overflow: hidden; position: relative; }
+
+/* SIDEBAR SUBTABS */
+.app-sidebar {
+  width: 275px; min-width: 275px; background: var(--bg-sidebar);
+  border-right: 1px solid var(--bdr); display: flex; flex-direction: column;
+  padding: 1rem 0.75rem; overflow-y: auto; backdrop-filter: blur(12px);
+  scrollbar-width: thin; scrollbar-color: var(--bdr) transparent;
+}
+.sidebar-title {
+  font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800;
+  color: var(--violet); letter-spacing: 2px; text-transform: uppercase;
+  padding-bottom: 0.6rem; margin-bottom: 0.65rem; border-bottom: 1px solid var(--bdr);
+  padding-left: 0.5rem;
+}
+.app-subtab {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%;
+  padding: 0.6rem 0.75rem; background: transparent; border: none;
+  border-bottom: 1px dotted rgba(176, 136, 255, 0.25); color: #d8c29d;
+  font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 500;
+  text-align: left; cursor: pointer; transition: all 0.2s ease; border-radius: 4px;
+}
+.app-subtab:hover { background: rgba(176, 136, 255, 0.1); color: #ffffff; }
+.app-subtab.active {
+  background: rgba(176, 136, 255, 0.18); color: #ffffff; font-weight: 700;
+  border-left: 3px solid var(--violet); border-bottom-color: transparent;
+  box-shadow: inset 0 0 15px rgba(176, 136, 255, 0.15);
+}
+.cs-num {
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 12px;
+  color: var(--violet); min-width: 24px; text-align: right;
+}
+.cs-name { flex: 1; line-height: 1.3; }
+
+/* MAIN CONTENT AREA */
+.app-main {
+  flex: 1; overflow-y: auto; padding: 1.5rem 2rem 4rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+  scrollbar-width: thin; scrollbar-color: var(--bdr) transparent;
+}
+
+/* TOP HORIZONTAL SUBNAV BAR WITH ARROWS */
+.top-subnav-bar {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: var(--bg-panel); border: 1px solid var(--bdr);
+  border-left: 4px solid var(--violet); border-radius: 8px; padding: 0.65rem 1rem;
+  flex-shrink: 0; backdrop-filter: blur(12px);
+}
+.top-subnav-label {
+  font-family: 'Orbitron', sans-serif; font-size: 10.5px; font-weight: 800;
+  color: var(--violet); letter-spacing: 1.5px; flex-shrink: 0; text-transform: uppercase;
+}
+.top-subnav-items { display: flex; gap: 0.4rem; overflow-x: auto; white-space: nowrap; flex: 1; scrollbar-width: none; }
+.top-subnav-items::-webkit-scrollbar { display: none; }
+.subnav-arrow-btn {
+  height: 32px; width: 28px; background: rgba(20, 14, 38, 0.95);
+  border: 1px solid var(--bdr); border-radius: 6px; color: var(--violet);
+  font-size: 13px; font-weight: 800; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;
+}
+.subnav-arrow-btn:hover { background: var(--violet); color: #06040d; box-shadow: 0 0 12px var(--violet-glow); }
+
+.csn-btn {
+  background: rgba(176, 136, 255, 0.06); border: 1px solid rgba(176, 136, 255, 0.2);
+  border-radius: 6px; color: #d1cae8; font-family: 'Inter', sans-serif;
+  font-size: 11.5px; font-weight: 600; padding: 0.4rem 0.8rem; cursor: pointer;
+  transition: all 0.2s ease; flex-shrink: 0;
+}
+.csn-btn:hover { background: rgba(176, 136, 255, 0.15); border-color: var(--violet); color: #fff; }
+.csn-btn.active { background: var(--violet); border-color: var(--violet); color: #06040d; font-weight: 800; }
+
+/* CHAPTER CARDS */
+.chapter-card {
+  background: var(--bg-panel); border: 1px solid var(--bdr);
+  border-radius: 12px; padding: 1.5rem 1.75rem; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.chapter-header {
+  display: flex; align-items: center; gap: 1rem; padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem; border-bottom: 1px solid var(--bdr);
+}
+.chapter-num {
+  width: 40px; height: 40px; border-radius: 8px; background: rgba(176, 136, 255, 0.12);
+  border: 1px solid var(--violet); color: var(--violet); font-family: 'Cinzel', serif;
+  font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; justify-content: center;
+}
+.chapter-title {
+  font-family: 'Orbitron', sans-serif; font-size: 1.25rem; font-weight: 800;
+  color: var(--txt-hi); letter-spacing: 0.5px;
+}
+
+/* CARDS & BENCHMARKS */
+.target-badge {
+  display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: 1.4rem;
+  font-weight: 800; padding: 0.5rem 1.2rem; border-radius: 8px; margin-bottom: 1.25rem;
+}
+.tb-fire { background: rgba(255, 46, 99, 0.12); border: 1px solid var(--red); color: var(--red); text-shadow: 0 0 10px var(--red-glow); }
+.tb-light { background: rgba(255, 183, 0, 0.12); border: 1px solid var(--gold); color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+.tb-cold { background: rgba(0, 243, 255, 0.12); border: 1px solid var(--cyan); color: var(--cyan); text-shadow: 0 0 10px var(--cyan-glow); }
+.tb-chaos { background: rgba(0, 255, 157, 0.12); border: 1px solid var(--green); color: var(--green); text-shadow: 0 0 10px var(--green-glow); }
+.tb-mitig { background: rgba(176, 136, 255, 0.12); border: 1px solid var(--violet); color: var(--violet); text-shadow: 0 0 10px var(--violet-glow); }
+
+.boss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem; }
+.boss-card {
+  background: rgba(20, 25, 35, 0.75); border: 1px solid var(--bdr);
+  border-radius: 8px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem;
+}
+.boss-card h3 { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 800; color: #fff; }
+.boss-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--gold); background: rgba(255,183,0,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(255,183,0,0.3); display: inline-block; width: fit-content; }
+.boss-desc { font-size: 12.5px; line-height: 1.6; color: var(--txt-mid); }
+.boss-loot { background: rgba(0,0,0,0.4); border: 1px solid var(--bdr); border-radius: 6px; padding: 0.5rem 0.8rem; font-size: 11.5px; color: var(--violet); }
+.boss-loot strong { color: var(--gold); }
+
+/* TABLE FORMATTING */
+.tbl-wrap { margin: 1.25rem 0 1.75rem; border-radius: 10px; border: 1px solid var(--bdr); overflow-x: auto; background: rgba(12, 8, 24, 0.85); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.6; }
+table caption { text-align: left; padding: 0.85rem 1.25rem; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800; color: var(--violet); letter-spacing: 1.5px; text-transform: uppercase; background: rgba(176, 136, 255, 0.1); border-bottom: 1px solid var(--bdr); }
+th { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 800; color: var(--violet); letter-spacing: 1px; text-transform: uppercase; background: rgba(24, 16, 48, 0.95); padding: 0.85rem 1.1rem; border-bottom: 2px solid var(--bdr); text-align: left; white-space: nowrap; }
+td { padding: 0.85rem 1.1rem; border-bottom: 1px solid rgba(176, 136, 255, 0.15); vertical-align: top; color: #e2ddf5; line-height: 1.6; }
+tbody tr:hover { background: rgba(176, 136, 255, 0.07); }
+td strong { color: #ffffff; font-weight: 700; }
+</style>
+</head>
+<body>
+<canvas id="plexusBgRes" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
+
+<!-- NAVBAR -->
+<header class="app-navbar">
+  <div class="app-brand">
+    <span>🛡️</span> POE2 ALPHACHUU GUIDE — RESISTANCE BENCHMARKS &amp; PINNACLE BOSSES
+  </div>
+
+  <div class="app-search-wrap">
+    <span>🔍</span>
+    <input type="text" class="app-search-input" id="resSearch" placeholder="Search boss, element, loot..." oninput="searchResApp(this.value)"/>
+  </div>
+
+  <div class="app-patch-badge">PINNACLE &amp; ENDGAME GUIDE</div>
+</header>
+
+<!-- LAYOUT CONTAINER -->
+<div class="app-container">
+  <!-- LEFT SIDEBAR SUBTABS -->
+  <aside class="app-sidebar">
+    <div class="sidebar-title">ENDGAME BENCHMARKS</div>
+    <button class="app-subtab active" data-res="all" onclick="switchResTab('all')">
+      <span class="cs-num">🏆</span> <span class="cs-name">All Bosses Summary</span>
+    </button>
+    <button class="app-subtab" data-res="fire" onclick="switchResTab('fire')">
+      <span class="cs-num">🔥</span> <span class="cs-name">Fire Res &amp; Pinnacle Bosses</span>
+    </button>
+    <button class="app-subtab" data-res="light" onclick="switchResTab('light')">
+      <span class="cs-num">⚡</span> <span class="cs-name">Lightning Res &amp; Guardians</span>
+    </button>
+    <button class="app-subtab" data-res="cold" onclick="switchResTab('cold')">
+      <span class="cs-num">❄️</span> <span class="cs-name">Cold Res &amp; Ritual Bosses</span>
+    </button>
+    <button class="app-subtab" data-res="chaos" onclick="switchResTab('chaos')">
+      <span class="cs-num">☣️</span> <span class="cs-name">Chaos Res &amp; Trialmaster</span>
+    </button>
+    <button class="app-subtab" data-res="mitig" onclick="switchResTab('mitig')">
+      <span class="cs-num">🛡️</span> <span class="cs-name">Spell Suppression &amp; Rules</span>
+    </button>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="app-main" id="resMainArea">
+    <!-- TOP HORIZONTAL SUBNAV BAR WITH ARROWS -->
+    <div class="top-subnav-bar">
+      <div class="top-subnav-label">CATEGORIES:</div>
+      <button class="subnav-arrow-btn" onclick="scrollResSubNav('prev')" title="Previous Category">❮</button>
+      <div class="top-subnav-items" id="resSubNavContainer">
+        <button class="csn-btn active" data-res="all" onclick="switchResTab('all')">🏆 All Bosses</button>
+        <button class="csn-btn" data-res="fire" onclick="switchResTab('fire')">🔥 Fire Res Target</button>
+        <button class="csn-btn" data-res="light" onclick="switchResTab('light')">⚡ Lightning Res Target</button>
+        <button class="csn-btn" data-res="cold" onclick="switchResTab('cold')">❄️ Cold Res Target</button>
+        <button class="csn-btn" data-res="chaos" onclick="switchResTab('chaos')">☣️ Chaos Res Target</button>
+        <button class="csn-btn" data-res="mitig" onclick="switchResTab('mitig')">🛡️ Mitigation Rules</button>
+      </div>
+      <button class="subnav-arrow-btn" onclick="scrollResSubNav('next')" title="Next Category">❯</button>
+    </div>
+
+    <!-- 1. SUMMARY ALL BOSSES CARD -->
+    <div class="chapter-card" id="card-all" data-res="all">
+      <div class="chapter-header">
+        <span class="chapter-num">🏆</span>
+        <h2 class="chapter-title">Pinnacle &amp; Endgame Bosses Overview</h2>
+      </div>
+      <div class="chapter-body">
+        <p>In Path of Exile 2, <strong>Pinnacle Bosses</strong> and <strong>Endgame Bosses</strong> represent the ultimate challenge after completing the campaign and entering the Atlas Waystones system. Each boss originates from specific endgame mechanics and requires dedicated keys or fragments to access.</p>
+        
+        <div class="tbl-wrap">
+          <table>
+            <caption>PRIMARY PINNACLE BOSSES &amp; DAMAGE ELEMENTS LIST</caption>
+            <thead>
+              <tr>
+                <th>Endgame Boss Name</th>
+                <th>Category / Source</th>
+                <th>Access Requirements / Keys</th>
+                <th>Primary Damage Elements</th>
+                <th>Primary Unique Drops</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>The Arbiter of Ash</strong></td>
+                <td>Main Atlas Pinnacle Boss</td>
+                <td>3 Crisis Fragments (Citadel Guardians)</td>
+                <td><span style="color:var(--red);font-weight:700;">Extreme Fire &amp; Physical</span></td>
+                <td>Sacred Flame, Prism of Belief, Morior Invictus</td>
+              </tr>
+              <tr>
+                <td><strong>Doryani, Royal Thaumaturge</strong></td>
+                <td>Stone Citadel Guardian</td>
+                <td>Waystone Map Tier 15+ Stone Citadel</td>
+                <td><span style="color:var(--gold);font-weight:700;">Lightning</span> &amp; <span style="color:var(--green);font-weight:700;">Chaos</span></td>
+                <td>High Tier Citadel Key, Unique Bases</td>
+              </tr>
+              <tr>
+                <td><strong>Jamanra, the Abomination</strong></td>
+                <td>Copper Citadel Guardian</td>
+                <td>Waystone Map Tier 15+ Copper Citadel</td>
+                <td><span style="color:var(--gold);font-weight:700;">Lightning</span> &amp; Physical</td>
+                <td>High Tier Citadel Key, Unique Bases</td>
+              </tr>
+              <tr>
+                <td><strong>The Iron Count / Geonor</strong></td>
+                <td>Iron Citadel Guardian</td>
+                <td>Waystone Map Tier 15+ Iron Citadel</td>
+                <td><span style="color:var(--cyan);font-weight:700;">Cold</span> &amp; Physical</td>
+                <td>High Tier Citadel Key, Unique Bases</td>
+              </tr>
+              <tr>
+                <td><strong>The Trialmaster</strong></td>
+                <td>Trial of Chaos (Ultimatum)</td>
+                <td>10 Rounds Trial of Chaos (Bahlak Key)</td>
+                <td><span style="color:var(--green);font-weight:700;">Chaos</span>, Physical &amp; Debuffs</td>
+                <td>Hateforge, Mahuxotl's Machination, The Adorned</td>
+              </tr>
+              <tr>
+                <td><strong>Zarokh, the Temporal</strong></td>
+                <td>Trial of the Sekhemas</td>
+                <td>End of Trial of Sekhemas</td>
+                <td>Physical, <span style="color:var(--red);font-weight:700;">Fire/Light</span> (Time Attacks)</td>
+                <td>Sekhema's Resolve, Temporalis, Sandstorm Visage</td>
+              </tr>
+              <tr>
+                <td><strong>Xesht, We That Are One</strong></td>
+                <td>Breach Realm Boss</td>
+                <td>Breach Splinters Stack</td>
+                <td><span style="color:var(--gold);font-weight:700;">Lightning</span> &amp; <span style="color:var(--green);font-weight:700;">Chaos</span></td>
+                <td>Choir of the Storm, The Pandemonius, Xoph's Blood</td>
+              </tr>
+              <tr>
+                <td><strong>Olroth, Origin of the Fall</strong></td>
+                <td>Expedition Aberration</td>
+                <td>Expedition Logbooks (Random Boss)</td>
+                <td>Physical, <span style="color:var(--red);font-weight:700;">Fire</span> &amp; Shield Block</td>
+                <td>Svalinn, Olroth's Resolve, Shattered Triskelion</td>
+              </tr>
+              <tr>
+                <td><strong>The King in the Mists</strong></td>
+                <td>Ritual Endgame Boss</td>
+                <td>Ritual Tribute Exchange Key</td>
+                <td><span style="color:var(--cyan);font-weight:700;">Cold</span> &amp; Physical Degen</td>
+                <td>The Burden of Shadows, Ingenuity, Pragmatism</td>
+              </tr>
+              <tr>
+                <td><strong>Simulacrum Bosses (Omniphobia/Kosis)</strong></td>
+                <td>Delirium Wave 15</td>
+                <td>300 Simulacrum Splinters</td>
+                <td><span style="color:var(--green);font-weight:700;">Chaos</span>, Physical &amp; Action Speed Slow</td>
+                <td>Delirium Uniques &amp; Cluster Jewels</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. FIRE RESISTANCE CARD -->
+    <div class="chapter-card" id="card-fire" data-res="fire">
+      <div class="chapter-header">
+        <span class="chapter-num">🔥</span>
+        <h2 class="chapter-title">Fire Resistance &amp; Fire Pinnacle Bosses</h2>
+      </div>
+      <div class="chapter-body">
+        <div class="target-badge tb-fire">75% FIRE RES TARGET (100%+ OVERCAPPED)</div>
+        <p>Fire Resistance is a critical target to withstand Atlas pinnacle boss <strong>The Arbiter of Ash</strong>, Trial of the Sekhemas boss <strong>Zarokh</strong>, and Expedition boss <strong>Olroth</strong>.</p>
+        
+        <div class="boss-grid">
+          <div class="boss-card">
+            <h3>The Arbiter of Ash</h3>
+            <div class="boss-tag">MAIN PINNACLE BOSS</div>
+            <div class="boss-desc">Primary Early Access endgame pinnacle boss in PoE 2. Requires 3 Crisis Fragments from Citadel Guardians. Features lava explosion attacks and degen fields.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Sacred Flame, Prism of Belief, Morior Invictus</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Zarokh, the Temporal</h3>
+            <div class="boss-tag">TRIAL OF THE SEKHEMAS</div>
+            <div class="boss-desc">Located at the end of Trial of the Sekhemas. Sand &amp; time-based Fire/Light attacks. Requires high mobility to dodge control attacks.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Sekhema's Resolve, Temporalis, Sandstorm Visage</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Olroth, Origin of the Fall</h3>
+            <div class="boss-tag">EXPEDITION ABERRATION</div>
+            <div class="boss-desc">Encountered inside Expedition Logbooks. Physical &amp; Fire attacks with shield block bypass mechanics (must break Olroth's shield).</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Svalinn Shield, Olroth's Resolve, Shattered Triskelion</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Act III: Infernal Highlands Target</h3>
+            <div class="boss-tag">CAMPAIGN PROGRESSION</div>
+            <div class="boss-desc">Target 75% Fire Res before entering lava zones and Zarokh's Temple of Chaos.</div>
+            <div class="boss-loot"><strong>Target:</strong> 75% Fire Res</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. LIGHTNING RESISTANCE CARD -->
+    <div class="chapter-card" id="card-light" data-res="light">
+      <div class="chapter-header">
+        <span class="chapter-num">⚡</span>
+        <h2 class="chapter-title">Lightning Resistance &amp; Lightning Pinnacle Bosses</h2>
+      </div>
+      <div class="chapter-body">
+        <div class="target-badge tb-light">75% LIGHTNING RES TARGET (100%+ OVERCAPPED)</div>
+        <p>Lightning Resistance is mandatory to survive <strong>Doryani</strong>, <strong>Jamanra Abomination</strong>, and Breach Realm pinnacle boss <strong>Xesht</strong>.</p>
+        
+        <div class="boss-grid">
+          <div class="boss-card">
+            <h3>Doryani, Royal Thaumaturge</h3>
+            <div class="boss-tag">STONE CITADEL GUARDIAN</div>
+            <div class="boss-desc">Guardian of Stone Citadel. Uses high-voltage Lightning &amp; deadly Chaos element combinations.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Stone Citadel Key, High Tier Uniques</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Jamanra, the Abomination</h3>
+            <div class="boss-tag">COPPER CITADEL GUARDIAN</div>
+            <div class="boss-desc">Guardian of Copper Citadel in Vastiri Desert. Massive Lightning shock &amp; Physical attacks.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Copper Citadel Key, Abomination Gear</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Xesht, We That Are One</h3>
+            <div class="boss-tag">BREACH REALM PINNACLE</div>
+            <div class="boss-desc">Accessed by collecting Breach Splinters. Fast Lightning &amp; Chaos attacks that cage players.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Choir of the Storm, The Pandemonius, Xoph's Blood</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Act II: Vastiri Desert Target</h3>
+            <div class="boss-tag">CAMPAIGN PROGRESSION</div>
+            <div class="boss-desc">Mandatory 75% Lightning Res target to mitigate sandstorm lightning bursts in Vastiri Desert.</div>
+            <div class="boss-loot"><strong>Target:</strong> 75% Lightning Res</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. COLD RESISTANCE CARD -->
+    <div class="chapter-card" id="card-cold" data-res="cold">
+      <div class="chapter-header">
+        <span class="chapter-num">❄️</span>
+        <h2 class="chapter-title">Cold Resistance &amp; Cold Pinnacle Bosses</h2>
+      </div>
+      <div class="chapter-body">
+        <div class="target-badge tb-cold">75% COLD RES TARGET (100%+ OVERCAPPED)</div>
+        <p>Cold Resistance is essential for Ritual boss <strong>The King in the Mists</strong>, <strong>Geonor (Iron Count)</strong>, and Freythorn boss fights.</p>
+        
+        <div class="boss-grid">
+          <div class="boss-card">
+            <h3>The Iron Count / Geonor</h3>
+            <div class="boss-tag">IRON CITADEL GUARDIAN</div>
+            <div class="boss-desc">Guardian of Iron Citadel. Physical ice cleaves and wide Cold freezing areas.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Iron Citadel Key, Geonor's Armor</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>The King in the Mists</h3>
+            <div class="boss-tag">RITUAL ENDGAME BOSS</div>
+            <div class="boss-desc">Accessed via Ritual Tribute tickets. Spawns Cold degeneration mist that melts life without high cold resistance.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> The Burden of Shadows, Ingenuity, Pragmatism</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Act I: Freythorn Target</h3>
+            <div class="boss-tag">CAMPAIGN PROGRESSION</div>
+            <div class="boss-desc">75% Cold Res target in Act I prior to fighting King in the Mist in Freythorn.</div>
+            <div class="boss-loot"><strong>Target:</strong> 75% Cold Res</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. CHAOS RESISTANCE CARD -->
+    <div class="chapter-card" id="card-chaos" data-res="chaos">
+      <div class="chapter-header">
+        <span class="chapter-num">☣️</span>
+        <h2 class="chapter-title">Chaos Resistance &amp; Endgame Trials</h2>
+      </div>
+      <div class="chapter-body">
+        <div class="target-badge tb-chaos">+30% TO 75% CHAOS RES TARGET (MANDATORY ENDGAME)</div>
+        <p>During the campaign, Chaos Resistance can be partially bypassed, but in Endgame Atlas (specifically <strong>Trialmaster</strong>, <strong>Simulacrum</strong>, and <strong>Doryani/Xesht</strong>), Chaos Resistance <strong>+30% to 75% is MANDATORY</strong> to prevent one-shots.</p>
+        
+        <div class="boss-grid">
+          <div class="boss-card">
+            <h3>The Trialmaster</h3>
+            <div class="boss-tag">TRIAL OF CHAOS / ULTIMATUM</div>
+            <div class="boss-desc">Complete 10 rounds of Trial of Chaos using Bahlak Key. Chaos poison attacks &amp; player-chosen debuff modifiers.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Hateforge, Mahuxotl's Machination, The Adorned</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Simulacrum Bosses (Omniphobia &amp; Kosis)</h3>
+            <div class="boss-tag">DELIRIUM WAVE 15</div>
+            <div class="boss-desc">Survive 15 Delirium waves (300 Simulacrum Splinters). Chaos damage &amp; Action Speed slow debuffs.</div>
+            <div class="boss-loot"><strong>Unique Drops:</strong> Delirium Cluster Jewels, Unique Amulets</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>Doryani &amp; Xesht Dual Damage</h3>
+            <div class="boss-tag">CITADEL &amp; BREACH</div>
+            <div class="boss-desc">Both bosses deal simultaneous Lightning + Chaos damage.</div>
+            <div class="boss-loot"><strong>Requirement:</strong> High Chaos + Lightning Res</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. MITIGATION & RULES CARD -->
+    <div class="chapter-card" id="card-mitig" data-res="mitig">
+      <div class="chapter-header">
+        <span class="chapter-num">🛡️</span>
+        <h2 class="chapter-title">Overcapped Resistance &amp; Spell Suppression Rules</h2>
+      </div>
+      <div class="chapter-body">
+        <div class="target-badge tb-mitig">3 CORE ENDGAME SURVIVAL RULES</div>
+        
+        <div class="boss-grid">
+          <div class="boss-card">
+            <h3>1. Overcapped Resistance (100%+)</h3>
+            <div class="boss-tag">ANTI-CURSE &amp; PENETRATION</div>
+            <div class="boss-desc">In addition to standard 75% cap, ensure total resistance exceeds 100%+ (Overcap) because Pinnacle bosses forcibly inflict Curses or Elemental Penetration.</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>2. Minimum +30% Chaos Res</h3>
+            <div class="boss-tag">ENDGAME SURVIVAL</div>
+            <div class="boss-desc">Without Chaos Res in endgame, Trialmaster and Simulacrum degen attacks will instantly one-shot you.</div>
+          </div>
+
+          <div class="boss-card">
+            <h3>3. 100% Spell Suppression / Armour</h3>
+            <div class="boss-tag">SPELL NUKES DEFENSE</div>
+            <div class="boss-desc">Almost all Pinnacle boss nuke attacks are Spell-based. Achieving 100% Spell Suppression permanently reduces boss spell damage by 50%.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* INTERACTIVE SUBTAB SWITCHING & AUTO CENTER SCROLL */
+function switchResTab(tabId) {
+  document.querySelectorAll('.app-subtab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.res === tabId);
+  });
+  document.querySelectorAll('.csn-btn').forEach(btn => {
+    const isActive = btn.dataset.res === tabId;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  });
+
+  const cards = document.querySelectorAll('.chapter-card');
+  if (tabId === 'all') {
+    cards.forEach(card => card.style.display = 'block');
+  } else {
+    cards.forEach(card => {
+      if (card.dataset.res === tabId) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  const mainArea = document.getElementById('resMainArea');
+  if (mainArea) mainArea.scrollTop = 0;
+}
+
+function scrollResSubNav(direction) {
+  const container = document.getElementById('resSubNavContainer');
+  if (!container) return;
+  const buttons = [...container.querySelectorAll('.csn-btn')];
+  const activeIndex = buttons.findIndex(b => b.classList.contains('active'));
+  let newIndex = activeIndex;
+  
+  if (direction === 'next') {
+    newIndex = (activeIndex + 1) % buttons.length;
+  } else if (direction === 'prev') {
+    newIndex = (activeIndex - 1 + buttons.length) % buttons.length;
+  }
+  
+  if (buttons[newIndex]) {
+    switchResTab(buttons[newIndex].dataset.res);
+  }
+}
+
+/* LOCAL SEARCH FUNCTION */
+function searchResApp(query) {
+  const q = query.toLowerCase().trim();
+  const cards = document.querySelectorAll('.chapter-card');
+  
+  if (!q) {
+    const activeSub = document.querySelector('.app-subtab.active');
+    const activeTab = activeSub ? activeSub.dataset.res : 'all';
+    switchResTab(activeTab);
+    return;
+  }
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>
