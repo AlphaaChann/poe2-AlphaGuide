@@ -119,8 +119,9 @@ html, body {
   padding: 1.5rem 1rem; gap: 1.25rem;
   backdrop-filter: blur(12px);
 }
-.games-header { display: flex; align-items: center; justify-content: space-between; }
-.gh-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--txt-hi); }
+.games-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.games-header:hover .gh-title { color: var(--cyan) !important; text-shadow: 0 0 10px var(--cyan-glow); }
+.gh-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--txt-hi); transition: all 0.2s ease; }
 
 .games-list { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; overflow-y: auto; }
 
@@ -583,7 +584,7 @@ html, body {
 
   <!-- 2. SECOND PANEL — ALL WORKING POE2 APPS -->
   <aside class="games-panel">
-    <div class="games-header">
+    <div class="games-header" onclick="showDashboard()" title="Back to Dashboard">
       <h2 class="gh-title">POE2 ALPHACHUU GUIDE</h2>
     </div>
 
